@@ -7,6 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-11-19
+
+### Changed - **BREAKING: Simplified Time Semantics**
+- **Duration = k_exec**: Duration now simply equals the number of primitive actions executed. Each primitive action = 1 tick.
+- **Removed `duration_fn` parameter**: No longer needed as duration is automatically k_exec
+- **Removed `partial_duration_policy` parameter**: No longer needed with simplified duration model  
+- **Removed `time_units` attribute**: Always implicitly "ticks" (= primitive actions)
+- **Default reward = sum**: Macro reward now defaults to sum of per-step rewards (`sum_rewards`)
+- **Simplified info structure**: `info["smdp"]["duration"]` now contains just k_exec (removed `duration_planned` and `duration_exec`)
+- **Removed `reward_rate`**: Rate-based rewards removed from defaults; users can implement custom aggregators if needed
+
+### Removed - **BREAKING: Duration Machinery**
+- **`smdpfier.defaults.durations` module**: Completely removed (ConstantOptionDuration, RandomOptionDuration, ConstantActionDuration, RandomActionDuration, MapActionDuration)
+- **Duration validation utilities**: Removed `validate_duration_function_output` from utils
+
+### Added
+- **New test coverage**: Added `test_duration_equals_kexec` to verify duration always equals k_exec
+
+### Migration Guide
+Users upgrading from 0.1.x need to:
+1. Remove `duration_fn` parameter from SMDPfier initialization
+2. Remove `partial_duration_policy` parameter if used
+3. Remove imports from `smdpfier.defaults.durations`
+4. Access duration via `info["smdp"]["duration"]` (equals k_exec)
+5. Explicitly pass `reward_agg=sum_rewards` if using default (or omit for same behavior)
+6. If using rate-based rewards, implement custom aggregator: `lambda rewards: sum(rewards) / len(rewards)` or similar
+
+## [0.1.0] - Previous Release
+
+### Added - Rate-Based Default Reward (ENV-side Duration Awareness)
+- **Rate-based reward as default**: Macro reward now defaults to `sum(rewards) / max(1, duration_exec)`, making duration environmentally significant
+- **`reward_rate` function**: New default reward aggregator that computes reward per unit time
+- **Flexible reward_agg signatures**: Support for both simple `(rewards)` and advanced `(rewards, duration_exec, per_action_durations)` signatures with automatic detection
+- **Comprehensive rate tests**: Tests verifying rate calculation, duration sensitivity, and backward compatibility
+- **Zero-duration edge case handling**: Denominator of `max(1, duration_exec)` prevents division by zero
+
+### Changed - Rate-Based Default Reward
+- **Default reward aggregator**: Changed from `sum_rewards` to rate-based (sum/duration)
+- **`sum_rewards` marked as legacy**: Now documented as deprecated in favor of `reward_rate`
+- **Reward aggregation logic**: Enhanced to detect function signatures and support flexible parameter passing
+- **Documentation**: Updated to present rate as the recommended SMDP reward objective
+
+### Deprecated - Rate-Based Default Reward
+- **`sum_rewards`**: Still available for backward compatibility but marked as legacy. Users wanting sum behavior must explicitly pass `reward_agg=sum_rewards`
+
 ### Added - Agent 4b Test Enablement & Repo Cleanup
 - **Complete test suite** with all pytest.skip() calls replaced with real test implementations
 - **Duration function tests** covering ConstantOptionDuration, RandomOptionDuration, ConstantActionDuration, RandomActionDuration, and MapActionDuration

@@ -6,10 +6,11 @@ from typing import Callable
 
 
 def sum_rewards(rewards: list[float]) -> float:
-    """Sum all rewards in the list (default aggregator).
+    """Sum all rewards in the list.
 
+    This is the **default** reward aggregator for SMDPfier.
     Simple summation of all per-primitive rewards collected during
-    option execution. This is the most common aggregation strategy.
+    option execution.
 
     Args:
         rewards: List of per-primitive rewards from option execution

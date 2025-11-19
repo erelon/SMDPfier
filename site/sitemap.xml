@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://smdpfier.readthedocs.io/</loc>
+         <lastmod>2025-11-12</lastmod>
+    </url>
+    <url>
+         <loc>https://smdpfier.readthedocs.io/api/</loc>
+         <lastmod>2025-11-12</lastmod>
+    </url>
+    <url>
+         <loc>https://smdpfier.readthedocs.io/durations/</loc>
+         <lastmod>2025-11-12</lastmod>
+    </url>
+    <url>
+         <loc>https://smdpfier.readthedocs.io/errors/</loc>
+         <lastmod>2025-11-12</lastmod>
+    </url>
+    <url>
+         <loc>https://smdpfier.readthedocs.io/faq/</loc>
+         <lastmod>2025-11-12</lastmod>
+    </url>
+    <url>
+         <loc>https://smdpfier.readthedocs.io/masking_and_precheck/</loc>
+         <lastmod>2025-11-12</lastmod>
+    </url>
+    <url>
+         <loc>https://smdpfier.readthedocs.io/usage_index_vs_direct/</loc>
+         <lastmod>2025-11-12</lastmod>
+    </url>
+</urlset>

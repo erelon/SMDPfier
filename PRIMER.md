@@ -1,12 +1,14 @@
-# PRIMER.md - SMDPfier Current State (Post Agent 4b)
+# PRIMER.md - SMDPfier Current State (Post Rate-Based Reward)
 
 ## Project Overview
 
 SMDPfier is a **fully tested** Gymnasium wrapper that transforms any environment into a Semi-Markov Decision Process (SMDP) by enabling **Options** (action sequences) with **duration metadata** for proper temporal discounting.
 
-**Core Innovation**: Separates execution (env steps) from time (ticks for discounting), enabling true SMDP learning with γ^{ticks}.
+**Core Innovation**: Separates execution (env steps) from time (ticks for discounting), and uses **rate-based rewards by default** to make duration environmentally significant.
 
 **Testing Status**: Complete test suite with all pytest.skip() calls replaced by real implementations. CI/CD pipeline established with GitHub Actions for automated testing across Python 3.9-3.12.
+
+**Version**: 0.1.0+ (rate-based reward default)
 
 ## Architecture Summary
 
@@ -21,20 +23,27 @@ SMDPfier is a **fully tested** Gymnasium wrapper that transforms any environment
 - **Option Providers**: Static lists or dynamic generators
 - **Error Handling**: Specialized exceptions with rich context
 - **Action Masking**: State-dependent option availability
+- **Rate-Based Rewards**: Default macro reward = sum(rewards) / max(1, duration_exec)
 
 ## Critical Concepts
 
 ### 1. Steps vs Duration (Most Important!)
 - **Steps**: Number of `env.step()` calls (determined by option length)
-- **Duration**: Abstract "ticks" for SMDP discounting (metadata only)
-- **KEY**: Duration never affects execution - only used for γ^{ticks} calculations
+- **Duration**: Abstract "ticks" for SMDP discounting AND reward rate calculation
+- **KEY**: Duration affects macro reward (via rate) and SMDP discounting (γ^{ticks})
 
-### 2. SMDP Discounting
+### 2. Rate-Based Reward (Default as of 0.1.0)
+- **Formula**: `macro_reward = sum(primitive_rewards) / max(1, duration_exec)`
+- **Purpose**: Makes duration environmentally significant, encourages time efficiency
+- **Example**: Same total reward (4.0) with duration 10 → reward 0.4, with duration 20 → reward 0.2
+- **Override**: Pass `reward_agg=sum_rewards` for legacy sum behavior
+
+### 3. SMDP Discounting
 - **Standard MDP**: γ^{steps}
 - **SMDP**: γ^{ticks} using `info["smdp"]["duration_exec"]`
 - **Cumulative**: Track total elapsed time across options
 
-### 3. Action Interfaces
+### 4. Action Interfaces
 - **Index**: `Discrete(max_options)` action space for RL training
 - **Direct**: Pass Option objects directly for scripting/testing
 
@@ -45,7 +54,7 @@ SMDPfier(
     env,                                    # Base Gymnasium environment
     options_provider,                       # Static list or dynamic callable  
     duration_fn,                           # Returns int or list[int]
-    reward_agg=sum_rewards,                # How to aggregate per-step rewards
+    reward_agg=None,                       # None=rate, or custom aggregator
     action_interface="index",              # "index" or "direct"
     max_options=None,                      # Required for index interface
     availability_fn=None,                  # Action masking function
@@ -88,7 +97,8 @@ Every step returns rich metadata in `info["smdp"]`:
 - `MapActionDuration(action_map, default_duration)` - List
 
 ### Reward Aggregation (`smdpfier.defaults.rewards`)
-- `sum_rewards` - Sum per-step rewards (default)
+- `reward_rate` - **Default**: sum(rewards) / max(1, duration_exec)
+- `sum_rewards` - **Legacy**: Sum per-step rewards (ignores duration)
 - `mean_rewards` - Average per-step rewards
 - `discounted_sum(gamma)` - Discount per-step rewards
 

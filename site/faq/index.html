@@ -1,0 +1,1745 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="SMDP-level behavior for Gymnasium environments">
+      
+      
+      
+        <link rel="canonical" href="https://smdpfier.readthedocs.io/faq/">
+      
+      
+        <link rel="prev" href="../errors/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>FAQ - SMDPfier</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#frequently-asked-questions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="SMDPfier" class="md-header__button md-logo" aria-label="SMDPfier" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SMDPfier
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              FAQ
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/smdpfier/smdpfier" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    smdpfier/smdpfier
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="SMDPfier" class="md-nav__button md-logo" aria-label="SMDPfier" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SMDPfier
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/smdpfier/smdpfier" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    smdpfier/smdpfier
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage_index_vs_direct/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index vs Direct Interfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../durations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Durations and SMDP Discounting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../masking_and_precheck/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Action Masking and Precheck
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Concepts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-smdpfier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is SMDPfier?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-is-this-different-from-other-hierarchical-rl-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How is this different from other hierarchical RL libraries?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-should-i-use-smdpfier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When should I use SMDPfier?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-critical-distinction-steps-vs-duration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Critical Distinction: Steps vs Duration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Critical Distinction: Steps vs Duration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#do-durations-control-how-many-steps-are-executed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚨 Do durations control how many steps are executed?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-determines-the-number-of-environment-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What determines the number of environment steps?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-control-execution-length" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I control execution length?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smdp-discounting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SMDP Discounting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SMDP Discounting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-apply-smdp-discounting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I apply SMDP discounting?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whats-the-difference-between-duration_planned-and-duration_exec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's the difference between duration_planned and duration_exec?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-partial-duration-policies-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do partial duration policies work?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#action-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action Interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Action Interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#index-vs-direct-which-should-i-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index vs Direct: Which should I use?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-does-action-masking-work-in-index-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How does action masking work in index interface?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-happens-with-dynamic-options-overflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happens with dynamic options overflow?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment Compatibility
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Environment Compatibility">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-continuous-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I use continuous actions?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-environments-work-with-smdpfier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What environments work with SMDPfier?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-happens-if-my-environment-terminates-during-an-option" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happens if my environment terminates during an option?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Issues
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#my-rl-algorithm-isnt-learning-whats-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        My RL algorithm isn't learning - what's wrong?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#im-getting-smdpoptionvalidationerror-what-does-it-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        I'm getting SMDPOptionValidationError - what does it mean?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#my-options-arent-being-executed-correctly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        My options aren't being executed correctly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-is-slow-how-can-i-optimize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance is slow - how can I optimize?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Usage
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#can-i-modify-options-during-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I modify options during execution?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-debug-option-sequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I debug option sequences?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-nest-smdpfiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I nest SMDPfiers?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Concepts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-smdpfier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is SMDPfier?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-is-this-different-from-other-hierarchical-rl-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How is this different from other hierarchical RL libraries?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-should-i-use-smdpfier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When should I use SMDPfier?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-critical-distinction-steps-vs-duration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Critical Distinction: Steps vs Duration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Critical Distinction: Steps vs Duration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#do-durations-control-how-many-steps-are-executed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚨 Do durations control how many steps are executed?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-determines-the-number-of-environment-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What determines the number of environment steps?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-control-execution-length" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I control execution length?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smdp-discounting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SMDP Discounting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SMDP Discounting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-apply-smdp-discounting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I apply SMDP discounting?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whats-the-difference-between-duration_planned-and-duration_exec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's the difference between duration_planned and duration_exec?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-partial-duration-policies-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do partial duration policies work?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#action-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action Interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Action Interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#index-vs-direct-which-should-i-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index vs Direct: Which should I use?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-does-action-masking-work-in-index-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How does action masking work in index interface?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-happens-with-dynamic-options-overflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happens with dynamic options overflow?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment Compatibility
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Environment Compatibility">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-continuous-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I use continuous actions?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-environments-work-with-smdpfier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What environments work with SMDPfier?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-happens-if-my-environment-terminates-during-an-option" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happens if my environment terminates during an option?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Issues
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#my-rl-algorithm-isnt-learning-whats-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        My RL algorithm isn't learning - what's wrong?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#im-getting-smdpoptionvalidationerror-what-does-it-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        I'm getting SMDPOptionValidationError - what does it mean?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#my-options-arent-being-executed-correctly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        My options aren't being executed correctly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-is-slow-how-can-i-optimize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance is slow - how can I optimize?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Usage
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#can-i-modify-options-during-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I modify options during execution?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-debug-option-sequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I debug option sequences?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-nest-smdpfiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I nest SMDPfiers?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="frequently-asked-questions">Frequently Asked Questions</h1>
+<p>Common questions and answers about SMDPfier concepts, usage, and troubleshooting.</p>
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="what-is-smdpfier">What is SMDPfier?</h3>
+<p>SMDPfier is a Gymnasium wrapper that transforms any environment into a <strong>Semi-Markov Decision Process (SMDP)</strong> by enabling:
+- <strong>Options</strong>: Sequences of primitive actions executed atomically
+- <strong>Duration Metadata</strong>: Abstract "ticks" for proper temporal discounting
+- <strong>SMDP Discounting</strong>: Using γ^{ticks} instead of γ^{steps}</p>
+<p><strong>Key Insight</strong>: SMDPfier separates execution (environment steps) from time (discounting metadata).</p>
+<h3 id="how-is-this-different-from-other-hierarchical-rl-libraries">How is this different from other hierarchical RL libraries?</h3>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>SMDPfier</th>
+<th>Other Libraries</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Focus</strong></td>
+<td>Duration-aware SMDP behavior</td>
+<td>General hierarchical RL</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>Single wrapper class</td>
+<td>Full frameworks</td>
+</tr>
+<tr>
+<td><strong>Environment Support</strong></td>
+<td>Any Gymnasium env unchanged</td>
+<td>Often require specific environments</td>
+</tr>
+<tr>
+<td><strong>Temporal Modeling</strong></td>
+<td>Explicit duration metadata</td>
+<td>Usually step-based</td>
+</tr>
+<tr>
+<td><strong>Integration</strong></td>
+<td>Drop-in wrapper</td>
+<td>Framework-specific</td>
+</tr>
+</tbody>
+</table>
+<h3 id="when-should-i-use-smdpfier">When should I use SMDPfier?</h3>
+<p>✅ <strong>Use SMDPfier when you want to:</strong>
+- Apply <strong>true SMDP discounting</strong> with γ^{duration}
+- Test <strong>hierarchical policies</strong> with temporal abstractions
+- Add <strong>option-level control</strong> to existing environments
+- <strong>Research temporal abstractions</strong> without framework complexity</p>
+<p>❌ <strong>Don't use SMDPfier when:</strong>
+- You need complex option discovery algorithms
+- You want full hierarchical RL frameworks (use HRL libraries)
+- You don't care about temporal discounting (standard MDP is fine)</p>
+<h2 id="the-critical-distinction-steps-vs-duration">The Critical Distinction: Steps vs Duration</h2>
+<h3 id="do-durations-control-how-many-steps-are-executed">🚨 Do durations control how many steps are executed?</h3>
+<p><strong>NO!</strong> This is the most common misconception.</p>
+<ul>
+<li><strong>Steps</strong>: Determined by option length, controls <code>env.step()</code> calls</li>
+<li><strong>Duration</strong>: Metadata only, used for SMDP discounting</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;three-actions&quot;</span><span class="p">)</span>     <span class="c1"># Always 3 steps</span>
+<span class="n">duration_fn</span> <span class="o">=</span> <span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>       <span class="c1"># 100 ticks metadata</span>
+
+<span class="c1"># Result: 3 env.step() calls, 100 ticks for discounting</span>
+</code></pre></div>
+<h3 id="what-determines-the-number-of-environment-steps">What determines the number of environment steps?</h3>
+<p><strong>Only the option length</strong> (<code>len(option.actions)</code>).</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># These all execute the same number of steps</span>
+<span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;option-1&quot;</span><span class="p">)</span>     <span class="c1"># 3 steps</span>
+<span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;option-2&quot;</span><span class="p">)</span>     <span class="c1"># 3 steps  </span>
+<span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;option-3&quot;</span><span class="p">)</span>     <span class="c1"># 3 steps</span>
+
+<span class="c1"># Duration function doesn&#39;t matter for execution:</span>
+<span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>         <span class="c1"># Still 3 steps each</span>
+<span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>      <span class="c1"># Still 3 steps each</span>
+</code></pre></div>
+<h3 id="how-do-i-control-execution-length">How do I control execution length?</h3>
+<p><strong>Change the option's action sequence</strong>, not the duration function:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Want longer execution? Add more actions:</span>
+<span class="n">short_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;short&quot;</span><span class="p">)</span>           <span class="c1"># 2 steps</span>
+<span class="n">long_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;long&quot;</span><span class="p">)</span>    <span class="c1"># 5 steps</span>
+
+<span class="c1"># Want shorter execution? Remove actions:</span>
+<span class="n">very_short_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;single&quot;</span><span class="p">)</span>        <span class="c1"># 1 step</span>
+</code></pre></div>
+<h2 id="smdp-discounting">SMDP Discounting</h2>
+<h3 id="how-do-i-apply-smdp-discounting">How do I apply SMDP discounting?</h3>
+<p>Use <code>duration_exec</code> from the info payload:</p>
+<div class="highlight"><pre><span></span><code><span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+
+<span class="c1"># Get executed duration (handles early termination)  </span>
+<span class="n">duration</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;duration_exec&quot;</span><span class="p">]</span>
+
+<span class="c1"># Apply SMDP discounting</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.99</span>
+<span class="n">discounted_reward</span> <span class="o">=</span> <span class="n">reward</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">**</span> <span class="n">duration</span><span class="p">)</span>
+
+<span class="c1"># Track cumulative time for multi-step discounting</span>
+<span class="n">total_time</span> <span class="o">+=</span> <span class="n">duration</span>
+<span class="n">next_discount</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">**</span> <span class="n">total_time</span>
+</code></pre></div>
+<h3 id="whats-the-difference-between-duration_planned-and-duration_exec">What's the difference between duration_planned and duration_exec?</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>When They Differ</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>duration_planned</code></td>
+<td>Expected duration from duration function</td>
+<td>10 ticks</td>
+</tr>
+<tr>
+<td><code>duration_exec</code></td>
+<td>Actual duration (accounts for early termination)</td>
+<td>6 ticks (if terminated early)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>They're equal</strong> when the option completes normally.
+<strong>They differ</strong> when the episode terminates before the option finishes.</p>
+<h3 id="how-do-partial-duration-policies-work">How do partial duration policies work?</h3>
+<p>When an option terminates early:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Option: [0, 1, 0, 1] (4 actions), Duration: 12 ticks, Terminated after 3 actions</span>
+
+<span class="c1"># &quot;proportional&quot; (default): (3/4) * 12 = 9 ticks</span>
+<span class="c1"># &quot;full&quot;: 12 ticks (option conceptually &quot;completes&quot;)  </span>
+<span class="c1"># &quot;zero&quot;: 0 ticks (failed options consume no time)</span>
+</code></pre></div>
+<p>Choose based on your domain:
+- <strong>Proportional</strong>: Most realistic (default)
+- <strong>Full</strong>: Options have setup costs
+- <strong>Zero</strong>: Failures are "free"</p>
+<h2 id="action-interfaces">Action Interfaces</h2>
+<h3 id="index-vs-direct-which-should-i-use">Index vs Direct: Which should I use?</h3>
+<table>
+<thead>
+<tr>
+<th>Use Case</th>
+<th>Recommended Interface</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RL Training</strong></td>
+<td>Index</td>
+<td>Discrete action space for algorithms</td>
+</tr>
+<tr>
+<td><strong>Scripting/Testing</strong></td>
+<td>Direct</td>
+<td>Intuitive option objects</td>
+</tr>
+<tr>
+<td><strong>Action Masking</strong></td>
+<td>Index</td>
+<td>Built-in mask support</td>
+</tr>
+<tr>
+<td><strong>Debugging</strong></td>
+<td>Direct</td>
+<td>Clear option identification</td>
+</tr>
+<tr>
+<td><strong>Continuous Actions</strong></td>
+<td>Direct</td>
+<td>Natural continuous support</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Common Pattern</strong>: Start with direct for prototyping, switch to index for RL training.</p>
+<h3 id="how-does-action-masking-work-in-index-interface">How does action masking work in index interface?</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">availability_fn</span><span class="p">(</span><span class="n">obs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return available option indices.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">obs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>  <span class="c1"># Cart far right</span>
+        <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># Only left-based options</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># All options</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">availability_fn</span><span class="o">=</span><span class="n">availability_fn</span><span class="p">)</span>
+
+<span class="n">obs</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>  <span class="c1"># e.g., [1, 0, 1] = options 0,2 available</span>
+</code></pre></div>
+<h3 id="what-happens-with-dynamic-options-overflow">What happens with dynamic options overflow?</h3>
+<p>When dynamic options exceed <code>max_options</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">max_options</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># If generator returns 5 options:</span>
+<span class="c1"># - First 3 options are used</span>
+<span class="c1"># - Last 2 options are dropped  </span>
+<span class="c1"># - info[&quot;smdp&quot;][&quot;num_dropped&quot;] = 2</span>
+</code></pre></div>
+<h2 id="environment-compatibility">Environment Compatibility</h2>
+<h3 id="can-i-use-continuous-actions">Can I use continuous actions?</h3>
+<p><strong>Yes!</strong> SMDPfier fully supports continuous action spaces:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Continuous options</span>
+<span class="n">continuous_options</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Option</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]],</span> <span class="s2">&quot;left-center-right&quot;</span><span class="p">),</span>
+    <span class="n">Option</span><span class="p">([[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]],</span> <span class="s2">&quot;multi-dim-action&quot;</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
+    <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;Pendulum-v1&quot;</span><span class="p">),</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="n">continuous_options</span><span class="p">,</span>
+    <span class="n">duration_fn</span><span class="o">=</span><span class="n">ConstantActionDuration</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;direct&quot;</span>  <span class="c1"># Recommended for continuous</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="what-environments-work-with-smdpfier">What environments work with SMDPfier?</h3>
+<p><strong>Any Gymnasium environment!</strong> SMDPfier is a generic wrapper.</p>
+<p>✅ <strong>Confirmed Compatible:</strong>
+- CartPole, Pendulum, MountainCar
+- Atari games
+- MuJoCo environments<br />
+- Custom environments
+- Multi-agent environments (with appropriate setup)</p>
+<h3 id="what-happens-if-my-environment-terminates-during-an-option">What happens if my environment terminates during an option?</h3>
+<p>SMDPfier handles this gracefully:</p>
+<ol>
+<li><strong>Execution stops</strong> immediately when <code>env.step()</code> returns <code>terminated=True</code> or <code>truncated=True</code></li>
+<li><strong>Partial duration policy</strong> is applied based on configuration</li>
+<li><strong>Info payload</strong> reflects actual execution (<code>k_exec</code>, <code>duration_exec</code>, <code>terminated_early</code>)</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="c1"># Option with 5 actions, but episode terminates after 2 actions</span>
+<span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;k_exec&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>                    <span class="c1"># Only 2 actions executed</span>
+    <span class="s2">&quot;terminated_early&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>       <span class="c1"># Flag early termination</span>
+    <span class="s2">&quot;duration_exec&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>             <span class="c1"># Partial duration (if proportional policy)</span>
+    <span class="c1"># ...</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="common-issues">Common Issues</h2>
+<h3 id="my-rl-algorithm-isnt-learning-whats-wrong">My RL algorithm isn't learning - what's wrong?</h3>
+<p><strong>Common causes:</strong></p>
+<ol>
+<li>
+<p><strong>Wrong discounting</strong>: Use <code>duration_exec</code>, not step count
+<div class="highlight"><pre><span></span><code><span class="c1"># Wrong</span>
+<span class="n">discount</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">**</span> <span class="n">step_count</span>
+
+<span class="c1"># Right  </span>
+<span class="n">discount</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">**</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;duration_exec&quot;</span><span class="p">]</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Action space mismatch</strong>: Ensure max_options is correct
+<div class="highlight"><pre><span></span><code><span class="c1"># Wrong - action space is Discrete(max_options), not len(options)</span>
+<span class="n">max_options</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">static_options</span><span class="p">)</span>  <span class="c1"># Correct for static options</span>
+<span class="n">max_options</span> <span class="o">=</span> <span class="mi">10</span>                   <span class="c1"># Might be needed for dynamic options</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Reward aggregation</strong>: Check if <code>sum_rewards</code> is appropriate
+<div class="highlight"><pre><span></span><code><span class="c1"># Try different aggregation</span>
+<span class="n">reward_agg</span> <span class="o">=</span> <span class="n">mean_rewards</span>          <span class="c1"># Average instead of sum</span>
+<span class="n">reward_agg</span> <span class="o">=</span> <span class="n">discounted_sum</span><span class="p">(</span><span class="mf">0.99</span><span class="p">)</span>  <span class="c1"># Internal discounting</span>
+</code></pre></div></p>
+</li>
+</ol>
+<h3 id="im-getting-smdpoptionvalidationerror-what-does-it-mean">I'm getting SMDPOptionValidationError - what does it mean?</h3>
+<p>This means an option failed precheck validation:</p>
+<div class="highlight"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">SMDPOptionValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Option &#39;</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">option_name</span><span class="si">}</span><span class="s2">&#39; failed at step </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">failing_step_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Action </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">action_repr</span><span class="si">}</span><span class="s2"> is invalid in current state&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;State summary: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">short_obs_summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Solutions:</strong>
+- Check if actions are valid for current environment state
+- Verify action space compatibility<br />
+- Use availability_fn to mask invalid options
+- Turn off precheck: <code>precheck=False</code></p>
+<h3 id="my-options-arent-being-executed-correctly">My options aren't being executed correctly</h3>
+<p><strong>Debug steps:</strong></p>
+<ol>
+<li>
+<p><strong>Check option construction</strong>:
+<div class="highlight"><pre><span></span><code><span class="n">option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;test&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Actions: </span><span class="si">{</span><span class="n">option</span><span class="o">.</span><span class="n">actions</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Length: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Verify action validity</strong>:
+<div class="highlight"><pre><span></span><code><span class="c1"># Test each action individually in base environment</span>
+<span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">option</span><span class="o">.</span><span class="n">actions</span><span class="p">:</span>
+    <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">base_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">term</span> <span class="ow">or</span> <span class="n">trunc</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Action </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2"> terminates episode!&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Check execution details</strong>:
+<div class="highlight"><pre><span></span><code><span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">smdp_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">option</span><span class="p">)</span>
+<span class="n">smdp</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Planned steps: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;len&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Executed steps: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;k_exec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rewards: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;rewards&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+</li>
+</ol>
+<h3 id="performance-is-slow-how-can-i-optimize">Performance is slow - how can I optimize?</h3>
+<p><strong>Performance tips:</strong></p>
+<ol>
+<li>
+<p><strong>Cache options</strong> when possible:
+<div class="highlight"><pre><span></span><code><span class="c1"># Pre-compute static options</span>
+<span class="n">static_options</span> <span class="o">=</span> <span class="p">[</span><span class="n">Option</span><span class="p">([</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;option_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> 
+                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Avoid complex duration functions</strong>:
+<div class="highlight"><pre><span></span><code><span class="c1"># Simple is better</span>
+<span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>          <span class="c1"># Fast</span>
+<span class="c1"># vs</span>
+<span class="n">complex_state_dependent_duration</span>   <span class="c1"># Potentially slow</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Use appropriate max_options</strong>:
+<div class="highlight"><pre><span></span><code><span class="c1"># Don&#39;t over-allocate</span>
+<span class="n">max_options</span> <span class="o">=</span> <span class="mi">5</span>   <span class="c1"># If you typically have 3-5 options</span>
+<span class="c1"># vs  </span>
+<span class="n">max_options</span> <span class="o">=</span> <span class="mi">100</span> <span class="c1"># Wastes memory and computation</span>
+</code></pre></div></p>
+</li>
+</ol>
+<h2 id="advanced-usage">Advanced Usage</h2>
+<h3 id="can-i-modify-options-during-execution">Can I modify options during execution?</h3>
+<p><strong>No.</strong> Options are executed atomically. However, you can:</p>
+<ol>
+<li><strong>Use dynamic options</strong> that change between executions</li>
+<li><strong>Create context-aware generators</strong> that consider current state</li>
+<li><strong>Implement early termination</strong> via environment design</li>
+</ol>
+<h3 id="how-do-i-debug-option-sequences">How do I debug option sequences?</h3>
+<p><strong>Detailed info inspection:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+<span class="n">smdp</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== Option Execution Details ===&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Option: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (ID: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Actions: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;len&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> total&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Executed: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;k_exec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> steps&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Per-step rewards: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;rewards&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duration: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;duration_exec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> ticks&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Early termination: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;terminated_early&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">smdp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;action_mask&#39;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available options next: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;action_mask&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="can-i-nest-smdpfiers">Can I nest SMDPfiers?</h3>
+<p><strong>Technically possible but not recommended.</strong> SMDPfier is designed as a single-level abstraction. For multi-level hierarchy, consider:</p>
+<ol>
+<li><strong>Option composition</strong>: Create complex options from simple ones</li>
+<li><strong>Custom option generators</strong>: Generate hierarchical option sets</li>
+<li><strong>External hierarchy</strong>: Use SMDPfier as one level in a larger system</li>
+</ol>
+<hr />
+<p><strong>Still have questions?</strong> Check the <a href="../api/">API Reference</a> or <a href="../examples/">examples</a> for more details.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

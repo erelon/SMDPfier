@@ -1,3 +1,178 @@
+# HANDOFF.md - Rate-Based Default Reward (ENV-side Duration Awareness)
+
+## What I Accomplished (Current Agent - Rate Default)
+
+### Core Implementation: Rate-Based Reward as Default
+
+1. **Default Macro Reward Changed to Rate**
+   - Changed default `reward_agg` from `sum_rewards` to rate-based calculation
+   - Formula: `macro_reward = sum(primitive_rewards) / max(1, duration_exec)`
+   - Makes duration environmentally significant (not just for learner-side discounting)
+   - Encourages time-efficient behavior at the environment boundary
+
+2. **New `reward_rate` Function** (smdpfier/defaults/rewards.py)
+   - Created as the recommended default reward aggregator
+   - Accepts flexible signature: `(rewards, duration_exec, per_action_durations)`
+   - Handles edge case: zero duration uses denominator of 1 to avoid division by zero
+   - Fully documented with examples showing duration sensitivity
+
+3. **Flexible Signature Detection** (smdpfier/wrapper.py)
+   - Added `inspect` module for function signature introspection
+   - Automatic detection of reward_agg parameter count
+   - Tries full signature `(rewards, duration_exec, per_action_durations)` first
+   - Falls back to simple `(rewards)` signature for backward compatibility
+   - Supports custom aggregators with either signature style
+
+4. **Backward Compatibility Maintained**
+   - `sum_rewards` marked as legacy but still fully functional
+   - Users can explicitly pass `reward_agg=sum_rewards` to get old behavior
+   - All existing examples continue to work (they use explicit `sum_rewards`)
+   - No breaking changes for existing code
+
+### Testing Implementation
+
+1. **Updated test_wrapper_core.py**
+   - Modified `test_reward_aggregation` to test default rate behavior
+   - Added explicit tests for `sum_rewards` (legacy), `mean_rewards`, and `reward_rate`
+   - Created `test_rate_reward_duration_sensitivity` showing different durations → different rewards
+   - Verified same primitive rewards + different durations = different macro rewards
+   - All 13 tests pass ✅
+
+2. **Updated test_examples_run.py**
+   - Added `test_default_rate_reward_calculation` verifying rate formula
+   - Ensures `reward == sum(rewards) / max(1, duration_exec)`
+   - Verifies `duration_exec` is properly logged in `info["smdp"]`
+   - All 8 tests pass ✅
+
+3. **Full Test Suite Passing**
+   - All 43 tests pass across all test files
+   - No pytest.skip() placeholders remain
+   - Examples run correctly with explicit `sum_rewards`
+
+### Documentation Updates
+
+1. **README.md**
+   - Added prominent "Rate-Based Reward (Default)" section after Quick Start
+   - Showed example: same total reward, different durations → different macro rewards
+   - Updated Quick Start to emphasize rate-based default
+   - Added note about legacy `sum_rewards` for backward compatibility
+   - Updated Key Features to highlight rate-based rewards first
+
+2. **docs/durations.md**
+   - Added "Rate-Based Rewards (Default)" section
+   - Explained why rate-based rewards matter (env-side time efficiency)
+   - Showed comparison: sum vs rate with concrete examples
+   - Documented how to override default with custom `reward_agg`
+   - Updated "Controls" column in comparison table to show "Macro reward (via rate)"
+
+3. **CHANGELOG.md**
+   - Added complete section for rate-based reward changes
+   - Documented new features, changes, and deprecations
+   - Included migration notes for users wanting legacy behavior
+
+4. **smdpfier/defaults/__init__.py**
+   - Reordered exports to show `reward_rate` first (recommended)
+   - Marked `sum_rewards` as legacy in comments
+
+### Key Design Decisions
+
+1. **Why Rate as Default?**
+   - Without rate, agents can ignore duration if no episode tick budget exists
+   - Rate encodes time efficiency directly in the environment reward signal
+   - Makes the problem a rate objective at the SMDP boundary
+   - Aligns with product decision to make duration ENV-visible
+
+2. **Edge Case: Zero Duration**
+   - Use `max(1, duration_exec)` as denominator
+   - Avoids division by zero
+   - Ensures well-defined behavior even with edge case durations
+   - Documented in reward_rate docstring
+
+3. **Flexible Signature Detection**
+   - Allows both old `(rewards)` and new `(rewards, duration_exec, per_action_durations)` signatures
+   - Automatic detection using `inspect.signature()`
+   - Graceful fallback on TypeError
+   - Supports user migration path from simple to advanced aggregators
+
+4. **No Episode Tick Budget**
+   - Explicitly removed all references to tick budgets
+   - Rate-based reward replaces need for artificial time constraints
+   - Simpler model: time matters through reward, not through arbitrary limits
+
+### Verification Steps for Next Agent
+
+1. **Run Full Test Suite**
+   ```bash
+   python -m pytest tests/ -xvs
+   ```
+   - Should see all 43 tests pass ✅
+
+2. **Verify Rate Calculation**
+   ```bash
+   python -m pytest tests/test_wrapper_core.py::TestSMDPfierCore::test_rate_reward_duration_sensitivity -xvs
+   ```
+   - Confirms different durations → different macro rewards ✅
+
+3. **Check Backward Compatibility**
+   ```bash
+   python examples/cartpole_index_static.py --max-steps 2
+   ```
+   - Should run without errors (uses explicit `sum_rewards`) ✅
+
+4. **Verify Default Behavior**
+   ```python
+   from smdpfier import SMDPfier, Option
+   from smdpfier.defaults import ConstantOptionDuration
+   import gymnasium as gym
+   
+   env = SMDPfier(
+       gym.make("CartPole-v1"),
+       options_provider=[Option([0, 1], "test")],
+       duration_fn=ConstantOptionDuration(10)
+       # Note: No reward_agg specified → uses rate by default
+   )
+   obs, info = env.reset()
+   obs, reward, term, trunc, info = env.step(0)
+   
+   # Verify rate formula
+   assert reward == sum(info["smdp"]["rewards"]) / info["smdp"]["duration_exec"]
+   ```
+
+### Files Modified
+
+1. **Core Implementation**
+   - `smdpfier/wrapper.py`: Added inspect import, changed default, added signature detection
+   - `smdpfier/defaults/rewards.py`: Added `reward_rate`, marked `sum_rewards` as legacy
+   - `smdpfier/defaults/__init__.py`: Reordered exports
+
+2. **Tests**
+   - `tests/test_wrapper_core.py`: Updated reward aggregation test, added rate sensitivity test
+   - `tests/test_examples_run.py`: Added rate calculation test
+
+3. **Documentation**
+   - `README.md`: Added rate section, updated Quick Start and Key Features
+   - `docs/durations.md`: Added rate-based rewards section
+   - `CHANGELOG.md`: Added unreleased section for rate changes
+
+### What's Left for Future Agents
+
+1. **No Further Rate Implementation Needed**
+   - Rate-based reward is fully implemented and tested
+   - All acceptance criteria met
+   - Documentation complete
+
+2. **Potential Enhancements (Optional)**
+   - Could add more custom reward aggregator examples in docs
+   - Could add rate-based reward tutorial/guide
+   - Could add visualization of rate vs sum behavior
+
+3. **Release Preparation**
+   - Ready for version bump to 0.1.0
+   - CHANGELOG documents breaking change (default behavior)
+   - All tests pass, documentation complete
+
+---
+
 # HANDOFF.md - Agent 4b Test Enablement & Repo Cleanup
 
 ## What I Accomplished

@@ -26,7 +26,7 @@ options = [
     Option(actions=[0, 1, 0], name="left-right-left"),
 ]
 
-# Wrap with SMDPfier 
+# Wrap with SMDPfier (uses rate-based reward by default)
 smdp_env = SMDPfier(
     env,
     options_provider=options,           # Static options list
@@ -42,16 +42,47 @@ obs, reward, term, trunc, info = smdp_env.step(0)  # Execute first option
 smdp_info = info["smdp"]
 print(f"Executed {smdp_info['k_exec']} steps in {smdp_info['duration_exec']} ticks")
 print(f"Per-step rewards: {smdp_info['rewards']}")
+print(f"Macro reward (rate): {reward}")  # = sum(rewards) / duration_exec
 
 # Apply SMDP discounting: γ^{duration_exec}
 gamma = 0.99
 discounted_reward = reward * (gamma ** smdp_info['duration_exec'])
 ```
 
+## ⚡ Rate-Based Reward (Default)
+
+**SMDPfier uses rate-based rewards by default**, making duration environmentally significant:
+
+```python
+# Default behavior: reward = sum(primitive rewards) / duration_exec
+# This encourages time-efficient behavior
+
+# Example: Same total reward, different durations
+option_fast = Option([0, 1], name="fast")  # 2 steps
+option_slow = Option([0, 1, 0, 1], name="slow")  # 4 steps
+
+# Both collect total reward = 4.0
+# With ConstantActionDuration(5):
+# - Fast option: duration = 10 ticks → macro reward = 4.0 / 10 = 0.4
+# - Slow option: duration = 20 ticks → macro reward = 4.0 / 20 = 0.2
+
+# Result: Agent learns to prefer faster options!
+
+# For legacy sum behavior, explicitly pass reward_agg
+from smdpfier.defaults import sum_rewards
+smdp_env = SMDPfier(
+    env,
+    options_provider=options,
+    duration_fn=ConstantOptionDuration(10),
+    reward_agg=sum_rewards  # Legacy: ignore duration
+)
+```
+
 ## 🎯 Key Features
 
+- **⚡ Rate-Based Rewards**: Default macro reward = sum(rewards) / duration makes time matter
 - **🔗 Flexible Options**: Static sequences or dynamic discovery via callable
-- **⚡ Two Interfaces**: Index-based (`Discrete` actions) or direct `Option` passing
+- **🎛️ Two Interfaces**: Index-based (`Discrete` actions) or direct `Option` passing
 - **⏱️ Duration Metadata**: Integer ticks for true SMDP discounting (γ^{ticks})
 - **🎭 Action Masking**: Support for discrete action availability constraints
 - **📊 Rich Info**: Comprehensive execution metadata in `info["smdp"]`

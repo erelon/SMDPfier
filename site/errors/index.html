@@ -1,0 +1,1657 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="SMDP-level behavior for Gymnasium environments">
+      
+      
+      
+        <link rel="canonical" href="https://smdpfier.readthedocs.io/errors/">
+      
+      
+        <link rel="prev" href="../masking_and_precheck/">
+      
+      
+        <link rel="next" href="../faq/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Error Handling - SMDPfier</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#error-handling" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="SMDPfier" class="md-header__button md-logo" aria-label="SMDPfier" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SMDPfier
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Error Handling
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/smdpfier/smdpfier" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    smdpfier/smdpfier
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="SMDPfier" class="md-nav__button md-logo" aria-label="SMDPfier" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SMDPfier
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/smdpfier/smdpfier" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    smdpfier/smdpfier
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage_index_vs_direct/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index vs Direct Interfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../durations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Durations and SMDP Discounting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../masking_and_precheck/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Action Masking and Precheck
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#error-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#smdpoptionvalidationerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SMDPOptionValidationError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smdpoptionexecutionerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SMDPOptionExecutionError
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-context-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Context Fields
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Context Fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#error-context-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Context Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-error-scenarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Error Scenarios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Error Scenarios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#invalid-action-for-action-space" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Invalid Action for Action Space
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continuous-action-shape-mismatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous Action Shape Mismatch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-state-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment State Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#early-termination-during-option" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Early Termination During Option
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Handling Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Handling Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-try-catch-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Try-Catch Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fallback-strategy-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fallback Strategy Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging-and-monitoring-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging and Monitoring Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-recovery-for-rl-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Recovery for RL Training
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging Techniques
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Debugging Techniques">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-pattern-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Pattern Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interactive-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interactive Debugging
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-prevention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Prevention
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Prevention">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-design-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option Design Guidelines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-specific-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment-Specific Safety
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#error-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#smdpoptionvalidationerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SMDPOptionValidationError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smdpoptionexecutionerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SMDPOptionExecutionError
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-context-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Context Fields
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Context Fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#error-context-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Context Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-error-scenarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Error Scenarios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Error Scenarios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#invalid-action-for-action-space" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Invalid Action for Action Space
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continuous-action-shape-mismatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous Action Shape Mismatch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-state-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment State Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#early-termination-during-option" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Early Termination During Option
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Handling Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Handling Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-try-catch-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Try-Catch Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fallback-strategy-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fallback Strategy Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging-and-monitoring-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging and Monitoring Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-recovery-for-rl-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Recovery for RL Training
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging Techniques
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Debugging Techniques">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-pattern-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Pattern Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interactive-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interactive Debugging
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-prevention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Prevention
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Prevention">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-design-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option Design Guidelines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-specific-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment-Specific Safety
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="error-handling">Error Handling</h1>
+<p>SMDPfier provides comprehensive error handling with detailed context information to help debug option execution issues and build robust SMDP applications.</p>
+<h2 id="error-types">Error Types</h2>
+<p>SMDPfier defines specialized exceptions that provide rich context about option failures, making debugging much easier than generic exceptions.</p>
+<h3 id="smdpoptionvalidationerror">SMDPOptionValidationError</h3>
+<p>Raised during <strong>precheck validation</strong> when an option is determined to be invalid before execution.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMDPOptionValidationError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">invalid_option_index</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">SMDPOptionValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Validation failed for option &#39;</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">option_name</span><span class="si">}</span><span class="s2">&#39; (ID: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">option_id</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Validation type: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">validation_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed at step </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">failing_step_index</span><span class="si">}</span><span class="s2"> with action </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">action_repr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Environment state: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">short_obs_summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">base_error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Underlying error: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">base_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="smdpoptionexecutionerror">SMDPOptionExecutionError</h3>
+<p>Raised during <strong>option execution</strong> when a primitive action fails at runtime.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMDPOptionExecutionError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">problematic_option_index</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">SMDPOptionExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Execution failed for option &#39;</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">option_name</span><span class="si">}</span><span class="s2">&#39; (ID: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">option_id</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed at step </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">failing_step_index</span><span class="si">}</span><span class="s2"> with action </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">action_repr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Environment state: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">short_obs_summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">base_error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Underlying error: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">base_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="error-context-fields">Error Context Fields</h2>
+<p>Both error types provide comprehensive context information:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>option_name</code></td>
+<td><code>str</code></td>
+<td>Human-readable name of the failing option</td>
+</tr>
+<tr>
+<td><code>option_id</code></td>
+<td><code>str</code></td>
+<td>Unique identifier for the option (hash-based)</td>
+</tr>
+<tr>
+<td><code>failing_step_index</code></td>
+<td><code>int</code></td>
+<td>Which action in the sequence failed (0-indexed)</td>
+</tr>
+<tr>
+<td><code>action_repr</code></td>
+<td><code>str</code></td>
+<td>String representation of the failing action</td>
+</tr>
+<tr>
+<td><code>short_obs_summary</code></td>
+<td><code>str</code></td>
+<td>Abbreviated environment state description</td>
+</tr>
+<tr>
+<td><code>base_error</code></td>
+<td><code>Exception \| None</code></td>
+<td>Original exception that caused the failure</td>
+</tr>
+<tr>
+<td><code>validation_type</code></td>
+<td><code>str</code></td>
+<td>Type of validation that failed (ValidationError only)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="error-context-example">Error Context Example</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># When this option fails:</span>
+<span class="n">problematic_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">99</span><span class="p">],</span> <span class="s2">&quot;problematic-sequence&quot;</span><span class="p">)</span>
+
+<span class="c1"># You get detailed context:</span>
+<span class="c1"># SMDPOptionExecutionError: Option execution failed</span>
+<span class="c1">#   option_name: &quot;problematic-sequence&quot;</span>
+<span class="c1">#   option_id: &quot;abc123def456...&quot;</span>
+<span class="c1">#   failing_step_index: 2</span>
+<span class="c1">#   action_repr: &quot;99&quot;</span>
+<span class="c1">#   short_obs_summary: &quot;obs=[0.1, -0.3, 0.05, ...] (CartPole-v1)&quot;</span>
+<span class="c1">#   base_error: ValueError(&quot;Invalid action 99 for Discrete(2) action space&quot;)</span>
+</code></pre></div>
+<h2 id="common-error-scenarios">Common Error Scenarios</h2>
+<h3 id="invalid-action-for-action-space">Invalid Action for Action Space</h3>
+<p><strong>Most common error</strong> - action not in environment's action space.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># CartPole has Discrete(2) action space (actions 0, 1)</span>
+<span class="n">invalid_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;invalid-action&quot;</span><span class="p">)</span>  <span class="c1"># Action 2 is invalid</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">invalid_option</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">SMDPOptionExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid action </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">action_repr</span><span class="si">}</span><span class="s2"> at step </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">failing_step_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Output: &quot;Invalid action 2 at step 2&quot;</span>
+</code></pre></div>
+<p><strong>Solution strategies:</strong>
+<div class="highlight"><pre><span></span><code><span class="c1"># Strategy 1: Validate options at creation</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_safe_option</span><span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">action_space</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create option with action space validation.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action_space</span><span class="p">,</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Discrete</span><span class="p">):</span>
+        <span class="n">valid_actions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+        <span class="n">invalid_actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">actions</span> <span class="k">if</span> <span class="n">a</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_actions</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">invalid_actions</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid actions </span><span class="si">{</span><span class="n">invalid_actions</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">action_space</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Option</span><span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+<span class="c1"># Strategy 2: Use masking to prevent invalid options</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">safe_availability</span><span class="p">(</span><span class="n">obs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Only allow options with valid actions.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># Indices of options with valid actions only</span>
+</code></pre></div></p>
+<h3 id="continuous-action-shape-mismatch">Continuous Action Shape Mismatch</h3>
+<p><strong>Continuous environments</strong> require actions with correct shape.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Pendulum expects actions with shape (1,)</span>
+<span class="n">wrong_shape_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]],</span> <span class="s2">&quot;wrong-shape&quot;</span><span class="p">)</span>  <span class="c1"># Shape (2,) - wrong!</span>
+<span class="n">correct_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([[</span><span class="mf">1.5</span><span class="p">]],</span> <span class="s2">&quot;correct-shape&quot;</span><span class="p">)</span>         <span class="c1"># Shape (1,) - correct</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">wrong_shape_option</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">SMDPOptionExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape error: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">base_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Output: &quot;Shape error: ValueError(&#39;Expected action shape (1,), got (2,)&#39;)&quot;</span>
+</code></pre></div>
+<h3 id="environment-state-issues">Environment State Issues</h3>
+<p>Some environments have <strong>state-dependent action validity</strong>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Taxi environment - pickup only valid at passenger locations</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">taxi_example</span><span class="p">():</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;Taxi-v3&quot;</span><span class="p">),</span> <span class="o">...</span><span class="p">)</span>
+
+    <span class="c1"># This might fail if taxi is not at passenger location</span>
+    <span class="n">pickup_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">4</span><span class="p">],</span> <span class="s2">&quot;pickup&quot;</span><span class="p">)</span>  <span class="c1"># Action 4 = pickup</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">pickup_option</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">SMDPOptionExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;pickup&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">base_error</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Pickup failed - taxi not at passenger location&quot;</span><span class="p">)</span>
+            <span class="c1"># Try movement instead</span>
+            <span class="n">move_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;move-south&quot;</span><span class="p">)</span>
+            <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">move_option</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="early-termination-during-option">Early Termination During Option</h3>
+<p><strong>Episode termination</strong> during option execution is handled gracefully (not an error), but understanding the behavior is important.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Long option that might cause episode termination</span>
+<span class="n">long_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;ten-left-actions&quot;</span><span class="p">)</span>
+
+<span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">long_option</span><span class="p">)</span>
+
+<span class="c1"># Check if option completed</span>
+<span class="n">smdp_info</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">smdp_info</span><span class="p">[</span><span class="s2">&quot;terminated_early&quot;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Episode ended after </span><span class="si">{</span><span class="n">smdp_info</span><span class="p">[</span><span class="s1">&#39;k_exec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">smdp_info</span><span class="p">[</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;len&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> actions&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Partial duration: </span><span class="si">{</span><span class="n">smdp_info</span><span class="p">[</span><span class="s1">&#39;duration_exec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> ticks&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="error-handling-patterns">Error Handling Patterns</h2>
+<h3 id="basic-try-catch-pattern">Basic Try-Catch Pattern</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">robust_step</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Robust step with error handling.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">SMDPOptionValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Precheck failed: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">option_name</span><span class="si">}</span><span class="s2"> at step </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">failing_step_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Return safe fallback or re-raise</span>
+        <span class="k">raise</span>
+    <span class="k">except</span> <span class="n">SMDPOptionExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Execution failed: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">option_name</span><span class="si">}</span><span class="s2"> with action </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">action_repr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Return safe fallback or re-raise  </span>
+        <span class="k">raise</span>
+</code></pre></div>
+<h3 id="fallback-strategy-pattern">Fallback Strategy Pattern</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">execute_with_fallback</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">primary_option</span><span class="p">,</span> <span class="n">fallback_options</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Try primary option, fall back to alternatives on failure.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Try primary option</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">primary_option</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">SMDPOptionValidationError</span><span class="p">,</span> <span class="n">SMDPOptionExecutionError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Primary option failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Try fallback options</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fallback</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fallback_options</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trying fallback </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">fallback</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">fallback</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">SMDPOptionValidationError</span><span class="p">,</span> <span class="n">SMDPOptionExecutionError</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+        <span class="c1"># All options failed</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;All options failed, no valid actions available&quot;</span><span class="p">)</span>
+
+<span class="c1"># Usage</span>
+<span class="n">primary</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;complex-sequence&quot;</span><span class="p">)</span>
+<span class="n">fallbacks</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;simple-sequence&quot;</span><span class="p">),</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;minimal-action&quot;</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">execute_with_fallback</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">primary</span><span class="p">,</span> <span class="n">fallbacks</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="logging-and-monitoring-pattern">Logging and Monitoring Pattern</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;smdp_errors&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">monitored_step</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Step with comprehensive error logging.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+
+        <span class="c1"># Log successful execution details</span>
+        <span class="n">smdp_info</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="s2">&quot;smdp&quot;</span><span class="p">]</span>  <span class="c1"># info[&quot;smdp&quot;]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Option &#39;</span><span class="si">{</span><span class="n">smdp_info</span><span class="p">[</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39; executed successfully&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Steps: </span><span class="si">{</span><span class="n">smdp_info</span><span class="p">[</span><span class="s1">&#39;k_exec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, Duration: </span><span class="si">{</span><span class="n">smdp_info</span><span class="p">[</span><span class="s1">&#39;duration_exec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">except</span> <span class="n">SMDPOptionValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Validation error: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">option_name</span><span class="si">}</span><span class="s2"> failed at step </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">failing_step_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Action: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">action_repr</span><span class="si">}</span><span class="s2">, State: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">short_obs_summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Full error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span>
+
+    <span class="k">except</span> <span class="n">SMDPOptionExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Execution error: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">option_name</span><span class="si">}</span><span class="s2"> failed at step </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">failing_step_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Action: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">action_repr</span><span class="si">}</span><span class="s2">, Base error: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">base_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Full error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span>
+</code></pre></div>
+<h3 id="error-recovery-for-rl-training">Error Recovery for RL Training</h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ErrorResilientAgent</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_counts</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_error_threshold</span> <span class="o">=</span> <span class="mi">5</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">step_with_recovery</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;RL training step with error recovery.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="p">(</span><span class="n">SMDPOptionValidationError</span><span class="p">,</span> <span class="n">SMDPOptionExecutionError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Track error frequency</span>
+            <span class="n">error_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">option_name</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">failing_step_index</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error_counts</span><span class="p">[</span><span class="n">error_key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">error_key</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="c1"># If this error happens too often, it&#39;s a systematic issue</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_counts</span><span class="p">[</span><span class="n">error_key</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_error_threshold</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Systematic error detected: </span><span class="si">{</span><span class="n">error_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="c1"># Could trigger option blacklisting, environment reset, etc.</span>
+
+            <span class="c1"># For training, reset environment and continue</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error during training: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">option_name</span><span class="si">}</span><span class="s2">, resetting episode&quot;</span><span class="p">)</span>
+            <span class="n">obs</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">obs</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">info</span>  <span class="c1"># Return terminal step</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_error_statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get error frequency statistics.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_counts</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="debugging-techniques">Debugging Techniques</h2>
+<h3 id="option-validation">Option Validation</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">validate_option_thoroughly</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">option</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Comprehensive option validation.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Validating option: </span><span class="si">{</span><span class="n">option</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Actions: </span><span class="si">{</span><span class="n">option</span><span class="o">.</span><span class="n">actions</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Action count: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check action space compatibility</span>
+    <span class="n">action_space</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">action_space</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Environment action space: </span><span class="si">{</span><span class="n">action_space</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">action</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">actions</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action_space</span><span class="p">,</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Discrete</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">action</span> <span class="o">&lt;</span> <span class="n">action_space</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ❌ Action </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2"> invalid for </span><span class="si">{</span><span class="n">action_space</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ✅ Action </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2"> valid&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action_space</span><span class="p">,</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">):</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">action_space</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ❌ Action </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: shape </span><span class="si">{</span><span class="n">action</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> != </span><span class="si">{</span><span class="n">action_space</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">action_space</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">action</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ❌ Action </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2"> outside bounds </span><span class="si">{</span><span class="n">action_space</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ✅ Action </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2"> valid&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="error-pattern-analysis">Error Pattern Analysis</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">analyze_error_patterns</span><span class="p">(</span><span class="n">error_log</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze common error patterns from logs.&quot;&quot;&quot;</span>
+    <span class="n">error_types</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">failing_actions</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">failing_options</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">error_log</span><span class="p">:</span>
+        <span class="c1"># Group by error type</span>
+        <span class="n">error_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">error_types</span><span class="p">[</span><span class="n">error_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">error_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">error_type</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># Group by failing action</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">action_repr</span>
+        <span class="n">failing_actions</span><span class="p">[</span><span class="n">action</span><span class="p">]</span> <span class="o">=</span> <span class="n">failing_actions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># Group by option name</span>
+        <span class="n">option</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">option_name</span>
+        <span class="n">failing_options</span><span class="p">[</span><span class="n">option</span><span class="p">]</span> <span class="o">=</span> <span class="n">failing_options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error Analysis:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error types: </span><span class="si">{</span><span class="n">error_types</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Most failing actions: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">failing_actions</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span><span class="w"> </span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span><span class="w"> </span><span class="n">x</span><span class="p">:</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Most failing options: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">failing_options</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span><span class="w"> </span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span><span class="w"> </span><span class="n">x</span><span class="p">:</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="interactive-debugging">Interactive Debugging</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">debug_option_interactively</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">option</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Step through option execution interactively.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Debug mode for option: </span><span class="si">{</span><span class="n">option</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Actions to execute: </span><span class="si">{</span><span class="n">option</span><span class="o">.</span><span class="n">actions</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">obs</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initial state: </span><span class="si">{</span><span class="n">obs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">action</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">actions</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: About to execute action </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Press Enter to continue...&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result: obs=</span><span class="si">{</span><span class="n">obs</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">..., reward=</span><span class="si">{</span><span class="n">reward</span><span class="si">}</span><span class="s2">, term=</span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="s2">, trunc=</span><span class="si">{</span><span class="n">trunc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">term</span> <span class="ow">or</span> <span class="n">trunc</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Episode terminated!&quot;</span><span class="p">)</span>
+                <span class="k">break</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error at step </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+</code></pre></div>
+<h2 id="error-prevention">Error Prevention</h2>
+<h3 id="option-design-guidelines">Option Design Guidelines</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># ✅ Good: Simple, robust options</span>
+<span class="n">good_options</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;single-left&quot;</span><span class="p">),</span>           <span class="c1"># Minimal failure risk</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;single-right&quot;</span><span class="p">),</span>          <span class="c1"># Minimal failure risk  </span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;balanced&quot;</span><span class="p">),</span>           <span class="c1"># Self-correcting</span>
+<span class="p">]</span>
+
+<span class="c1"># ❌ Avoid: Complex, risky options</span>
+<span class="n">risky_options</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;extreme-long&quot;</span><span class="p">),</span>     <span class="c1"># High termination risk</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">999</span><span class="p">],</span> <span class="s2">&quot;invalid-action&quot;</span><span class="p">),</span>      <span class="c1"># Invalid action</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;too-long&quot;</span><span class="p">),</span> <span class="c1"># Long sequence risk</span>
+<span class="p">]</span>
+</code></pre></div>
+<h3 id="environment-specific-safety">Environment-Specific Safety</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">create_safe_cartpole_options</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create CartPole options with built-in safety.&quot;&quot;&quot;</span>
+    <span class="c1"># CartPole actions: 0 (left), 1 (right)</span>
+    <span class="n">safe_options</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;left&quot;</span><span class="p">),</span>
+        <span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;right&quot;</span><span class="p">),</span>
+        <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;left-right&quot;</span><span class="p">),</span>     <span class="c1"># Balanced</span>
+        <span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;right-left&quot;</span><span class="p">),</span>     <span class="c1"># Balanced</span>
+        <span class="c1"># Avoid long sequences that might cause termination</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">safe_options</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_safe_pendulum_options</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create Pendulum options with proper action ranges.&quot;&quot;&quot;</span>
+    <span class="c1"># Pendulum action space: Box([-2.0], [2.0])</span>
+    <span class="n">safe_options</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Option</span><span class="p">([[</span><span class="o">-</span><span class="mf">2.0</span><span class="p">]],</span> <span class="s2">&quot;max-left&quot;</span><span class="p">),</span>
+        <span class="n">Option</span><span class="p">([[</span><span class="mf">2.0</span><span class="p">]],</span> <span class="s2">&quot;max-right&quot;</span><span class="p">),</span>
+        <span class="n">Option</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">]],</span> <span class="s2">&quot;no-torque&quot;</span><span class="p">),</span>
+        <span class="n">Option</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]],</span> <span class="s2">&quot;swing&quot;</span><span class="p">),</span>
+        <span class="n">Option</span><span class="p">([[</span><span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">]],</span> <span class="s2">&quot;gentle-right&quot;</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">safe_options</span>
+</code></pre></div>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Error Type</th>
+<th>When It Occurs</th>
+<th>How to Handle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SMDPOptionValidationError</code></td>
+<td>Precheck failure</td>
+<td>Disable precheck or fix option</td>
+</tr>
+<tr>
+<td><code>SMDPOptionExecutionError</code></td>
+<td>Runtime action failure</td>
+<td>Use fallbacks or fix option</td>
+</tr>
+<tr>
+<td>Early termination</td>
+<td>Episode ends during option</td>
+<td>Normal behavior, check <code>terminated_early</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Best Practices:</strong>
+1. <strong>Design robust options</strong> with minimal failure risk
+2. <strong>Use action masking</strong> to prevent invalid options
+3. <strong>Implement fallback strategies</strong> for critical applications
+4. <strong>Log errors comprehensively</strong> for debugging
+5. <strong>Test options thoroughly</strong> in development</p>
+<p><strong>Key Takeaway</strong>: SMDPfier's detailed error context makes debugging much easier than generic exceptions. Use this information to build robust, error-resilient SMDP applications.</p>
+<hr />
+<p><strong>Next</strong>: <a href="../faq/">FAQ</a> | <strong>See Also</strong>: <a href="../masking_and_precheck/">Masking and Precheck</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -2,6 +2,8 @@
 
 **Duration metadata** is the key feature that enables true Semi-Markov Decision Process (SMDP) learning with proper temporal discounting using γ^{ticks}.
 
+**As of SMDPfier ≥0.1.0**, duration also affects the **environment-level macro reward** through the default rate-based aggregation, making time efficiency a first-class objective.
+
 ## 🎯 The Critical Distinction: Steps vs Duration (Ticks)
 
 **This is the most important concept in SMDPfier.** Understanding this distinction is essential for proper SMDP learning.
@@ -10,8 +12,8 @@
 |--------|-------|------------------|
 | **Definition** | Number of `env.step()` calls | Abstract time units |
 | **Determined By** | Option length (`len(option.actions)`) | Duration function |
-| **Controls** | Environment execution | Nothing (metadata only) |
-| **Used For** | Running the environment | SMDP discounting (γ^{ticks}) |
+| **Controls** | Environment execution | Macro reward (via rate) |
+| **Used For** | Running the environment | Reward rate & SMDP discounting |
 | **Always Equal To** | Number of actions in option | Whatever duration function returns |
 
 ### Visual Example
@@ -25,10 +27,81 @@ duration_fn = ConstantOptionDuration(10)        # 10 ticks
 # Step 2: env.step(1) → reward₂  } 3 environment steps
 # Step 3: env.step(0) → reward₃  }
 # 
-# Time accounting: 10 ticks elapsed (for discounting)
+# Time accounting: 10 ticks elapsed
+# Macro reward: (reward₁ + reward₂ + reward₃) / 10  ← Rate-based!
 ```
 
-**Key Point**: The option will ALWAYS execute 3 steps regardless of the duration function. Duration is purely temporal metadata.
+**Key Point**: The option will ALWAYS execute 3 steps regardless of the duration function. Duration is temporal metadata used for rate calculation and SMDP discounting.
+
+## ⚡ Rate-Based Rewards (Default)
+
+**SMDPfier ≥0.1.0 uses rate-based rewards by default**, making duration environmentally significant:
+
+```python
+# Default macro reward formula:
+macro_reward = sum(primitive_rewards) / max(1, duration_exec)
+
+# This encourages time-efficient behavior at the environment level
+```
+
+### Why Rate-Based Rewards?
+
+Without duration-aware rewards, an agent can ignore time costs:
+
+```python
+# Two options collecting same primitive rewards
+option_fast = Option([0, 1], "fast")  # 2 steps
+option_slow = Option([0, 1, 0, 1], "slow")  # 4 steps
+
+# Both collect: [1.0, 1.0, 1.0, 1.0] → total = 4.0
+
+# ❌ With sum_rewards (legacy):
+# - Fast: macro_reward = 4.0
+# - Slow: macro_reward = 4.0
+# → Agent has no incentive to be efficient!
+
+# ✅ With rate-based (default):
+# Assuming ConstantActionDuration(5):
+# - Fast: duration=10, macro_reward = 4.0/10 = 0.4
+# - Slow: duration=20, macro_reward = 4.0/20 = 0.2
+# → Agent learns to prefer faster options!
+```
+
+### Overriding Default Behavior
+
+For legacy sum behavior or custom aggregation:
+
+```python
+from smdpfier.defaults import sum_rewards, mean_rewards
+
+# Legacy sum (ignore duration)
+smdp_env = SMDPfier(
+    env,
+    options_provider=options,
+    duration_fn=ConstantOptionDuration(10),
+    reward_agg=sum_rewards  # Explicit override
+)
+
+# Or use mean
+smdp_env = SMDPfier(
+    env,
+    options_provider=options,
+    duration_fn=ConstantOptionDuration(10),
+    reward_agg=mean_rewards  # Average per primitive step
+)
+
+# Or custom function
+def custom_agg(rewards, duration_exec, per_action_durations):
+    # Your custom logic here
+    return sum(rewards) * 0.5
+
+smdp_env = SMDPfier(
+    env,
+    options_provider=options,
+    duration_fn=ConstantOptionDuration(10),
+    reward_agg=custom_agg  # Flexible signature detection
+)
+```
 
 ## Duration Types
 
