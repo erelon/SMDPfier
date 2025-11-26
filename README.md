@@ -235,7 +235,7 @@ If you use SMDPfier in your research, please cite:
 ```bibtex
 @software{smdpfier2024,
   title = {SMDPfier: SMDP-level behavior for Gymnasium environments},
-  author = {SMDPfier Contributors},
+  author = {Erel A. Shtossel, Gal A. Kaminka},
   url = {https://github.com/smdpfier/smdpfier},
   year = {2024}
 }
