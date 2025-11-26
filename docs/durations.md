@@ -1,154 +1,270 @@
 # Durations and SMDP Discounting
 
-**Duration metadata** is the key feature that enables true Semi-Markov Decision Process (SMDP) learning with proper temporal discounting using γ^{ticks}.
+**Duration** in SMDPfier v0.2.0+ is simple: each primitive action = 1 tick, and option duration equals the number of primitive actions executed (k_exec).
 
-**As of SMDPfier ≥0.1.0**, duration also affects the **environment-level macro reward** through the default rate-based aggregation, making time efficiency a first-class objective.
+## 🎯 Time Semantics (v0.2.0+)
 
-## 🎯 The Critical Distinction: Steps vs Duration (Ticks)
+**The key principle:** Each primitive action = 1 tick of time.
 
-**This is the most important concept in SMDPfier.** Understanding this distinction is essential for proper SMDP learning.
+| Concept | Value |
+|---------|-------|
+| **Tick** | One primitive action execution |
+| **Option Duration** | Number of primitive actions executed (k_exec) |
+| **Complete Execution** | duration = `len(option.actions)` |
+| **Partial Execution** | duration = number of actions before termination |
 
-| Aspect | Steps | Duration (Ticks) |
-|--------|-------|------------------|
-| **Definition** | Number of `env.step()` calls | Abstract time units |
-| **Determined By** | Option length (`len(option.actions)`) | Duration function |
-| **Controls** | Environment execution | Macro reward (via rate) |
-| **Used For** | Running the environment | Reward rate & SMDP discounting |
-| **Always Equal To** | Number of actions in option | Whatever duration function returns |
+### Simple Example
+
+```python
+from smdpfier import SMDPfier, Option
+import gymnasium as gym
+
+env = gym.make("CartPole-v1")
+options = [
+    Option([0, 1, 0], "three-step"),      # 3 actions = 3 ticks
+    Option([1, 1, 0, 0], "four-step"),    # 4 actions = 4 ticks
+    Option([0, 1], "two-step"),           # 2 actions = 2 ticks
+]
+
+smdp_env = SMDPfier(env, options_provider=options, action_interface="index", max_options=3)
+
+# Execute first option (3 actions)
+obs, reward, term, trunc, info = smdp_env.step(0)
+
+# Check duration
+assert info["smdp"]["duration"] == 3  # 3 actions executed = 3 ticks
+assert info["smdp"]["k_exec"] == 3    # Same value
+```
 
 ### Visual Example
 
-```python
-option = Option([0, 1, 0], "left-right-left")  # 3 actions
-duration_fn = ConstantOptionDuration(10)        # 10 ticks
+```
+Option: [0, 1, 0, 1, 1]  (5 actions)
 
-# Execution:
-# Step 1: env.step(0) → reward₁  }
-# Step 2: env.step(1) → reward₂  } 3 environment steps
-# Step 3: env.step(0) → reward₃  }
-# 
-# Time accounting: 10 ticks elapsed
-# Macro reward: (reward₁ + reward₂ + reward₃) / 10  ← Rate-based!
+Normal Execution:
+┌─────┬─────┬─────┬─────┬─────┐
+│ a=0 │ a=1 │ a=0 │ a=1 │ a=1 │
+└─────┴─────┴─────┴─────┴─────┘
+tick:   1     2     3     4     5    → duration = 5
+
+Early Termination (after 3 actions):
+┌─────┬─────┬─────┐  X
+│ a=0 │ a=1 │ a=0 │ episode ends
+└─────┴─────┴─────┘
+tick:   1     2     3                → duration = 3
 ```
 
-**Key Point**: The option will ALWAYS execute 3 steps regardless of the duration function. Duration is temporal metadata used for rate calculation and SMDP discounting.
+## 🔄 SMDP Discounting
 
-## ⚡ Rate-Based Rewards (Default)
+With simple duration = k_exec, SMDP discounting becomes straightforward:
 
-**SMDPfier ≥0.1.0 uses rate-based rewards by default**, making duration environmentally significant:
+### Basic Discounting
 
 ```python
-# Default macro reward formula:
-macro_reward = sum(primitive_rewards) / max(1, duration_exec)
+gamma = 0.99
 
-# This encourages time-efficient behavior at the environment level
+# Execute option
+obs, reward, term, trunc, info = env.step(action)
+duration = info["smdp"]["duration"]
+
+# Apply SMDP discount
+discounted_reward = reward * (gamma ** duration)
 ```
 
-### Why Rate-Based Rewards?
-
-Without duration-aware rewards, an agent can ignore time costs:
+### Multi-Step Example
 
 ```python
-# Two options collecting same primitive rewards
-option_fast = Option([0, 1], "fast")  # 2 steps
-option_slow = Option([0, 1, 0, 1], "slow")  # 4 steps
+# Execute sequence of options
+gamma = 0.99
+total_time = 0
+cumulative_return = 0
 
-# Both collect: [1.0, 1.0, 1.0, 1.0] → total = 4.0
+for action in [0, 1, 2]:
+    obs, reward, term, trunc, info = env.step(action)
+    duration = info["smdp"]["duration"]
+    
+    # Apply time-cumulative discount
+    discount_factor = gamma ** total_time
+    cumulative_return += reward * discount_factor
+    
+    total_time += duration
+    if term or trunc:
+        break
 
-# ❌ With sum_rewards (legacy):
-# - Fast: macro_reward = 4.0
-# - Slow: macro_reward = 4.0
-# → Agent has no incentive to be efficient!
-
-# ✅ With rate-based (default):
-# Assuming ConstantActionDuration(5):
-# - Fast: duration=10, macro_reward = 4.0/10 = 0.4
-# - Slow: duration=20, macro_reward = 4.0/20 = 0.2
-# → Agent learns to prefer faster options!
+print(f"Total time: {total_time} ticks")
+print(f"Cumulative return: {cumulative_return}")
 ```
 
-### Overriding Default Behavior
-
-For legacy sum behavior or custom aggregation:
+### Comparison: MDP vs SMDP
 
 ```python
-from smdpfier.defaults import sum_rewards, mean_rewards
+# MDP: Each primitive action discounts by γ
+mdp_return = r₀ + γ¹·r₁ + γ²·r₂ + γ³·r₃ + γ⁴·r₄
 
-# Legacy sum (ignore duration)
+# SMDP: Each option discounts by γ^{duration}
+# Options with lengths [3, 2, 4]:
+smdp_return = R₀ + γ³·R₁ + γ⁵·R₂
+#                   ↑      ↑
+#                   3    3+2
+```
+
+## 📊 Reward Aggregation
+
+By default, SMDPfier sums the per-step rewards to produce the macro reward:
+
+```python
+# Default behavior (v0.2.0+)
+macro_reward = sum(primitive_rewards)
+
+# Example:
+# Option executes 3 steps with rewards [1.0, 1.0, 1.0]
+# macro_reward = 1.0 + 1.0 + 1.0 = 3.0
+```
+
+### Custom Aggregators
+
+You can customize reward aggregation:
+
+```python
+from smdpfier import SMDPfier
+from smdpfier.defaults import mean_rewards, discounted_sum
+
+# Average per-step rewards
+env = SMDPfier(env, options_provider=options, reward_agg=mean_rewards)
+# 3 steps with rewards [1.0, 1.0, 1.0] → macro_reward = 1.0
+
+# Discount per-step rewards
+env = SMDPfier(env, options_provider=options, reward_agg=discounted_sum(gamma=0.99))
+# 3 steps with rewards [1.0, 1.0, 1.0] → macro_reward = 1.0 + 0.99 + 0.98 = 2.97
+
+# Custom aggregator
+def custom_agg(rewards):
+    return sum(r * (i + 1) for i, r in enumerate(rewards))  # Weighted sum
+
+env = SMDPfier(env, options_provider=options, reward_agg=custom_agg)
+```
+
+## ⚠️ Early Termination
+
+When the episode terminates before an option completes, duration reflects actual execution:
+
+```python
+option = Option([0, 1, 0, 1, 1], "five-step")
+
+# Episode terminates after 3rd action
+# - k_exec = 3
+# - duration = 3 (not 5!)
+# - rewards = [r₁, r₂, r₃] (only 3 rewards)
+# - terminated_early = True
+
+obs, reward, term, trunc, info = env.step(option)
+if info["smdp"]["terminated_early"]:
+    print(f"Option interrupted after {info['smdp']['k_exec']} of {info['smdp']['option']['len']} actions")
+    print(f"Duration: {info['smdp']['duration']} ticks (not {info['smdp']['option']['len']})")
+```
+
+### Why This Matters for Discounting
+
+```python
+# Option length: 5 actions
+# Terminated after 3 actions
+
+# ✅ Correct: Use actual duration
+duration = info["smdp"]["duration"]  # = 3
+next_discount = gamma ** duration    # = γ³
+
+# ❌ Wrong: Use planned duration
+planned = info["smdp"]["option"]["len"]  # = 5
+wrong_discount = gamma ** planned         # = γ⁵ (incorrect!)
+```
+
+## 🧪 Full Example
+
+```python
+import gymnasium as gym
+from smdpfier import SMDPfier, Option
+
+# Setup
+env = gym.make("CartPole-v1")
+options = [
+    Option([0, 0, 1], "left-left-right"),    # 3 ticks
+    Option([1, 1, 0, 0], "right-right-left-left"),  # 4 ticks
+]
+
 smdp_env = SMDPfier(
     env,
     options_provider=options,
-    duration_fn=ConstantOptionDuration(10),
-    reward_agg=sum_rewards  # Explicit override
+    action_interface="index",
+    max_options=2
 )
 
-# Or use mean
-smdp_env = SMDPfier(
-    env,
-    options_provider=options,
-    duration_fn=ConstantOptionDuration(10),
-    reward_agg=mean_rewards  # Average per primitive step
-)
+# Episode
+obs, info = smdp_env.reset()
+gamma = 0.99
+total_time = 0
+returns = []
 
-# Or custom function
-def custom_agg(rewards, duration_exec, per_action_durations):
-    # Your custom logic here
-    return sum(rewards) * 0.5
+for step in range(10):
+    action = smdp_env.action_space.sample()
+    obs, reward, term, trunc, info = smdp_env.step(action)
+    
+    smdp = info["smdp"]
+    duration = smdp["duration"]
+    
+    print(f"Step {step}:")
+    print(f"  Option: {smdp['option']['name']}")
+    print(f"  Duration: {duration} ticks")
+    print(f"  Rewards: {smdp['rewards']}")
+    print(f"  Macro reward: {reward}")
+    print(f"  Discounted: {reward * (gamma ** total_time):.4f}")
+    
+    total_time += duration
+    returns.append(reward * (gamma ** total_time))
+    
+    if term or trunc:
+        break
 
-smdp_env = SMDPfier(
-    env,
-    options_provider=options,
-    duration_fn=ConstantOptionDuration(10),
-    reward_agg=custom_agg  # Flexible signature detection
-)
+print(f"\nTotal time: {total_time} ticks")
+print(f"Total return: {sum(returns):.4f}")
 ```
 
-## Duration Types
+## 📝 Key Takeaways
 
-SMDPfier supports two duration formats with different use cases:
+1. **Each primitive action = 1 tick**: Time is simple and natural
+2. **Duration = k_exec**: No separate duration function needed
+3. **Early termination**: Duration reflects actual execution, not planned
+4. **SMDP discounting**: Use `γ^{duration}` for each option
+5. **Macro reward**: Sum of per-step rewards by default (customizable)
 
-### Scalar Duration (Option-Level)
+## 🔄 Migrating from 0.1.x
 
-Returns a single integer representing the total duration for the entire option.
+In v0.1.x, you had to specify a `duration_fn`. In v0.2.0+, this is automatic:
 
 ```python
-from smdpfier.defaults import ConstantOptionDuration, RandomOptionDuration
+# 0.1.x - Old way
+from smdpfier.defaults import ConstantActionDuration
 
-# Fixed duration per option
-duration_fn = ConstantOptionDuration(10)
-# Every option takes 10 ticks, regardless of length
+env = SMDPfier(
+    env,
+    options_provider=options,
+    duration_fn=ConstantActionDuration(1),  # Each action = 1 tick
+    # ...
+)
 
-# Random duration per option  
-duration_fn = RandomOptionDuration(min_duration=5, max_duration=15)
-# Each option gets a random duration between 5-15 ticks
+# 0.2.0+ - New way (automatic!)
+env = SMDPfier(
+    env,
+    options_provider=options,
+    # duration_fn removed - each action automatically = 1 tick
+    # ...
+)
 ```
 
-**Use Cases:**
-- Modeling options as "macro-actions" with fixed time cost
-- Simple temporal abstractions
-- When option completion time is independent of constituent actions
+See [Migration Guide](migration_0_2.md) for complete upgrade instructions.
 
-### List Duration (Action-Level)
+---
 
-Returns a list of integers, one for each primitive action in the option.
-
-```python
-from smdpfier.defaults import ConstantActionDuration, RandomActionDuration
-
-# Fixed duration per action
-duration_fn = ConstantActionDuration(3)
-# Each primitive action takes 3 ticks
-# Option [0,1,0] → durations [3,3,3] → total 9 ticks
-
-# Random duration per action
-duration_fn = RandomActionDuration(min_duration=2, max_duration=5)  
-# Each action gets random duration 2-5 ticks
-# Option [0,1,0] → durations [4,2,5] → total 11 ticks
-```
-
-**Use Cases:**
-- Modeling heterogeneous action costs (e.g., move vs attack)
-- Fine-grained temporal modeling
+**Next:** [FAQ](faq.md) | **Previous:** [API Reference](api.md)
 - When different actions have different inherent durations
 
 ### Duration Type Comparison

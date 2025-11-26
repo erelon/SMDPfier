@@ -590,22 +590,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-critical-distinction-steps-vs-duration" class="md-nav__link">
+  <a href="#time-semantics-v020" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Critical Distinction: Steps vs Duration
+        Time Semantics (v0.2.0+)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="The Critical Distinction: Steps vs Duration">
+    <nav class="md-nav" aria-label="Time Semantics (v0.2.0+)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#do-durations-control-how-many-steps-are-executed" class="md-nav__link">
+  <a href="#how-does-time-work-in-smdpfier" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🚨 Do durations control how many steps are executed?
+        How does time work in SMDPfier?
       
     </span>
   </a>
@@ -613,10 +613,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#what-determines-the-number-of-environment-steps" class="md-nav__link">
+  <a href="#why-did-duration-modeling-change-in-v020" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What determines the number of environment steps?
+        Why did duration modeling change in v0.2.0?
       
     </span>
   </a>
@@ -624,10 +624,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#how-do-i-control-execution-length" class="md-nav__link">
+  <a href="#how-do-i-control-option-duration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        How do I control execution length?
+        How do I control option duration?
       
     </span>
   </a>
@@ -663,21 +663,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#whats-the-difference-between-duration_planned-and-duration_exec" class="md-nav__link">
+  <a href="#what-happens-with-early-termination" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What's the difference between duration_planned and duration_exec?
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#how-do-partial-duration-policies-work" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How do partial duration policies work?
+        What happens with early termination?
       
     </span>
   </a>
@@ -985,22 +974,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-critical-distinction-steps-vs-duration" class="md-nav__link">
+  <a href="#time-semantics-v020" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Critical Distinction: Steps vs Duration
+        Time Semantics (v0.2.0+)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="The Critical Distinction: Steps vs Duration">
+    <nav class="md-nav" aria-label="Time Semantics (v0.2.0+)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#do-durations-control-how-many-steps-are-executed" class="md-nav__link">
+  <a href="#how-does-time-work-in-smdpfier" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🚨 Do durations control how many steps are executed?
+        How does time work in SMDPfier?
       
     </span>
   </a>
@@ -1008,10 +997,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#what-determines-the-number-of-environment-steps" class="md-nav__link">
+  <a href="#why-did-duration-modeling-change-in-v020" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What determines the number of environment steps?
+        Why did duration modeling change in v0.2.0?
       
     </span>
   </a>
@@ -1019,10 +1008,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#how-do-i-control-execution-length" class="md-nav__link">
+  <a href="#how-do-i-control-option-duration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        How do I control execution length?
+        How do I control option duration?
       
     </span>
   </a>
@@ -1058,21 +1047,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#whats-the-difference-between-duration_planned-and-duration_exec" class="md-nav__link">
+  <a href="#what-happens-with-early-termination" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What's the difference between duration_planned and duration_exec?
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#how-do-partial-duration-policies-work" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How do partial duration policies work?
+        What happens with early termination?
       
     </span>
   </a>
@@ -1321,9 +1299,9 @@
 <h3 id="what-is-smdpfier">What is SMDPfier?</h3>
 <p>SMDPfier is a Gymnasium wrapper that transforms any environment into a <strong>Semi-Markov Decision Process (SMDP)</strong> by enabling:
 - <strong>Options</strong>: Sequences of primitive actions executed atomically
-- <strong>Duration Metadata</strong>: Abstract "ticks" for proper temporal discounting
-- <strong>SMDP Discounting</strong>: Using γ^{ticks} instead of γ^{steps}</p>
-<p><strong>Key Insight</strong>: SMDPfier separates execution (environment steps) from time (discounting metadata).</p>
+- <strong>Simple Time Semantics</strong>: Each primitive action = 1 tick (v0.2.0+)
+- <strong>SMDP Discounting</strong>: Using γ^{k} where k = number of actions executed</p>
+<p><strong>Key Insight (v0.2.0+)</strong>: Each primitive action = 1 tick. Duration = k_exec. Simple and natural.</p>
 <h3 id="how-is-this-different-from-other-hierarchical-rl-libraries">How is this different from other hierarchical RL libraries?</h3>
 <table>
 <thead>
@@ -1336,7 +1314,7 @@
 <tbody>
 <tr>
 <td><strong>Focus</strong></td>
-<td>Duration-aware SMDP behavior</td>
+<td>Option-based SMDP behavior</td>
 <td>General hierarchical RL</td>
 </tr>
 <tr>
@@ -1351,7 +1329,7 @@
 </tr>
 <tr>
 <td><strong>Temporal Modeling</strong></td>
-<td>Explicit duration metadata</td>
+<td>Each action = 1 tick</td>
 <td>Usually step-based</td>
 </tr>
 <tr>
@@ -1363,53 +1341,46 @@
 </table>
 <h3 id="when-should-i-use-smdpfier">When should I use SMDPfier?</h3>
 <p>✅ <strong>Use SMDPfier when you want to:</strong>
-- Apply <strong>true SMDP discounting</strong> with γ^{duration}
+- Apply <strong>SMDP discounting</strong> with γ^{duration} where duration = actions executed
 - Test <strong>hierarchical policies</strong> with temporal abstractions
 - Add <strong>option-level control</strong> to existing environments
-- <strong>Research temporal abstractions</strong> without framework complexity</p>
+- <strong>Research temporal abstractions</strong> with simple time semantics</p>
 <p>❌ <strong>Don't use SMDPfier when:</strong>
 - You need complex option discovery algorithms
 - You want full hierarchical RL frameworks (use HRL libraries)
 - You don't care about temporal discounting (standard MDP is fine)</p>
-<h2 id="the-critical-distinction-steps-vs-duration">The Critical Distinction: Steps vs Duration</h2>
-<h3 id="do-durations-control-how-many-steps-are-executed">🚨 Do durations control how many steps are executed?</h3>
-<p><strong>NO!</strong> This is the most common misconception.</p>
-<ul>
-<li><strong>Steps</strong>: Determined by option length, controls <code>env.step()</code> calls</li>
-<li><strong>Duration</strong>: Metadata only, used for SMDP discounting</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="n">option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;three-actions&quot;</span><span class="p">)</span>     <span class="c1"># Always 3 steps</span>
-<span class="n">duration_fn</span> <span class="o">=</span> <span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>       <span class="c1"># 100 ticks metadata</span>
+<h2 id="time-semantics-v020">Time Semantics (v0.2.0+)</h2>
+<h3 id="how-does-time-work-in-smdpfier">How does time work in SMDPfier?</h3>
+<p><strong>Simple rule:</strong> Each primitive action = 1 tick.</p>
+<div class="highlight"><pre><span></span><code><span class="n">option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;three-actions&quot;</span><span class="p">)</span>  <span class="c1"># 3 actions</span>
 
-<span class="c1"># Result: 3 env.step() calls, 100 ticks for discounting</span>
+<span class="c1"># Executes 3 primitive actions → duration = 3 ticks</span>
+<span class="c1"># If terminated early after 2 actions → duration = 2 ticks</span>
 </code></pre></div>
-<h3 id="what-determines-the-number-of-environment-steps">What determines the number of environment steps?</h3>
-<p><strong>Only the option length</strong> (<code>len(option.actions)</code>).</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># These all execute the same number of steps</span>
-<span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;option-1&quot;</span><span class="p">)</span>     <span class="c1"># 3 steps</span>
-<span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;option-2&quot;</span><span class="p">)</span>     <span class="c1"># 3 steps  </span>
-<span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;option-3&quot;</span><span class="p">)</span>     <span class="c1"># 3 steps</span>
+<h3 id="why-did-duration-modeling-change-in-v020">Why did duration modeling change in v0.2.0?</h3>
+<p><strong>Simplicity and clarity.</strong> The old system separated "steps" from "ticks" which was confusing. Now:
+- Each action = 1 tick (natural and intuitive)
+- Duration = k_exec (number of actions executed)
+- No complex duration functions needed</p>
+<p>See <a href="../migration_0_2/">Migration Guide</a> for upgrading from 0.1.x.</p>
+<h3 id="how-do-i-control-option-duration">How do I control option duration?</h3>
+<p><strong>Use option length:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Want 2 ticks? Use 2 actions:</span>
+<span class="n">short_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;short&quot;</span><span class="p">)</span>           <span class="c1"># 2 ticks</span>
 
-<span class="c1"># Duration function doesn&#39;t matter for execution:</span>
-<span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>         <span class="c1"># Still 3 steps each</span>
-<span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>      <span class="c1"># Still 3 steps each</span>
-</code></pre></div>
-<h3 id="how-do-i-control-execution-length">How do I control execution length?</h3>
-<p><strong>Change the option's action sequence</strong>, not the duration function:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Want longer execution? Add more actions:</span>
-<span class="n">short_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;short&quot;</span><span class="p">)</span>           <span class="c1"># 2 steps</span>
-<span class="n">long_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;long&quot;</span><span class="p">)</span>    <span class="c1"># 5 steps</span>
+<span class="c1"># Want 5 ticks? Use 5 actions:</span>
+<span class="n">long_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;long&quot;</span><span class="p">)</span>    <span class="c1"># 5 ticks</span>
 
-<span class="c1"># Want shorter execution? Remove actions:</span>
-<span class="n">very_short_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;single&quot;</span><span class="p">)</span>        <span class="c1"># 1 step</span>
+<span class="c1"># Want 1 tick? Use 1 action:</span>
+<span class="n">instant_option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;instant&quot;</span><span class="p">)</span>          <span class="c1"># 1 tick</span>
 </code></pre></div>
 <h2 id="smdp-discounting">SMDP Discounting</h2>
 <h3 id="how-do-i-apply-smdp-discounting">How do I apply SMDP discounting?</h3>
-<p>Use <code>duration_exec</code> from the info payload:</p>
+<p>Use <code>duration</code> from the info payload:</p>
 <div class="highlight"><pre><span></span><code><span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
-<span class="c1"># Get executed duration (handles early termination)  </span>
-<span class="n">duration</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;duration_exec&quot;</span><span class="p">]</span>
+<span class="c1"># Get duration (equals k_exec)</span>
+<span class="n">duration</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span>
 
 <span class="c1"># Apply SMDP discounting</span>
 <span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.99</span>
@@ -1419,42 +1390,20 @@
 <span class="n">total_time</span> <span class="o">+=</span> <span class="n">duration</span>
 <span class="n">next_discount</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">**</span> <span class="n">total_time</span>
 </code></pre></div>
-<h3 id="whats-the-difference-between-duration_planned-and-duration_exec">What's the difference between duration_planned and duration_exec?</h3>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>When They Differ</th>
-<th>Example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>duration_planned</code></td>
-<td>Expected duration from duration function</td>
-<td>10 ticks</td>
-</tr>
-<tr>
-<td><code>duration_exec</code></td>
-<td>Actual duration (accounts for early termination)</td>
-<td>6 ticks (if terminated early)</td>
-</tr>
-</tbody>
-</table>
-<p><strong>They're equal</strong> when the option completes normally.
-<strong>They differ</strong> when the episode terminates before the option finishes.</p>
-<h3 id="how-do-partial-duration-policies-work">How do partial duration policies work?</h3>
-<p>When an option terminates early:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Option: [0, 1, 0, 1] (4 actions), Duration: 12 ticks, Terminated after 3 actions</span>
+<h3 id="what-happens-with-early-termination">What happens with early termination?</h3>
+<p>When the episode terminates before an option completes, <code>duration</code> reflects actual execution:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Option has 5 actions, but episode terminates after 2 actions</span>
 
-<span class="c1"># &quot;proportional&quot; (default): (3/4) * 12 = 9 ticks</span>
-<span class="c1"># &quot;full&quot;: 12 ticks (option conceptually &quot;completes&quot;)  </span>
-<span class="c1"># &quot;zero&quot;: 0 ticks (failed options consume no time)</span>
+<span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;k_exec&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>              <span class="c1"># 2 actions executed</span>
+    <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>            <span class="c1"># 2 ticks (= k_exec)</span>
+    <span class="s2">&quot;terminated_early&quot;</span><span class="p">:</span> <span class="kc">True</span>  <span class="c1"># Flag indicating early termination</span>
+<span class="p">}</span>
 </code></pre></div>
-<p>Choose based on your domain:
-- <strong>Proportional</strong>: Most realistic (default)
-- <strong>Full</strong>: Options have setup costs
-- <strong>Zero</strong>: Failures are "free"</p>
+<p><strong>Why this matters:</strong>
+- Use actual duration for discounting, not planned length
+- Prevents incorrect temporal credit assignment
+- Handles partial execution correctly</p>
 <h2 id="action-interfaces">Action Interfaces</h2>
 <h3 id="index-vs-direct-which-should-i-use">Index vs Direct: Which should I use?</h3>
 <table>
@@ -1521,14 +1470,13 @@
 <p><strong>Yes!</strong> SMDPfier fully supports continuous action spaces:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Continuous options</span>
 <span class="n">continuous_options</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">Option</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]],</span> <span class="s2">&quot;left-center-right&quot;</span><span class="p">),</span>
-    <span class="n">Option</span><span class="p">([[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]],</span> <span class="s2">&quot;multi-dim-action&quot;</span><span class="p">),</span>
+    <span class="n">Option</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]],</span> <span class="s2">&quot;left-center-right&quot;</span><span class="p">),</span>  <span class="c1"># 3 ticks</span>
+    <span class="n">Option</span><span class="p">([[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]],</span> <span class="s2">&quot;multi-dim-action&quot;</span><span class="p">),</span>             <span class="c1"># 1 tick</span>
 <span class="p">]</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
     <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;Pendulum-v1&quot;</span><span class="p">),</span>
     <span class="n">options_provider</span><span class="o">=</span><span class="n">continuous_options</span><span class="p">,</span>
-    <span class="n">duration_fn</span><span class="o">=</span><span class="n">ConstantActionDuration</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
     <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;direct&quot;</span>  <span class="c1"># Recommended for continuous</span>
 <span class="p">)</span>
 </code></pre></div>
@@ -1544,14 +1492,14 @@
 <p>SMDPfier handles this gracefully:</p>
 <ol>
 <li><strong>Execution stops</strong> immediately when <code>env.step()</code> returns <code>terminated=True</code> or <code>truncated=True</code></li>
-<li><strong>Partial duration policy</strong> is applied based on configuration</li>
-<li><strong>Info payload</strong> reflects actual execution (<code>k_exec</code>, <code>duration_exec</code>, <code>terminated_early</code>)</li>
+<li><strong>Duration reflects actual execution</strong> (duration = k_exec)</li>
+<li><strong>Info payload</strong> contains early termination flag</li>
 </ol>
 <div class="highlight"><pre><span></span><code><span class="c1"># Option with 5 actions, but episode terminates after 2 actions</span>
 <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;k_exec&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>                    <span class="c1"># Only 2 actions executed</span>
+    <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>                  <span class="c1"># 2 ticks (= k_exec)</span>
     <span class="s2">&quot;terminated_early&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>       <span class="c1"># Flag early termination</span>
-    <span class="s2">&quot;duration_exec&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>             <span class="c1"># Partial duration (if proportional policy)</span>
     <span class="c1"># ...</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -1560,23 +1508,25 @@
 <p><strong>Common causes:</strong></p>
 <ol>
 <li>
-<p><strong>Wrong discounting</strong>: Use <code>duration_exec</code>, not step count
+<p><strong>Wrong discounting</strong>: Use <code>duration</code>, not step count
 <div class="highlight"><pre><span></span><code><span class="c1"># Wrong</span>
 <span class="n">discount</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">**</span> <span class="n">step_count</span>
 
 <span class="c1"># Right  </span>
-<span class="n">discount</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">**</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;duration_exec&quot;</span><span class="p">]</span>
+<span class="n">discount</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">**</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span>
 </code></pre></div></p>
 </li>
 <li>
 <p><strong>Action space mismatch</strong>: Ensure max_options is correct
-<div class="highlight"><pre><span></span><code><span class="c1"># Wrong - action space is Discrete(max_options), not len(options)</span>
-<span class="n">max_options</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">static_options</span><span class="p">)</span>  <span class="c1"># Correct for static options</span>
-<span class="n">max_options</span> <span class="o">=</span> <span class="mi">10</span>                   <span class="c1"># Might be needed for dynamic options</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Correct for static options</span>
+<span class="n">max_options</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">static_options</span><span class="p">)</span>
+
+<span class="c1"># Might be needed for dynamic options</span>
+<span class="n">max_options</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Set appropriately</span>
 </code></pre></div></p>
 </li>
 <li>
-<p><strong>Reward aggregation</strong>: Check if <code>sum_rewards</code> is appropriate
+<p><strong>Reward aggregation</strong>: Check if default sum is appropriate
 <div class="highlight"><pre><span></span><code><span class="c1"># Try different aggregation</span>
 <span class="n">reward_agg</span> <span class="o">=</span> <span class="n">mean_rewards</span>          <span class="c1"># Average instead of sum</span>
 <span class="n">reward_agg</span> <span class="o">=</span> <span class="n">discounted_sum</span><span class="p">(</span><span class="mf">0.99</span><span class="p">)</span>  <span class="c1"># Internal discounting</span>
@@ -1637,11 +1587,10 @@
 </code></pre></div></p>
 </li>
 <li>
-<p><strong>Avoid complex duration functions</strong>:
-<div class="highlight"><pre><span></span><code><span class="c1"># Simple is better</span>
-<span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>          <span class="c1"># Fast</span>
-<span class="c1"># vs</span>
-<span class="n">complex_state_dependent_duration</span>   <span class="c1"># Potentially slow</span>
+<p><strong>Use simple reward aggregators</strong>:
+<div class="highlight"><pre><span></span><code><span class="c1"># Simple aggregators are faster</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults</span><span class="w"> </span><span class="kn">import</span> <span class="n">sum_rewards</span><span class="p">,</span> <span class="n">mean_rewards</span>
+<span class="n">reward_agg</span> <span class="o">=</span> <span class="n">sum_rewards</span>  <span class="c1"># Fast</span>
 </code></pre></div></p>
 </li>
 <li>
@@ -1668,10 +1617,11 @@
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== Option Execution Details ===&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Option: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (ID: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Actions: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;len&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> total&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Actions: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;len&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> total&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Executed: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;k_exec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> steps&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duration: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> ticks (= k_exec)&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Per-step rewards: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;rewards&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duration: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;duration_exec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> ticks&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Macro reward: </span><span class="si">{</span><span class="n">reward</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Early termination: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;terminated_early&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="n">smdp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;action_mask&#39;</span><span class="p">):</span>

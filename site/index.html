@@ -350,6 +350,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#index-interface-recommended-for-rl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index Interface (Recommended for RL)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direct-interface-intuitive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Direct Interface (Intuitive)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -376,10 +404,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#steps-vs-duration-critical-distinction" class="md-nav__link">
+  <a href="#time-semantics-v020" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Steps vs Duration (Critical Distinction!)
+        Time Semantics (v0.2.0+)
       
     </span>
   </a>
@@ -440,56 +468,6 @@
     <span class="md-ellipsis">
       
         Quick Navigation
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Quick Navigation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#options_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Options
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#durations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Durations
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#interfaces" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Interfaces
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installation
       
     </span>
   </a>
@@ -842,6 +820,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#index-interface-recommended-for-rl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index Interface (Recommended for RL)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direct-interface-intuitive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Direct Interface (Intuitive)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -868,10 +874,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#steps-vs-duration-critical-distinction" class="md-nav__link">
+  <a href="#time-semantics-v020" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Steps vs Duration (Critical Distinction!)
+        Time Semantics (v0.2.0+)
       
     </span>
   </a>
@@ -932,56 +938,6 @@
     <span class="md-ellipsis">
       
         Quick Navigation
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Quick Navigation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#options_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Options
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#durations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Durations
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#interfaces" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Interfaces
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installation
       
     </span>
   </a>
@@ -1070,40 +1026,40 @@
 
 
 <h1 id="smdpfier-documentation">SMDPfier Documentation</h1>
-<p>Welcome to SMDPfier, a Gymnasium wrapper that enables <strong>Semi-Markov Decision Process (SMDP)</strong> behavior in reinforcement learning environments through <strong>Options</strong> and <strong>duration metadata</strong>.</p>
+<p>Welcome to SMDPfier, a Gymnasium wrapper that enables <strong>Semi-Markov Decision Process (SMDP)</strong> behavior in reinforcement learning environments through <strong>Options</strong> with simple, natural time semantics.</p>
 <h2 id="overview">Overview</h2>
-<p>SMDPfier transforms any Gymnasium environment into an SMDP by allowing agents to execute <strong>Options</strong> (sequences of primitive actions) while tracking <strong>duration metadata</strong> in abstract "ticks" for proper temporal discounting.</p>
-<p><strong>🎯 Key Insight</strong>: SMDPfier separates <strong>execution</strong> (how many <code>env.step()</code> calls) from <strong>time</strong> (abstract ticks for discounting), enabling true SMDP learning with γ^{ticks}.</p>
+<p>SMDPfier transforms any Gymnasium environment into an SMDP by allowing agents to execute <strong>Options</strong> (sequences of primitive actions) where each primitive action = 1 tick of time, enabling natural SMDP discounting.</p>
+<p><strong>🎯 Key Insight</strong>: Each primitive action = 1 tick. Option duration = number of actions executed. Simple and natural.</p>
 <h2 id="key-features">Key Features</h2>
 <ul>
 <li><strong>🔗 Flexible Options</strong>: Static sequences or dynamic discovery via callable</li>
 <li><strong>⚡ Two Interfaces</strong>: <a href="usage_index_vs_direct/#index-interface">Index-based</a> (Discrete actions) or <a href="usage_index_vs_direct/#direct-interface">direct</a> Option passing  </li>
-<li><strong>⏱️ Duration Metadata</strong>: Integer ticks for <a href="durations/#smdp-discounting">true SMDP discounting</a></li>
+<li><strong>⏱️ Simple Time Semantics</strong>: Each primitive action = 1 tick, <a href="durations/">duration = k_exec</a></li>
 <li><strong>🎭 Action Masking</strong>: Support for <a href="masking_and_precheck/">discrete action availability</a></li>
 <li><strong>📊 Rich Info</strong>: Comprehensive execution metadata in <code>info["smdp"]</code></li>
 <li><strong>🛡️ Error Handling</strong>: Detailed <a href="errors/">validation and runtime errors</a></li>
 <li><strong>🔄 Continuous Actions</strong>: Full support for continuous action spaces</li>
-<li><strong>🎲 Built-in Defaults</strong>: Ready-to-use option generators and duration functions</li>
+<li><strong>🎲 Built-in Defaults</strong>: Ready-to-use option generators and reward aggregators</li>
 </ul>
 <h2 id="quick-start">Quick Start</h2>
+<h3 id="index-interface-recommended-for-rl">Index Interface (Recommended for RL)</h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">gymnasium</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gym</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMDPfier</span><span class="p">,</span> <span class="n">Option</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConstantOptionDuration</span>
 
 <span class="c1"># Create environment and define options</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;CartPole-v1&quot;</span><span class="p">)</span>
 <span class="n">options</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">Option</span><span class="p">(</span><span class="n">actions</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;left-left-right&quot;</span><span class="p">),</span>   <span class="c1"># 3 steps</span>
-    <span class="n">Option</span><span class="p">(</span><span class="n">actions</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;right-right-left&quot;</span><span class="p">),</span>  <span class="c1"># 3 steps</span>
-    <span class="n">Option</span><span class="p">(</span><span class="n">actions</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;left-right&quot;</span><span class="p">),</span>           <span class="c1"># 2 steps</span>
+    <span class="n">Option</span><span class="p">(</span><span class="n">actions</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;left-left-right&quot;</span><span class="p">),</span>   <span class="c1"># 3 actions = 3 ticks</span>
+    <span class="n">Option</span><span class="p">(</span><span class="n">actions</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;right-right-left&quot;</span><span class="p">),</span>  <span class="c1"># 3 actions = 3 ticks</span>
+    <span class="n">Option</span><span class="p">(</span><span class="n">actions</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;left-right&quot;</span><span class="p">),</span>           <span class="c1"># 2 actions = 2 ticks</span>
 <span class="p">]</span>
 
 <span class="c1"># Wrap with SMDPfier</span>
 <span class="n">smdp_env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
     <span class="n">env</span><span class="p">,</span>
-    <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>               <span class="c1"># Static options list</span>
-    <span class="n">duration_fn</span><span class="o">=</span><span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="c1"># 10 ticks per option</span>
-    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span>                <span class="c1"># Discrete(3) action space</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>       <span class="c1"># Static options list</span>
+    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>       <span class="c1"># Discrete(3) action space</span>
+    <span class="n">max_options</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="c1"># Use like any Gym environment</span>
@@ -1112,13 +1068,20 @@
 
 <span class="c1"># Access SMDP metadata</span>
 <span class="n">smdp</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Option &#39;</span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39; executed </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;k_exec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/3 steps&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duration: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;duration_exec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> ticks (for SMDP discounting)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Option &#39;</span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39; executed </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;k_exec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> steps&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duration: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> ticks (= k_exec)&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Per-step rewards: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;rewards&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="c1"># Apply SMDP discounting</span>
 <span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.99</span>
-<span class="n">discounted_reward</span> <span class="o">=</span> <span class="n">reward</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">**</span> <span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;duration_exec&#39;</span><span class="p">])</span>
+<span class="n">discounted_reward</span> <span class="o">=</span> <span class="n">reward</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">**</span> <span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">])</span>
+</code></pre></div>
+<h3 id="direct-interface-intuitive">Direct Interface (Intuitive)</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Pass Option objects directly</span>
+<span class="n">smdp_env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;direct&quot;</span><span class="p">)</span>
+
+<span class="c1"># Execute with Option object</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">smdp_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </code></pre></div>
 <h2 id="core-concepts">Core Concepts</h2>
 <h3 id="options">Options</h3>
@@ -1130,50 +1093,29 @@
     <span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;strategy&quot;</span><span class="p">:</span> <span class="s2">&quot;zigzag&quot;</span><span class="p">}</span>  <span class="c1"># Optional metadata</span>
 <span class="p">)</span>
 </code></pre></div>
-<h3 id="steps-vs-duration-critical-distinction">Steps vs Duration (Critical Distinction!)</h3>
-<p><strong>This is the most important concept in SMDPfier:</strong></p>
-<table>
-<thead>
-<tr>
-<th>Concept</th>
-<th>Definition</th>
-<th>Controls</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Steps</strong></td>
-<td>Number of <code>env.step()</code> calls</td>
-<td>Option length</td>
-<td>Environment execution</td>
-</tr>
-<tr>
-<td><strong>Duration (Ticks)</strong></td>
-<td>Abstract time units</td>
-<td>Duration function</td>
-<td>SMDP discounting only</td>
-</tr>
-</tbody>
-</table>
+<h3 id="time-semantics-v020">Time Semantics (v0.2.0+)</h3>
+<p><strong>Simple and natural:</strong>
+- Each primitive action = <strong>1 tick</strong> of time
+- Option duration = <strong>k_exec</strong> (number of primitive actions executed)
+- If option completes: <code>duration = len(option.actions)</code>
+- If terminated early: <code>duration &lt; len(option.actions)</code></p>
 <p><strong>Example:</strong>
-<div class="highlight"><pre><span></span><code><span class="n">option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;three-action-option&quot;</span><span class="p">)</span>  <span class="c1"># Always 3 steps</span>
-<span class="n">duration_fn</span> <span class="o">=</span> <span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>            <span class="c1"># Always 10 ticks</span>
+<div class="highlight"><pre><span></span><code><span class="n">option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;three-action-option&quot;</span><span class="p">)</span>  <span class="c1"># 3 actions</span>
 
-<span class="c1"># Result: 3 environment steps executed, 10 ticks of &quot;time&quot; for discounting</span>
+<span class="c1"># If it completes normally: duration = 3 ticks</span>
+<span class="c1"># If episode terminates after 2 actions: duration = 2 ticks</span>
 </code></pre></div></p>
-<p><strong>Duration does NOT control execution</strong> - it's purely metadata for temporal reasoning.</p>
 <h3 id="smdp-discounting">SMDP Discounting</h3>
-<p><strong>Standard MDP</strong>: <code>γ^{steps}</code><br />
-<strong>SMDP</strong>: <code>γ^{ticks}</code></p>
-<div class="highlight"><pre><span></span><code><span class="c1"># MDP: Each step advances time by 1</span>
+<p><strong>Standard MDP</strong>: <code>γ^{1}</code> per primitive step<br />
+<strong>SMDP</strong>: <code>γ^{k}</code> where k = option duration</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># MDP: Each primitive step discounts by γ</span>
 <span class="n">mdp_return</span> <span class="o">=</span> <span class="n">r</span><span class="err">₁</span> <span class="o">+</span> <span class="n">γ</span><span class="err">¹·</span><span class="n">r</span><span class="err">₂</span> <span class="o">+</span> <span class="n">γ</span><span class="err">²·</span><span class="n">r</span><span class="err">₃</span> <span class="o">+</span> <span class="n">γ</span><span class="err">³·</span><span class="n">r</span><span class="err">₄</span>
 
-<span class="c1"># SMDP: Each option advances time by its duration</span>
-<span class="c1"># Options with durations [5, 3, 7] ticks:  </span>
-<span class="n">smdp_return</span> <span class="o">=</span> <span class="n">r</span><span class="err">₁</span> <span class="o">+</span> <span class="n">γ</span><span class="err">⁵·</span><span class="n">r</span><span class="err">₂</span> <span class="o">+</span> <span class="n">γ</span><span class="err">⁸·</span><span class="n">r</span><span class="err">₃</span> <span class="o">+</span> <span class="n">γ</span><span class="err">¹⁵·</span><span class="n">r</span><span class="err">₄</span>
+<span class="c1"># SMDP: Each option discounts by γ^{duration}</span>
+<span class="c1"># Options with lengths [3, 2, 4]:  </span>
+<span class="n">smdp_return</span> <span class="o">=</span> <span class="n">r</span><span class="err">₁</span> <span class="o">+</span> <span class="n">γ</span><span class="err">³·</span><span class="n">r</span><span class="err">₂</span> <span class="o">+</span> <span class="n">γ</span><span class="err">⁵·</span><span class="n">r</span><span class="err">₃</span> <span class="o">+</span> <span class="n">γ</span><span class="err">⁹·</span><span class="n">r</span><span class="err">₄</span>
 <span class="c1">#                   ↑      ↑       ↑</span>
-<span class="c1">#                   5    5+3    5+3+7</span>
+<span class="c1">#                   3    3+2    3+2+4</span>
 </code></pre></div>
 <h3 id="action-interfaces">Action Interfaces</h3>
 <p>SMDPfier provides two ways to select options:</p>
@@ -1196,11 +1138,11 @@
         <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{}</span>                   <span class="c1"># User metadata</span>
     <span class="p">},</span>
     <span class="s2">&quot;k_exec&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>                     <span class="c1"># Steps actually executed</span>
+    <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>                   <span class="c1"># Duration in ticks (= k_exec)</span>
     <span class="s2">&quot;rewards&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>     <span class="c1"># Per-step rewards</span>
-    <span class="s2">&quot;duration_planned&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>          <span class="c1"># Expected ticks</span>
-    <span class="s2">&quot;duration_exec&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>             <span class="c1"># Actual ticks (may differ due to early termination)</span>
     <span class="s2">&quot;terminated_early&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>       <span class="c1"># Episode ended during option?</span>
-    <span class="s2">&quot;time_units&quot;</span><span class="p">:</span> <span class="s2">&quot;ticks&quot;</span><span class="p">,</span>           <span class="c1"># Always &quot;ticks&quot;</span>
+    <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>       <span class="c1"># Available options (index interface only)</span>
+    <span class="s2">&quot;num_dropped&quot;</span><span class="p">:</span> <span class="mi">0</span>                 <span class="c1"># Dropped options (index interface only)</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>See the <a href="api/#smdp-info-payload-structure">API Reference</a> for complete details.</p>
@@ -1221,8 +1163,8 @@
 </tr>
 <tr>
 <td><strong><a href="durations/">Durations Guide</a></strong></td>
-<td>Ticks, SMDP discounting, policies</td>
-<td>Understanding temporal mechanics</td>
+<td>Duration = k_exec, SMDP discounting</td>
+<td>Understanding time semantics</td>
 </tr>
 <tr>
 <td><strong><a href="usage_index_vs_direct/">Index vs Direct</a></strong></td>
@@ -1244,6 +1186,11 @@
 <td>Common questions</td>
 <td>Quick answers</td>
 </tr>
+<tr>
+<td><strong><a href="migration_0_2/">Migration from 0.1.x</a></strong></td>
+<td>Upgrading to v0.2.0</td>
+<td>Updating existing code</td>
+</tr>
 </tbody>
 </table>
 <h2 id="quick-navigation">Quick Navigation</h2>
@@ -1251,23 +1198,9 @@
 <p><strong>🤖 Building an RL agent?</strong> See <a href="usage_index_vs_direct/#index-interface">Index Interface</a> and <a href="durations/#smdp-discounting">Durations</a>.</p>
 <p><strong>🔧 Need custom behavior?</strong> Check <a href="api/">API Reference</a> and <a href="../examples/">examples/</a>.</p>
 <p><strong>❓ Something not working?</strong> Try <a href="errors/">Error Handling</a> and <a href="faq/">FAQ</a>.</p>
+<p><strong>⬆️ Upgrading from 0.1.x?</strong> See <a href="migration_0_2/">Migration Guide</a>.</p>
 <hr />
 <p><strong>Next:</strong> <a href="api/">API Reference</a> | <strong>Examples:</strong> <a href="../examples/">../examples/</a></p>
-<h3 id="options_1">Options</h3>
-<p>Options represent temporal abstractions - sequences of primitive actions executed atomically. Each option has:
-- <code>actions</code>: Sequence of primitive actions
-- <code>name</code>: Human-readable identifier<br />
-- <code>meta</code>: Optional metadata dictionary</p>
-<h3 id="durations">Durations</h3>
-<p>Durations are metadata (in ticks) that don't control execution but enable true SMDP discounting:
-- <strong>Planned</strong>: Expected duration before execution
-- <strong>Executed</strong>: Actual duration after execution (may differ due to early termination)</p>
-<h3 id="interfaces">Interfaces</h3>
-<ul>
-<li><strong>Index Interface</strong>: Choose options by index from <code>Discrete(max_options)</code> action space</li>
-<li><strong>Direct Interface</strong>: Pass <code>Option</code> objects directly to <code>step()</code></li>
-</ul>
-<h2 id="installation">Installation</h2>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>smdpfier
 </code></pre></div>
 <p>For development:

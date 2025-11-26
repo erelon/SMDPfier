@@ -544,6 +544,34 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#action-interfaces_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action Interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Action Interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#index-interface_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
           <li class="md-nav__item">
   <a href="#direct-interface" class="md-nav__link">
     <span class="md-ellipsis">
@@ -577,17 +605,6 @@
     <span class="md-ellipsis">
       
         Option Generators
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#duration-functions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Duration Functions
       
     </span>
   </a>
@@ -657,17 +674,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#partial-duration-policies" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Partial Duration Policies
-      
-    </span>
-  </a>
   
 </li>
       
@@ -1205,6 +1211,34 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#action-interfaces_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action Interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Action Interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#index-interface_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
           <li class="md-nav__item">
   <a href="#direct-interface" class="md-nav__link">
     <span class="md-ellipsis">
@@ -1238,17 +1272,6 @@
     <span class="md-ellipsis">
       
         Option Generators
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#duration-functions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Duration Functions
       
     </span>
   </a>
@@ -1318,17 +1341,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#partial-duration-policies" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Partial Duration Policies
-      
-    </span>
-  </a>
   
 </li>
       
@@ -1468,28 +1480,29 @@
 <h2 id="quick-start-examples">Quick Start Examples</h2>
 <h3 id="basic-smdpfier-setup">Basic SMDPfier Setup</h3>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMDPfier</span><span class="p">,</span> <span class="n">Option</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConstantOptionDuration</span><span class="p">,</span> <span class="n">sum_rewards</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults</span><span class="w"> </span><span class="kn">import</span> <span class="n">sum_rewards</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">gymnasium</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gym</span>
 
 <span class="c1"># Basic setup with static options</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;CartPole-v1&quot;</span><span class="p">)</span>
-<span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;left-right&quot;</span><span class="p">),</span> <span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;right-left&quot;</span><span class="p">)]</span>
+<span class="n">options</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;left-right&quot;</span><span class="p">),</span>     <span class="c1"># 2 actions = 2 ticks</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;right-left&quot;</span><span class="p">)</span>      <span class="c1"># 2 actions = 2 ticks</span>
+<span class="p">]</span>
 
 <span class="n">smdp_env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
     <span class="n">env</span><span class="p">,</span>
     <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
-    <span class="n">duration_fn</span><span class="o">=</span><span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
-    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span>
+    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
+    <span class="n">max_options</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div>
 <h3 id="dynamic-options-with-built-in-generators">Dynamic Options with Built-in Generators</h3>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults.options</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomStaticLen</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults.durations</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomActionDuration</span>
 
 <span class="n">smdp_env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
     <span class="n">env</span><span class="p">,</span>
     <span class="n">options_provider</span><span class="o">=</span><span class="n">RandomStaticLen</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">num_options</span><span class="o">=</span><span class="mi">8</span><span class="p">),</span>
-    <span class="n">duration_fn</span><span class="o">=</span><span class="n">RandomActionDuration</span><span class="p">(</span><span class="n">min_duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_duration</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
     <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
     <span class="n">max_options</span><span class="o">=</span><span class="mi">8</span>
 <span class="p">)</span>
@@ -1503,14 +1516,11 @@
         <span class="n">env</span><span class="p">:</span> <span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">options_provider</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">Option</span><span class="p">]]</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Option</span><span class="p">],</span>
-        <span class="n">duration_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Option</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
         <span class="n">reward_agg</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_rewards</span><span class="p">,</span>
         <span class="n">action_interface</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="s2">&quot;direct&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;index&quot;</span><span class="p">,</span>
         <span class="n">max_options</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">availability_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">precheck</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">partial_duration_policy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;proportional&quot;</span><span class="p">,</span> <span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="s2">&quot;zero&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;proportional&quot;</span><span class="p">,</span>
-        <span class="n">time_units</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ticks&quot;</span><span class="p">,</span>
         <span class="n">rng_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre></div>
@@ -1539,13 +1549,6 @@
 <td>✅</td>
 <td>-</td>
 <td>Static options or dynamic generator</td>
-</tr>
-<tr>
-<td><code>duration_fn</code></td>
-<td><code>Callable</code></td>
-<td>✅</td>
-<td>-</td>
-<td>Returns duration(s) for option</td>
 </tr>
 <tr>
 <td><code>reward_agg</code></td>
@@ -1581,20 +1584,6 @@
 <td>❌</td>
 <td><code>False</code></td>
 <td>Validate options before execution</td>
-</tr>
-<tr>
-<td><code>partial_duration_policy</code></td>
-<td><code>str</code></td>
-<td>❌</td>
-<td><code>"proportional"</code></td>
-<td>Handle early termination</td>
-</tr>
-<tr>
-<td><code>time_units</code></td>
-<td><code>str</code></td>
-<td>❌</td>
-<td><code>"ticks"</code></td>
-<td>Time unit name (metadata only)</td>
 </tr>
 <tr>
 <td><code>rng_seed</code></td>
@@ -1690,11 +1679,9 @@
         <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">}</span>    <span class="c1"># User metadata (if any)</span>
     <span class="p">},</span>
     <span class="s2">&quot;k_exec&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>                        <span class="c1"># Primitive steps actually executed</span>
+    <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>                      <span class="c1"># Duration in ticks (= k_exec)</span>
     <span class="s2">&quot;rewards&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>        <span class="c1"># Per-step rewards</span>
-    <span class="s2">&quot;duration_planned&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>             <span class="c1"># Expected duration (ticks)</span>
-    <span class="s2">&quot;duration_exec&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>                <span class="c1"># Actual duration (accounting for early termination)</span>
     <span class="s2">&quot;terminated_early&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>          <span class="c1"># Whether episode ended during option</span>
-    <span class="s2">&quot;time_units&quot;</span><span class="p">:</span> <span class="s2">&quot;ticks&quot;</span><span class="p">,</span>              <span class="c1"># Always &quot;ticks&quot;</span>
     <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>       <span class="c1"># Available option indices (index interface only)</span>
     <span class="s2">&quot;num_dropped&quot;</span><span class="p">:</span> <span class="mi">0</span>                    <span class="c1"># Options dropped due to overflow (index interface only)</span>
 <span class="p">}</span>
@@ -1722,7 +1709,7 @@
 <tr>
 <td><code>option.len</code></td>
 <td><code>int</code></td>
-<td>Total number of primitive actions</td>
+<td>Total number of primitive actions in option</td>
 </tr>
 <tr>
 <td><code>option.meta</code></td>
@@ -1735,29 +1722,19 @@
 <td>Number of primitive steps actually executed</td>
 </tr>
 <tr>
+<td><code>duration</code></td>
+<td><code>int</code></td>
+<td>Duration in ticks (always equals k_exec)</td>
+</tr>
+<tr>
 <td><code>rewards</code></td>
 <td><code>list[float]</code></td>
 <td>Per-primitive-step rewards</td>
 </tr>
 <tr>
-<td><code>duration_planned</code></td>
-<td><code>int</code></td>
-<td>Expected duration from duration function</td>
-</tr>
-<tr>
-<td><code>duration_exec</code></td>
-<td><code>int</code></td>
-<td>Actual duration (may differ due to early termination)</td>
-</tr>
-<tr>
 <td><code>terminated_early</code></td>
 <td><code>bool</code></td>
 <td>True if episode ended before option completed</td>
-</tr>
-<tr>
-<td><code>time_units</code></td>
-<td><code>str</code></td>
-<td>Always "ticks"</td>
 </tr>
 <tr>
 <td><code>action_mask</code></td>
@@ -1773,12 +1750,13 @@
 </table>
 <h2 id="action-interfaces">Action Interfaces</h2>
 <h3 id="index-interface">Index Interface</h3>
+<h2 id="action-interfaces_1">Action Interfaces</h2>
+<h3 id="index-interface_1">Index Interface</h3>
 <p>Transforms the action space to <code>Discrete(max_options)</code> where actions are integer indices.</p>
 <p><strong>Configuration:</strong>
 <div class="highlight"><pre><span></span><code><span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
     <span class="n">base_env</span><span class="p">,</span>
     <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
-    <span class="n">duration_fn</span><span class="o">=</span><span class="n">duration_fn</span><span class="p">,</span>
     <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
     <span class="n">max_options</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>  <span class="c1"># Required</span>
 <span class="p">)</span>
@@ -1797,7 +1775,6 @@
 <div class="highlight"><pre><span></span><code><span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
     <span class="n">base_env</span><span class="p">,</span>
     <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
-    <span class="n">duration_fn</span><span class="o">=</span><span class="n">duration_fn</span><span class="p">,</span>
     <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;direct&quot;</span>
     <span class="c1"># No max_options needed</span>
 <span class="p">)</span>
@@ -1816,7 +1793,7 @@
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults.options</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomStaticLen</span>
 
 <span class="n">generator</span> <span class="o">=</span> <span class="n">RandomStaticLen</span><span class="p">(</span>
-    <span class="n">length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>                    <span class="c1"># Fixed option length</span>
+    <span class="n">length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>                    <span class="c1"># Fixed option length (= 3 ticks)</span>
     <span class="n">action_space_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>         <span class="c1"># Discrete action space size (auto-detected if None)</span>
     <span class="n">num_options</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>              <span class="c1"># Number of options to generate</span>
     <span class="n">rng_seed</span><span class="o">=</span><span class="mi">42</span>                  <span class="c1"># Random seed</span>
@@ -1826,41 +1803,15 @@
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults.options</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomVarLen</span>
 
 <span class="n">generator</span> <span class="o">=</span> <span class="n">RandomVarLen</span><span class="p">(</span>
-    <span class="n">min_length</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>                <span class="c1"># Minimum option length</span>
-    <span class="n">max_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>                <span class="c1"># Maximum option length</span>
+    <span class="n">min_length</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>                <span class="c1"># Minimum option length (= 2 ticks)</span>
+    <span class="n">max_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>                <span class="c1"># Maximum option length (= 5 ticks)</span>
     <span class="n">action_space_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>         <span class="c1"># Discrete action space size</span>
     <span class="n">num_options</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>               <span class="c1"># Number of options to generate</span>
     <span class="n">rng_seed</span><span class="o">=</span><span class="mi">42</span>                  <span class="c1"># Random seed</span>
 <span class="p">)</span>
 </code></pre></div>
-<h3 id="duration-functions">Duration Functions</h3>
-<p><strong>Option-Level Durations (Scalar):</strong></p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults.durations</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConstantOptionDuration</span><span class="p">,</span> <span class="n">RandomOptionDuration</span>
-
-<span class="c1"># Fixed duration per option</span>
-<span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># Every option takes 10 ticks</span>
-
-<span class="c1"># Random duration per option</span>
-<span class="n">RandomOptionDuration</span><span class="p">(</span><span class="n">min_duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_duration</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">rng_seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-</code></pre></div>
-<p><strong>Action-Level Durations (List):</strong></p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults.durations</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConstantActionDuration</span><span class="p">,</span> <span class="n">RandomActionDuration</span>
-
-<span class="c1"># Fixed duration per action</span>
-<span class="n">ConstantActionDuration</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Each action takes 3 ticks</span>
-
-<span class="c1"># Random duration per action</span>
-<span class="n">RandomActionDuration</span><span class="p">(</span><span class="n">min_duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">rng_seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-</code></pre></div>
-<p><strong>Custom Duration Mapping:</strong></p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults.durations</span><span class="w"> </span><span class="kn">import</span> <span class="n">MapActionDuration</span>
-
-<span class="c1"># Map specific actions to durations</span>
-<span class="n">action_durations</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>  <span class="c1"># Action 0: 2 ticks, Action 1: 5 ticks, etc.</span>
-<span class="n">MapActionDuration</span><span class="p">(</span><span class="n">action_durations</span><span class="p">,</span> <span class="n">default_duration</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-</code></pre></div>
 <h3 id="reward-aggregation">Reward Aggregation</h3>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults.rewards</span><span class="w"> </span><span class="kn">import</span> <span class="n">sum_rewards</span><span class="p">,</span> <span class="n">mean_rewards</span><span class="p">,</span> <span class="n">discounted_sum</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults</span><span class="w"> </span><span class="kn">import</span> <span class="n">sum_rewards</span><span class="p">,</span> <span class="n">mean_rewards</span><span class="p">,</span> <span class="n">discounted_sum</span>
 
 <span class="c1"># Sum all per-step rewards (default)</span>
 <span class="n">reward_agg</span> <span class="o">=</span> <span class="n">sum_rewards</span>
@@ -1874,15 +1825,14 @@
 <h2 id="configuration-patterns">Configuration Patterns</h2>
 <h3 id="static-options-with-index-interface">Static Options with Index Interface</h3>
 <div class="highlight"><pre><span></span><code><span class="n">options</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;left-right&quot;</span><span class="p">),</span>
-    <span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;right-left&quot;</span><span class="p">),</span>
-    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;left-left-right&quot;</span><span class="p">),</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;left-right&quot;</span><span class="p">),</span>                <span class="c1"># 2 ticks</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;right-left&quot;</span><span class="p">),</span>                <span class="c1"># 2 ticks</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;left-left-right&quot;</span><span class="p">),</span>        <span class="c1"># 3 ticks</span>
 <span class="p">]</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
     <span class="n">base_env</span><span class="p">,</span>
     <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
-    <span class="n">duration_fn</span><span class="o">=</span><span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
     <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
     <span class="n">max_options</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
 <span class="p">)</span>
@@ -1902,7 +1852,6 @@
 <span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
     <span class="n">base_env</span><span class="p">,</span>
     <span class="n">options_provider</span><span class="o">=</span><span class="n">dynamic_generator</span><span class="p">,</span>
-    <span class="n">duration_fn</span><span class="o">=</span><span class="n">RandomActionDuration</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
     <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
     <span class="n">max_options</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
     <span class="n">availability_fn</span><span class="o">=</span><span class="n">availability_mask</span>
@@ -1910,64 +1859,17 @@
 </code></pre></div>
 <h3 id="continuous-actions-with-direct-interface">Continuous Actions with Direct Interface</h3>
 <div class="highlight"><pre><span></span><code><span class="n">continuous_options</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">Option</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]],</span> <span class="s2">&quot;left-center&quot;</span><span class="p">),</span>
-    <span class="n">Option</span><span class="p">([[</span><span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]],</span> <span class="s2">&quot;gentle-hard-right&quot;</span><span class="p">),</span>
-    <span class="n">Option</span><span class="p">([[</span><span class="o">-</span><span class="mf">2.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]],</span> <span class="s2">&quot;extreme-swing&quot;</span><span class="p">),</span>
+    <span class="n">Option</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]],</span> <span class="s2">&quot;left-center&quot;</span><span class="p">),</span>            <span class="c1"># 2 ticks</span>
+    <span class="n">Option</span><span class="p">([[</span><span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]],</span> <span class="s2">&quot;gentle-hard-right&quot;</span><span class="p">),</span>       <span class="c1"># 2 ticks</span>
+    <span class="n">Option</span><span class="p">([[</span><span class="o">-</span><span class="mf">2.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]],</span> <span class="s2">&quot;extreme-swing&quot;</span><span class="p">),</span>   <span class="c1"># 3 ticks</span>
 <span class="p">]</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
     <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;Pendulum-v1&quot;</span><span class="p">),</span>
     <span class="n">options_provider</span><span class="o">=</span><span class="n">continuous_options</span><span class="p">,</span>
-    <span class="n">duration_fn</span><span class="o">=</span><span class="n">ConstantActionDuration</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
     <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;direct&quot;</span>
 <span class="p">)</span>
 </code></pre></div>
-<h2 id="partial-duration-policies">Partial Duration Policies</h2>
-<p>Handle early termination when episodes end before options complete:</p>
-<table>
-<thead>
-<tr>
-<th>Policy</th>
-<th>Behavior</th>
-<th>Formula</th>
-<th>Use Case</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>"proportional"</code></td>
-<td>Scale by execution ratio</td>
-<td><code>(k_exec / option_len) * planned_duration</code></td>
-<td><strong>Default</strong> - realistic time scaling</td>
-</tr>
-<tr>
-<td><code>"full"</code></td>
-<td>Use full planned duration</td>
-<td><code>planned_duration</code></td>
-<td>Options have setup costs</td>
-</tr>
-<tr>
-<td><code>"zero"</code></td>
-<td>No time consumed</td>
-<td><code>0</code></td>
-<td>Failed options waste no time</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Example:</strong>
-<div class="highlight"><pre><span></span><code><span class="c1"># Option with 4 actions, 12 ticks planned, terminates after 3 actions</span>
-
-<span class="c1"># Proportional (default): (3/4) * 12 = 9 ticks</span>
-<span class="c1"># Full: 12 ticks  </span>
-<span class="c1"># Zero: 0 ticks</span>
-
-<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
-    <span class="n">base_env</span><span class="p">,</span>
-    <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
-    <span class="n">duration_fn</span><span class="o">=</span><span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">12</span><span class="p">),</span>
-    <span class="n">partial_duration_policy</span><span class="o">=</span><span class="s2">&quot;proportional&quot;</span>  <span class="c1"># Default</span>
-<span class="p">)</span>
-</code></pre></div></p>
 <h2 id="error-handling">Error Handling</h2>
 <p>SMDPfier provides detailed error context through specialized exceptions:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMDPOptionValidationError</span><span class="p">,</span> <span class="n">SMDPOptionExecutionError</span>
