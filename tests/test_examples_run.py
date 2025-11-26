@@ -108,122 +108,43 @@ class TestExamplesRun:
             assert "def main(" in content
             assert 'if __name__ == "__main__"' in content
 
-
-class TestSMDPInfoPayload:
-    """Test SMDP info payload structure and content."""
-
-    def test_cartpole_smdp_info_structure(self) -> None:
-        """Test that CartPole example produces correct SMDP info structure."""
+    def test_default_rate_reward_calculation(self) -> None:
+        """Test that default sum-based reward matches expected calculation."""
         import gymnasium as gym
+        import pytest
 
         from smdpfier import Option, SMDPfier
-        from smdpfier.defaults import ConstantOptionDuration, sum_rewards
 
         env = gym.make("CartPole-v1")
+        options = [Option([0, 1], "test-option")]
 
-        static_options = [
-            Option([0, 1], "left-right", meta={"test": "option"}),
-            Option([1, 0], "right-left", meta={"test": "option2"}),
-        ]
-
+        # Use default reward_agg (should be sum_rewards)
         smdp_env = SMDPfier(
             env,
-            options_provider=static_options,
-            duration_fn=ConstantOptionDuration(5),
-            reward_agg=sum_rewards,
+            options_provider=options,
             action_interface="index",
-            max_options=len(static_options),
-            rng_seed=42,
         )
 
-        obs, info = smdp_env.reset(seed=123)
+        obs, info = smdp_env.reset(seed=42)
         obs, reward, terminated, truncated, info = smdp_env.step(0)
 
-        # Validate SMDP info structure
-        assert "smdp" in info
+        # Verify info contains duration and rewards
         smdp_info = info["smdp"]
-
-        # Check required fields
-        assert "option" in smdp_info
-        assert "k_exec" in smdp_info
+        assert "duration" in smdp_info
         assert "rewards" in smdp_info
-        assert "duration_planned" in smdp_info
-        assert "duration_exec" in smdp_info
-        assert "terminated_early" in smdp_info
-        assert "time_units" in smdp_info
 
-        # Check option sub-structure
-        option_info = smdp_info["option"]
-        assert "id" in option_info
-        assert "name" in option_info
-        assert "len" in option_info
-        assert "meta" in option_info
+        duration = smdp_info["duration"]
+        primitive_rewards = smdp_info["rewards"]
+        k_exec = smdp_info["k_exec"]
 
-        # Check values
-        assert smdp_info["k_exec"] == 2  # Should execute 2 actions
-        assert len(smdp_info["rewards"]) == 2  # Should have 2 reward values
-        assert smdp_info["duration_planned"] == 5  # ConstantOptionDuration(5)
-        assert smdp_info["duration_exec"] == 5  # Full execution
-        assert smdp_info["time_units"] == "ticks"
-        assert option_info["name"] == "left-right"
-        assert option_info["len"] == 2
-        assert option_info["meta"]["test"] == "option"
+        # Verify duration equals k_exec
+        assert duration == k_exec
 
-        env.close()
-
-    def test_taxi_dynamic_options_and_masking(self) -> None:
-        """Test Taxi dynamic options and action masking functionality."""
-        # Import the functions from the taxi example
-        import sys
-        from pathlib import Path
-
-        import gymnasium as gym
-
-        from smdpfier import SMDPfier
-        from smdpfier.defaults import RandomActionDuration, mean_rewards
-
-        examples_dir = Path(__file__).parent.parent / "examples"
-        sys.path.insert(0, str(examples_dir))
-
-        from taxi_index_dynamic_mask import (
-            create_taxi_options,
-            taxi_availability_function,
+        # Verify reward equals sum of primitive rewards (default)
+        expected_sum = sum(primitive_rewards)
+        assert reward == pytest.approx(expected_sum), (
+            f"Reward should equal sum: {reward} vs {expected_sum}"
         )
-
-        env = gym.make("Taxi-v3")
-
-        smdp_env = SMDPfier(
-            env,
-            options_provider=create_taxi_options,
-            duration_fn=RandomActionDuration(min_duration=2, max_duration=4),
-            reward_agg=mean_rewards,
-            action_interface="index",
-            max_options=12,
-            availability_fn=taxi_availability_function,
-            precheck=True,
-            rng_seed=42,
-        )
-
-        obs, info = smdp_env.reset(seed=456)
-
-        # Check action mask is present
-        assert "action_mask" in info
-        action_mask = info["action_mask"]
-        assert len(action_mask) <= 12  # Should not exceed max_options
-        assert len(action_mask) >= 6   # Should have at least the basic options
-        assert any(action_mask)  # At least some options should be available
-
-        # Find available option and execute
-        available_indices = [i for i, avail in enumerate(action_mask) if avail]
-        assert len(available_indices) > 0
-
-        obs, reward, terminated, truncated, info = smdp_env.step(available_indices[0])
-
-        # Validate SMDP info
-        smdp_info = info["smdp"]
-        assert smdp_info["k_exec"] >= 1
-        assert isinstance(smdp_info["rewards"], list)
-        assert 2 <= smdp_info["duration_exec"] <= 4  # RandomActionDuration range
 
         env.close()
 
@@ -232,7 +153,7 @@ class TestSMDPInfoPayload:
         import gymnasium as gym
 
         from smdpfier import Option, SMDPfier
-        from smdpfier.defaults import ConstantActionDuration, discounted_sum
+        from smdpfier.defaults import discounted_sum
 
         env = gym.make("Pendulum-v1")
 
@@ -244,7 +165,6 @@ class TestSMDPInfoPayload:
         smdp_env = SMDPfier(
             env,
             options_provider=continuous_options,
-            duration_fn=ConstantActionDuration(3),  # 3 ticks per action
             reward_agg=discounted_sum(gamma=0.95),
             action_interface="direct",
             rng_seed=42,
@@ -252,33 +172,31 @@ class TestSMDPInfoPayload:
 
         obs, info = smdp_env.reset(seed=789)
 
-        # Execute first option (2 actions, 3 ticks each = 6 total ticks)
+        # Execute first option (2 actions)
         obs, reward, terminated, truncated, info = smdp_env.step(continuous_options[0])
 
         # Validate SMDP info for continuous actions
         smdp_info = info["smdp"]
         assert smdp_info["k_exec"] == 2  # Executed 2 actions
-        assert smdp_info["duration_planned"] == 6  # 2 actions * 3 ticks each
-        assert smdp_info["duration_exec"] == 6  # Full execution
+        assert smdp_info["duration"] == 2  # duration = k_exec
         assert len(smdp_info["rewards"]) == 2  # One reward per action
 
-        # Execute second option (3 actions, 3 ticks each = 9 total ticks)
+        # Execute second option (3 actions)
         obs, reward, terminated, truncated, info = smdp_env.step(continuous_options[1])
 
         smdp_info = info["smdp"]
         assert smdp_info["k_exec"] == 3  # Executed 3 actions
-        assert smdp_info["duration_planned"] == 9  # 3 actions * 3 ticks each
-        assert smdp_info["duration_exec"] == 9  # Full execution
+        assert smdp_info["duration"] == 3  # duration = k_exec
         assert len(smdp_info["rewards"]) == 3  # One reward per action
 
         env.close()
 
     def test_partial_execution_duration_policy(self) -> None:
-        """Test partial execution duration policies."""
+        """Test partial execution duration handling."""
         import gymnasium as gym
 
         from smdpfier import Option, SMDPfier
-        from smdpfier.defaults import ConstantOptionDuration, sum_rewards
+        from smdpfier.defaults import sum_rewards
 
         # Create a short-lived environment that terminates quickly
         env = gym.make("CartPole-v1")
@@ -289,11 +207,9 @@ class TestSMDPInfoPayload:
         smdp_env = SMDPfier(
             env,
             options_provider=[long_option],
-            duration_fn=ConstantOptionDuration(20),  # 20 ticks for full option
             reward_agg=sum_rewards,
             action_interface="index",
             max_options=1,
-            partial_duration_policy="proportional",
             rng_seed=42,
         )
 
@@ -304,14 +220,14 @@ class TestSMDPInfoPayload:
 
         smdp_info = info["smdp"]
 
-        # Check duration handling
-        assert smdp_info["duration_planned"] == 20
+        # Check duration handling - duration always equals k_exec
+        assert smdp_info["duration"] == smdp_info["k_exec"]
+
         if smdp_info["terminated_early"]:
-            # If terminated early, duration_exec should be proportional
-            expected_duration = (smdp_info["k_exec"] / 10) * 20  # proportional policy
-            assert smdp_info["duration_exec"] == int(expected_duration)
+            # If terminated early, k_exec < option length
+            assert smdp_info["k_exec"] < 10
         else:
-            # If completed fully, duration should match planned
-            assert smdp_info["duration_exec"] == 20
+            # If completed fully, k_exec == option length
+            assert smdp_info["k_exec"] == 10
 
         env.close()

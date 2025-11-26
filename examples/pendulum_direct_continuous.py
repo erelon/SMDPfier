@@ -5,7 +5,7 @@ import argparse
 import gymnasium as gym
 
 from smdpfier import Option, SMDPfier
-from smdpfier.defaults import ConstantActionDuration, discounted_sum
+from smdpfier.defaults import discounted_sum
 
 
 def create_pendulum_options() -> list[Option]:
@@ -68,16 +68,14 @@ def main(max_steps: int = 8) -> None:
     # Get predefined continuous options
     continuous_options = create_pendulum_options()
 
-    # Create SMDPfier with direct interface
+    # Create SMDPfier with direct interface (default reward aggregation = sum, but using discounted_sum here)
     smdp_env = SMDPfier(
         env,
         options_provider=continuous_options,  # Static continuous options
-        duration_fn=ConstantActionDuration(duration_per_action=4),  # 4 ticks per action
         reward_agg=discounted_sum(gamma=0.95),  # Discounted reward aggregation
         action_interface="direct",  # Pass Option objects directly
         availability_fn=None,  # No masking for continuous actions
         precheck=False,  # Skip precheck for continuous demo
-        partial_duration_policy="full",  # Full duration even if interrupted
         rng_seed=42,
     )
 
@@ -113,9 +111,7 @@ def main(max_steps: int = 8) -> None:
         print(f"  Executed {smdp_info['k_exec']}/{smdp_info['option']['len']} actions")
         print(f"  Per-step rewards: {[f'{r:.3f}' for r in smdp_info['rewards']]}")
         print(f"  Discounted reward: {reward:.3f}")
-        print(
-            f"  Duration: {smdp_info['duration_exec']}/{smdp_info['duration_planned']} ticks"
-        )
+        print(f"  Duration: {smdp_info['duration']} ticks (= k_exec)")
         print(f"  Early termination: {smdp_info['terminated_early']}")
         print(f"  Final observation: [{obs[0]:.3f}, {obs[1]:.3f}, {obs[2]:.3f}]")
 
@@ -138,3 +134,5 @@ if __name__ == "__main__":
                         help="Maximum number of SMDP steps to run")
     args = parser.parse_args()
     main(args.max_steps)
+
+

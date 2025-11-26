@@ -4,7 +4,7 @@ import gymnasium as gym
 import pytest
 
 from smdpfier import Option, SMDPfier
-from smdpfier.defaults import ConstantOptionDuration
+from smdpfier.defaults import sum_rewards, mean_rewards
 
 
 class TestSMDPfierCore:
@@ -15,13 +15,10 @@ class TestSMDPfierCore:
         env = gym.make("CartPole-v1")
         options = [Option([0, 1], "test-option")]
 
-        smdp_env = SMDPfier(
-            env, options_provider=options, duration_fn=ConstantOptionDuration(5)
-        )
+        smdp_env = SMDPfier(env, options_provider=options)
 
         assert smdp_env is not None
         assert smdp_env.action_interface == "index"
-        assert smdp_env.time_units == "ticks"
 
     def test_static_options_provider(self) -> None:
         """Test wrapper with static sequence of options."""
@@ -32,11 +29,7 @@ class TestSMDPfierCore:
             Option([0, 0, 1], "left-left-right")
         ]
 
-        smdp_env = SMDPfier(
-            env,
-            options_provider=options,
-            duration_fn=ConstantOptionDuration(10)
-        )
+        smdp_env = SMDPfier(env, options_provider=options)
 
         assert smdp_env is not None
         assert len(smdp_env._options_provider_raw) == 3
@@ -63,7 +56,6 @@ class TestSMDPfierCore:
         smdp_env = SMDPfier(
             env,
             options_provider=dynamic_options,
-            duration_fn=ConstantOptionDuration(3),
             max_options=3
         )
 
@@ -85,7 +77,6 @@ class TestSMDPfierCore:
         smdp_env = SMDPfier(
             env,
             options_provider=options,
-            duration_fn=ConstantOptionDuration(5),
             action_interface="index"
         )
 
@@ -115,7 +106,6 @@ class TestSMDPfierCore:
         smdp_env = SMDPfier(
             env,
             options_provider=options,
-            duration_fn=ConstantOptionDuration(3),
             action_interface="direct"
         )
 
@@ -140,11 +130,7 @@ class TestSMDPfierCore:
         env = gym.make("CartPole-v1")
         options = [Option([0, 1, 0], "left-right-left")]
 
-        smdp_env = SMDPfier(
-            env,
-            options_provider=options,
-            duration_fn=ConstantOptionDuration(7)
-        )
+        smdp_env = SMDPfier(env, options_provider=options)
 
         obs, info = smdp_env.reset()
         obs, reward, terminated, truncated, info = smdp_env.step(0)
@@ -166,18 +152,14 @@ class TestSMDPfierCore:
         # Check execution metadata
         assert "k_exec" in smdp_info
         assert "rewards" in smdp_info
-        assert "duration_planned" in smdp_info
-        assert "duration_exec" in smdp_info
+        assert "duration" in smdp_info
         assert "terminated_early" in smdp_info
-        assert "time_units" in smdp_info
 
         # Check values
         assert smdp_info["k_exec"] == 3
         assert len(smdp_info["rewards"]) == 3
-        assert smdp_info["duration_planned"] == 7
-        assert smdp_info["duration_exec"] == 7
+        assert smdp_info["duration"] == 3  # duration = k_exec
         assert smdp_info["terminated_early"] is False
-        assert smdp_info["time_units"] == "ticks"
 
         # Check interface-specific fields
         assert "action_mask" in smdp_info  # For index interface
@@ -188,11 +170,7 @@ class TestSMDPfierCore:
         env = gym.make("CartPole-v1")
         options = [Option([0, 1, 0, 1], "alternating")]
 
-        smdp_env = SMDPfier(
-            env,
-            options_provider=options,
-            duration_fn=ConstantOptionDuration(12)
-        )
+        smdp_env = SMDPfier(env, options_provider=options)
 
         obs, info = smdp_env.reset()
         obs, reward, terminated, truncated, info = smdp_env.step(0)
@@ -209,8 +187,7 @@ class TestSMDPfierCore:
         assert len(smdp_info["rewards"]) == 4  # One reward per action
 
         # Check duration metadata
-        assert smdp_info["duration_planned"] == 12
-        assert smdp_info["duration_exec"] == 12  # Full duration since no early termination
+        assert smdp_info["duration"] == 4  # duration = k_exec
         assert smdp_info["terminated_early"] is False
 
         # Verify rewards are floats
@@ -219,16 +196,25 @@ class TestSMDPfierCore:
 
     def test_reward_aggregation(self) -> None:
         """Test different reward aggregation functions."""
-        from smdpfier.defaults.rewards import mean_rewards, sum_rewards
-
         env = gym.make("CartPole-v1")
         options = [Option([0, 1], "left-right")]
 
-        # Test with sum_rewards (default)
+        # Test with default (sum_rewards)
+        smdp_env_default = SMDPfier(env, options_provider=options)
+
+        obs, info = smdp_env_default.reset()
+        obs, reward_default, terminated, truncated, info = smdp_env_default.step(0)
+
+        # Should get sum of primitive rewards
+        primitive_rewards = info["smdp"]["rewards"]
+        expected_sum = sum(primitive_rewards)
+        assert abs(reward_default - expected_sum) < 1e-6
+
+        # Test with explicit sum_rewards
+        env2 = gym.make("CartPole-v1")
         smdp_env_sum = SMDPfier(
-            env,
+            env2,
             options_provider=options,
-            duration_fn=ConstantOptionDuration(5),
             reward_agg=sum_rewards
         )
 
@@ -241,11 +227,10 @@ class TestSMDPfierCore:
         assert abs(reward_sum - expected_sum) < 1e-6
 
         # Test with mean_rewards
-        env2 = gym.make("CartPole-v1")
+        env3 = gym.make("CartPole-v1")
         smdp_env_mean = SMDPfier(
-            env2,
+            env3,
             options_provider=options,
-            duration_fn=ConstantOptionDuration(5),
             reward_agg=mean_rewards
         )
 
@@ -254,25 +239,15 @@ class TestSMDPfierCore:
 
         # Should get mean of primitive rewards
         primitive_rewards = info["smdp"]["rewards"]
-        expected_mean = sum(primitive_rewards) / len(primitive_rewards)
+        expected_mean = sum(primitive_rewards) / len(primitive_rewards) if len(primitive_rewards) > 0 else 0.0
         assert abs(reward_mean - expected_mean) < 1e-6
 
     def test_early_termination_handling(self) -> None:
         """Test behavior when episode terminates during option execution."""
-        # This test is tricky to implement reliably because it depends on
-        # the environment terminating mid-option, which is hard to control
-        # We'll test the partial duration policy logic instead
-
         env = gym.make("CartPole-v1")
         long_option = Option([0] * 100, "very-long-left")  # Very long option
 
-        # Test proportional partial duration policy
-        smdp_env = SMDPfier(
-            env,
-            options_provider=[long_option],
-            duration_fn=ConstantOptionDuration(100),
-            partial_duration_policy="proportional"
-        )
+        smdp_env = SMDPfier(env, options_provider=[long_option])
 
         obs, info = smdp_env.reset()
 
@@ -281,23 +256,46 @@ class TestSMDPfierCore:
 
         smdp_info = info["smdp"]
         k_exec = smdp_info["k_exec"]
-        duration_planned = smdp_info["duration_planned"]
-        duration_exec = smdp_info["duration_exec"]
+        duration = smdp_info["duration"]
         terminated_early = smdp_info["terminated_early"]
 
+        # Duration should always equal k_exec
+        assert duration == k_exec
+
         if terminated_early:
-            # If terminated early, duration_exec should be proportional
-            expected_duration = int(duration_planned * (k_exec / len(long_option.actions)))
-            assert duration_exec == expected_duration
+            # If terminated early, k_exec should be less than option length
             assert k_exec < len(long_option.actions)
         else:
-            # If completed, should have full duration
-            assert duration_exec == duration_planned
+            # If completed, should have executed all actions
             assert k_exec == len(long_option.actions)
 
-        # The test passes regardless of whether early termination occurred
-        # because we're testing the logic in both cases
+    def test_duration_equals_kexec(self) -> None:
+        """Test that duration always equals k_exec (number of executed primitives)."""
+        env = gym.make("CartPole-v1")
 
+        # Test with different option lengths
+        options = [
+            Option([0], "single"),
+            Option([0, 1], "double"),
+            Option([0, 1, 0], "triple"),
+            Option([0, 1, 0, 1, 0], "five")
+        ]
+
+        for opt in options:
+            smdp_env = SMDPfier(env, options_provider=[opt])
+            obs, info = smdp_env.reset()
+            obs, reward, terminated, truncated, info = smdp_env.step(0)
+
+            smdp_info = info["smdp"]
+            k_exec = smdp_info["k_exec"]
+            duration = smdp_info["duration"]
+
+            # Duration must equal k_exec
+            assert duration == k_exec, f"For option {opt.name}: duration={duration} != k_exec={k_exec}"
+
+            # Reward should be sum of primitive rewards (default)
+            expected_reward = sum(smdp_info["rewards"])
+            assert abs(reward - expected_reward) < 1e-6
 
 class TestOptionClass:
     """Test Option dataclass functionality."""

@@ -5,7 +5,7 @@ import argparse
 import gymnasium as gym
 
 from smdpfier import Option, SMDPfier
-from smdpfier.defaults import RandomActionDuration, mean_rewards
+from smdpfier.defaults import mean_rewards
 
 
 def create_taxi_options(obs, info: dict) -> list[Option]:
@@ -86,19 +86,15 @@ def main(max_steps: int = 15) -> None:
     # Create base environment
     env = gym.make("Taxi-v3")
 
-    # Create SMDPfier with dynamic options
+    # Create SMDPfier with dynamic options (default reward aggregation = sum, but using mean here)
     smdp_env = SMDPfier(
         env,
         options_provider=create_taxi_options,  # Dynamic callable
-        duration_fn=RandomActionDuration(
-            min_duration=3, max_duration=8
-        ),  # Per-action durations
         reward_agg=mean_rewards,  # Average rewards across actions
         action_interface="index",  # Use discrete action indices
         max_options=12,  # Limit number of dynamic options
         availability_fn=taxi_availability_function,  # Action masking
         precheck=True,  # Enable precheck validation
-        partial_duration_policy="proportional",
         rng_seed=42,
     )
 
@@ -117,8 +113,8 @@ def main(max_steps: int = 15) -> None:
 
     for episode_step in range(max_steps):  # Limit steps for demo
         # Get available options with masking
-        available_mask = info.get("action_mask")
         smdp_info = info.get("smdp", {})
+        available_mask = smdp_info.get("action_mask")
         num_dropped = smdp_info.get("num_dropped", 0)
 
         print(f"\nStep {episode_step + 1}:")
@@ -147,9 +143,7 @@ def main(max_steps: int = 15) -> None:
             print(f"  Steps: {smdp_info['k_exec']}/{smdp_info['option']['len']}")
             print(f"  Rewards: {smdp_info['rewards']}")
             print(f"  Mean reward: {reward:.3f}")
-            print(
-                f"  Duration: {smdp_info['duration_exec']}/{smdp_info['duration_planned']} ticks"
-            )
+            print(f"  Duration: {smdp_info['duration']} ticks (= k_exec)")
             print(f"  Early termination: {smdp_info['terminated_early']}")
 
             total_reward += reward

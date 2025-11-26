@@ -9,7 +9,7 @@ from .errors import SMDPOptionExecutionError, SMDPOptionValidationError
 from .option import Option, make_option_id
 from .wrapper import SMDPfier
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = [
     "SMDPfier",
     "Option",

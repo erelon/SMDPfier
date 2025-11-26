@@ -8,89 +8,82 @@ Common questions and answers about SMDPfier concepts, usage, and troubleshooting
 
 SMDPfier is a Gymnasium wrapper that transforms any environment into a **Semi-Markov Decision Process (SMDP)** by enabling:
 - **Options**: Sequences of primitive actions executed atomically
-- **Duration Metadata**: Abstract "ticks" for proper temporal discounting
-- **SMDP Discounting**: Using γ^{ticks} instead of γ^{steps}
+- **Simple Time Semantics**: Each primitive action = 1 tick (v0.2.0+)
+- **SMDP Discounting**: Using γ^{k} where k = number of actions executed
 
-**Key Insight**: SMDPfier separates execution (environment steps) from time (discounting metadata).
+**Key Insight (v0.2.0+)**: Each primitive action = 1 tick. Duration = k_exec. Simple and natural.
 
 ### How is this different from other hierarchical RL libraries?
 
 | Aspect | SMDPfier | Other Libraries |
 |--------|----------|-----------------|
-| **Focus** | Duration-aware SMDP behavior | General hierarchical RL |
+| **Focus** | Option-based SMDP behavior | General hierarchical RL |
 | **Complexity** | Single wrapper class | Full frameworks |
 | **Environment Support** | Any Gymnasium env unchanged | Often require specific environments |
-| **Temporal Modeling** | Explicit duration metadata | Usually step-based |
+| **Temporal Modeling** | Each action = 1 tick | Usually step-based |
 | **Integration** | Drop-in wrapper | Framework-specific |
 
 ### When should I use SMDPfier?
 
 ✅ **Use SMDPfier when you want to:**
-- Apply **true SMDP discounting** with γ^{duration}
+- Apply **SMDP discounting** with γ^{duration} where duration = actions executed
 - Test **hierarchical policies** with temporal abstractions
 - Add **option-level control** to existing environments
-- **Research temporal abstractions** without framework complexity
+- **Research temporal abstractions** with simple time semantics
 
 ❌ **Don't use SMDPfier when:**
 - You need complex option discovery algorithms
 - You want full hierarchical RL frameworks (use HRL libraries)
 - You don't care about temporal discounting (standard MDP is fine)
 
-## The Critical Distinction: Steps vs Duration
+## Time Semantics (v0.2.0+)
 
-### 🚨 Do durations control how many steps are executed?
+### How does time work in SMDPfier?
 
-**NO!** This is the most common misconception.
-
-- **Steps**: Determined by option length, controls `env.step()` calls
-- **Duration**: Metadata only, used for SMDP discounting
+**Simple rule:** Each primitive action = 1 tick.
 
 ```python
-option = Option([0, 1, 0], "three-actions")     # Always 3 steps
-duration_fn = ConstantOptionDuration(100)       # 100 ticks metadata
+option = Option([0, 1, 0], "three-actions")  # 3 actions
 
-# Result: 3 env.step() calls, 100 ticks for discounting
+# Executes 3 primitive actions → duration = 3 ticks
+# If terminated early after 2 actions → duration = 2 ticks
 ```
 
-### What determines the number of environment steps?
+### Why did duration modeling change in v0.2.0?
 
-**Only the option length** (`len(option.actions)`).
+**Simplicity and clarity.** The old system separated "steps" from "ticks" which was confusing. Now:
+- Each action = 1 tick (natural and intuitive)
+- Duration = k_exec (number of actions executed)
+- No complex duration functions needed
 
-```python
-# These all execute the same number of steps
-Option([0, 1, 0], "option-1")     # 3 steps
-Option([1, 0, 1], "option-2")     # 3 steps  
-Option([0, 0, 0], "option-3")     # 3 steps
+See [Migration Guide](migration_0_2.md) for upgrading from 0.1.x.
 
-# Duration function doesn't matter for execution:
-ConstantOptionDuration(1)         # Still 3 steps each
-ConstantOptionDuration(1000)      # Still 3 steps each
-```
+### How do I control option duration?
 
-### How do I control execution length?
-
-**Change the option's action sequence**, not the duration function:
+**Use option length:**
 
 ```python
-# Want longer execution? Add more actions:
-short_option = Option([0, 1], "short")           # 2 steps
-long_option = Option([0, 1, 0, 1, 0], "long")    # 5 steps
+# Want 2 ticks? Use 2 actions:
+short_option = Option([0, 1], "short")           # 2 ticks
 
-# Want shorter execution? Remove actions:
-very_short_option = Option([0], "single")        # 1 step
+# Want 5 ticks? Use 5 actions:
+long_option = Option([0, 1, 0, 1, 0], "long")    # 5 ticks
+
+# Want 1 tick? Use 1 action:
+instant_option = Option([0], "instant")          # 1 tick
 ```
 
 ## SMDP Discounting
 
 ### How do I apply SMDP discounting?
 
-Use `duration_exec` from the info payload:
+Use `duration` from the info payload:
 
 ```python
 obs, reward, term, trunc, info = env.step(action)
 
-# Get executed duration (handles early termination)  
-duration = info["smdp"]["duration_exec"]
+# Get duration (equals k_exec)
+duration = info["smdp"]["duration"]
 
 # Apply SMDP discounting
 gamma = 0.99
@@ -101,32 +94,24 @@ total_time += duration
 next_discount = gamma ** total_time
 ```
 
-### What's the difference between duration_planned and duration_exec?
+### What happens with early termination?
 
-| Field | When They Differ | Example |
-|-------|-----------------|---------|
-| `duration_planned` | Expected duration from duration function | 10 ticks |
-| `duration_exec` | Actual duration (accounts for early termination) | 6 ticks (if terminated early) |
-
-**They're equal** when the option completes normally.
-**They differ** when the episode terminates before the option finishes.
-
-### How do partial duration policies work?
-
-When an option terminates early:
+When the episode terminates before an option completes, `duration` reflects actual execution:
 
 ```python
-# Option: [0, 1, 0, 1] (4 actions), Duration: 12 ticks, Terminated after 3 actions
+# Option has 5 actions, but episode terminates after 2 actions
 
-# "proportional" (default): (3/4) * 12 = 9 ticks
-# "full": 12 ticks (option conceptually "completes")  
-# "zero": 0 ticks (failed options consume no time)
+info["smdp"] = {
+    "k_exec": 2,              # 2 actions executed
+    "duration": 2,            # 2 ticks (= k_exec)
+    "terminated_early": True  # Flag indicating early termination
+}
 ```
 
-Choose based on your domain:
-- **Proportional**: Most realistic (default)
-- **Full**: Options have setup costs
-- **Zero**: Failures are "free"
+**Why this matters:**
+- Use actual duration for discounting, not planned length
+- Prevents incorrect temporal credit assignment
+- Handles partial execution correctly
 
 ## Action Interfaces
 
@@ -180,14 +165,13 @@ env = SMDPfier(..., max_options=3)
 ```python
 # Continuous options
 continuous_options = [
-    Option([[-1.0], [0.0], [1.0]], "left-center-right"),
-    Option([[0.5, 0.2]], "multi-dim-action"),
+    Option([[-1.0], [0.0], [1.0]], "left-center-right"),  # 3 ticks
+    Option([[0.5, 0.2]], "multi-dim-action"),             # 1 tick
 ]
 
 env = SMDPfier(
     gym.make("Pendulum-v1"),
     options_provider=continuous_options,
-    duration_fn=ConstantActionDuration(3),
     action_interface="direct"  # Recommended for continuous
 )
 ```
@@ -208,15 +192,15 @@ env = SMDPfier(
 SMDPfier handles this gracefully:
 
 1. **Execution stops** immediately when `env.step()` returns `terminated=True` or `truncated=True`
-2. **Partial duration policy** is applied based on configuration
-3. **Info payload** reflects actual execution (`k_exec`, `duration_exec`, `terminated_early`)
+2. **Duration reflects actual execution** (duration = k_exec)
+3. **Info payload** contains early termination flag
 
 ```python
 # Option with 5 actions, but episode terminates after 2 actions
 info["smdp"] = {
     "k_exec": 2,                    # Only 2 actions executed
+    "duration": 2,                  # 2 ticks (= k_exec)
     "terminated_early": True,       # Flag early termination
-    "duration_exec": 4,             # Partial duration (if proportional policy)
     # ...
 }
 ```
@@ -227,23 +211,25 @@ info["smdp"] = {
 
 **Common causes:**
 
-1. **Wrong discounting**: Use `duration_exec`, not step count
+1. **Wrong discounting**: Use `duration`, not step count
 ```python
 # Wrong
 discount = gamma ** step_count
 
 # Right  
-discount = gamma ** info["smdp"]["duration_exec"]
+discount = gamma ** info["smdp"]["duration"]
 ```
 
 2. **Action space mismatch**: Ensure max_options is correct
 ```python
-# Wrong - action space is Discrete(max_options), not len(options)
-max_options = len(static_options)  # Correct for static options
-max_options = 10                   # Might be needed for dynamic options
+# Correct for static options
+max_options = len(static_options)
+
+# Might be needed for dynamic options
+max_options = 10  # Set appropriately
 ```
 
-3. **Reward aggregation**: Check if `sum_rewards` is appropriate
+3. **Reward aggregation**: Check if default sum is appropriate
 ```python
 # Try different aggregation
 reward_agg = mean_rewards          # Average instead of sum
@@ -309,12 +295,11 @@ static_options = [Option([i, j], f"option_{i}_{j}")
                  for i in range(2) for j in range(2)]
 ```
 
-2. **Avoid complex duration functions**:
+2. **Use simple reward aggregators**:
 ```python
-# Simple is better
-ConstantOptionDuration(5)          # Fast
-# vs
-complex_state_dependent_duration   # Potentially slow
+# Simple aggregators are faster
+from smdpfier.defaults import sum_rewards, mean_rewards
+reward_agg = sum_rewards  # Fast
 ```
 
 3. **Use appropriate max_options**:
@@ -345,10 +330,11 @@ smdp = info["smdp"]
 
 print("=== Option Execution Details ===")
 print(f"Option: {smdp['option']['name']} (ID: {smdp['option']['id']})")
-print(f"Actions: {len(smdp['option']['len'])} total")
+print(f"Actions: {smdp['option']['len']} total")
 print(f"Executed: {smdp['k_exec']} steps")
+print(f"Duration: {smdp['duration']} ticks (= k_exec)")
 print(f"Per-step rewards: {smdp['rewards']}")
-print(f"Duration: {smdp['duration_exec']} ticks")
+print(f"Macro reward: {reward}")
 print(f"Early termination: {smdp['terminated_early']}")
 
 if smdp.get('action_mask'):

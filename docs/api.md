@@ -8,18 +8,21 @@ Complete reference for SMDPfier classes, functions, and configurations.
 
 ```python
 from smdpfier import SMDPfier, Option
-from smdpfier.defaults import ConstantOptionDuration, sum_rewards
+from smdpfier.defaults import sum_rewards
 import gymnasium as gym
 
 # Basic setup with static options
 env = gym.make("CartPole-v1")
-options = [Option([0, 1], "left-right"), Option([1, 0], "right-left")]
+options = [
+    Option([0, 1], "left-right"),     # 2 actions = 2 ticks
+    Option([1, 0], "right-left")      # 2 actions = 2 ticks
+]
 
 smdp_env = SMDPfier(
     env,
     options_provider=options,
-    duration_fn=ConstantOptionDuration(5),
-    action_interface="index"
+    action_interface="index",
+    max_options=len(options)
 )
 ```
 
@@ -27,12 +30,10 @@ smdp_env = SMDPfier(
 
 ```python
 from smdpfier.defaults.options import RandomStaticLen
-from smdpfier.defaults.durations import RandomActionDuration
 
 smdp_env = SMDPfier(
     env,
     options_provider=RandomStaticLen(length=3, num_options=8),
-    duration_fn=RandomActionDuration(min_duration=2, max_duration=5),
     action_interface="index",
     max_options=8
 )
@@ -51,14 +52,11 @@ class SMDPfier(gym.Wrapper):
         env: gym.Env,
         *,
         options_provider: Callable[[Any, dict], list[Option]] | Sequence[Option],
-        duration_fn: Callable[[Option, Any, dict], int | list[int]],
         reward_agg: Callable[[list[float]], float] = sum_rewards,
         action_interface: Literal["index", "direct"] = "index",
         max_options: int | None = None,
         availability_fn: Optional[Callable[[Any], Iterable[int]]] = None,
         precheck: bool = False,
-        partial_duration_policy: Literal["proportional", "full", "zero"] = "proportional",
-        time_units: str = "ticks",
         rng_seed: int | None = None,
     )
 ```
@@ -69,14 +67,11 @@ class SMDPfier(gym.Wrapper):
 |-----------|------|----------|---------|-------------|
 | `env` | `gym.Env` | ✅ | - | Base Gymnasium environment |
 | `options_provider` | `Callable` or `Sequence[Option]` | ✅ | - | Static options or dynamic generator |
-| `duration_fn` | `Callable` | ✅ | - | Returns duration(s) for option |
 | `reward_agg` | `Callable` | ❌ | `sum_rewards` | How to aggregate per-step rewards |
 | `action_interface` | `"index"` or `"direct"` | ❌ | `"index"` | Action selection interface |
 | `max_options` | `int` or `None` | ❌ | `None` | Max options (required for index interface) |
 | `availability_fn` | `Callable` or `None` | ❌ | `None` | Action masking function |
 | `precheck` | `bool` | ❌ | `False` | Validate options before execution |
-| `partial_duration_policy` | `str` | ❌ | `"proportional"` | Handle early termination |
-| `time_units` | `str` | ❌ | `"ticks"` | Time unit name (metadata only) |
 | `rng_seed` | `int` or `None` | ❌ | `None` | Random seed for reproducibility |
 
 #### Methods
@@ -157,11 +152,9 @@ Every `step()` call returns comprehensive metadata in `info["smdp"]`:
         "meta": {"category": "test"}    # User metadata (if any)
     },
     "k_exec": 3,                        # Primitive steps actually executed
+    "duration": 3,                      # Duration in ticks (= k_exec)
     "rewards": [1.0, 1.0, 1.0],        # Per-step rewards
-    "duration_planned": 10,             # Expected duration (ticks)
-    "duration_exec": 10,                # Actual duration (accounting for early termination)
     "terminated_early": False,          # Whether episode ended during option
-    "time_units": "ticks",              # Always "ticks"
     "action_mask": [1, 1, 0, 1],       # Available option indices (index interface only)
     "num_dropped": 0                    # Options dropped due to overflow (index interface only)
 }
@@ -173,17 +166,18 @@ Every `step()` call returns comprehensive metadata in `info["smdp"]`:
 |-------|------|-------------|
 | `option.id` | `str` | Stable identifier (hash of actions + name) |
 | `option.name` | `str` | Human-readable option name |
-| `option.len` | `int` | Total number of primitive actions |
+| `option.len` | `int` | Total number of primitive actions in option |
 | `option.meta` | `dict` | User-defined metadata |
 | `k_exec` | `int` | Number of primitive steps actually executed |
+| `duration` | `int` | Duration in ticks (always equals k_exec) |
 | `rewards` | `list[float]` | Per-primitive-step rewards |
-| `duration_planned` | `int` | Expected duration from duration function |
-| `duration_exec` | `int` | Actual duration (may differ due to early termination) |
 | `terminated_early` | `bool` | True if episode ended before option completed |
-| `time_units` | `str` | Always "ticks" |
 | `action_mask` | `list[int]` | Binary mask of available options (index interface) |
 | `num_dropped` | `int` | Number of options dropped due to overflow (index interface) |
 
+## Action Interfaces
+
+### Index Interface
 ## Action Interfaces
 
 ### Index Interface
@@ -195,7 +189,6 @@ Transforms the action space to `Discrete(max_options)` where actions are integer
 env = SMDPfier(
     base_env,
     options_provider=options,
-    duration_fn=duration_fn,
     action_interface="index",
     max_options=len(options)  # Required
 )
@@ -219,7 +212,6 @@ Allows passing `Option` objects directly to `step()`.
 env = SMDPfier(
     base_env,
     options_provider=options,
-    duration_fn=duration_fn,
     action_interface="direct"
     # No max_options needed
 )
@@ -244,7 +236,7 @@ obs, reward, term, trunc, info = env.step(option)
 from smdpfier.defaults.options import RandomStaticLen
 
 generator = RandomStaticLen(
-    length=3,                    # Fixed option length
+    length=3,                    # Fixed option length (= 3 ticks)
     action_space_size=4,         # Discrete action space size (auto-detected if None)
     num_options=10,              # Number of options to generate
     rng_seed=42                  # Random seed
@@ -257,54 +249,18 @@ generator = RandomStaticLen(
 from smdpfier.defaults.options import RandomVarLen
 
 generator = RandomVarLen(
-    min_length=2,                # Minimum option length
-    max_length=5,                # Maximum option length
+    min_length=2,                # Minimum option length (= 2 ticks)
+    max_length=5,                # Maximum option length (= 5 ticks)
     action_space_size=4,         # Discrete action space size
     num_options=8,               # Number of options to generate
     rng_seed=42                  # Random seed
 )
 ```
 
-### Duration Functions
-
-**Option-Level Durations (Scalar):**
-
-```python
-from smdpfier.defaults.durations import ConstantOptionDuration, RandomOptionDuration
-
-# Fixed duration per option
-ConstantOptionDuration(10)  # Every option takes 10 ticks
-
-# Random duration per option
-RandomOptionDuration(min_duration=5, max_duration=15, rng_seed=42)
-```
-
-**Action-Level Durations (List):**
-
-```python
-from smdpfier.defaults.durations import ConstantActionDuration, RandomActionDuration
-
-# Fixed duration per action
-ConstantActionDuration(3)  # Each action takes 3 ticks
-
-# Random duration per action
-RandomActionDuration(min_duration=2, max_duration=5, rng_seed=42)
-```
-
-**Custom Duration Mapping:**
-
-```python
-from smdpfier.defaults.durations import MapActionDuration
-
-# Map specific actions to durations
-action_durations = {0: 2, 1: 5, 2: 3}  # Action 0: 2 ticks, Action 1: 5 ticks, etc.
-MapActionDuration(action_durations, default_duration=4)
-```
-
 ### Reward Aggregation
 
 ```python
-from smdpfier.defaults.rewards import sum_rewards, mean_rewards, discounted_sum
+from smdpfier.defaults import sum_rewards, mean_rewards, discounted_sum
 
 # Sum all per-step rewards (default)
 reward_agg = sum_rewards
@@ -322,15 +278,14 @@ reward_agg = discounted_sum(gamma=0.99)
 
 ```python
 options = [
-    Option([0, 1], "left-right"),
-    Option([1, 0], "right-left"),
-    Option([0, 0, 1], "left-left-right"),
+    Option([0, 1], "left-right"),                # 2 ticks
+    Option([1, 0], "right-left"),                # 2 ticks
+    Option([0, 0, 1], "left-left-right"),        # 3 ticks
 ]
 
 env = SMDPfier(
     base_env,
     options_provider=options,
-    duration_fn=ConstantOptionDuration(5),
     action_interface="index",
     max_options=len(options)
 )
@@ -353,7 +308,6 @@ def availability_mask(obs):
 env = SMDPfier(
     base_env,
     options_provider=dynamic_generator,
-    duration_fn=RandomActionDuration(2, 4),
     action_interface="index",
     max_options=5,
     availability_fn=availability_mask
@@ -364,44 +318,18 @@ env = SMDPfier(
 
 ```python
 continuous_options = [
-    Option([[-1.0], [0.0]], "left-center"),
-    Option([[0.5], [1.0]], "gentle-hard-right"),
-    Option([[-2.0], [2.0], [0.0]], "extreme-swing"),
+    Option([[-1.0], [0.0]], "left-center"),            # 2 ticks
+    Option([[0.5], [1.0]], "gentle-hard-right"),       # 2 ticks
+    Option([[-2.0], [2.0], [0.0]], "extreme-swing"),   # 3 ticks
 ]
 
 env = SMDPfier(
     gym.make("Pendulum-v1"),
     options_provider=continuous_options,
-    duration_fn=ConstantActionDuration(3),
     action_interface="direct"
 )
 ```
 
-## Partial Duration Policies
-
-Handle early termination when episodes end before options complete:
-
-| Policy | Behavior | Formula | Use Case |
-|--------|----------|---------|----------|
-| `"proportional"` | Scale by execution ratio | `(k_exec / option_len) * planned_duration` | **Default** - realistic time scaling |
-| `"full"` | Use full planned duration | `planned_duration` | Options have setup costs |
-| `"zero"` | No time consumed | `0` | Failed options waste no time |
-
-**Example:**
-```python
-# Option with 4 actions, 12 ticks planned, terminates after 3 actions
-
-# Proportional (default): (3/4) * 12 = 9 ticks
-# Full: 12 ticks  
-# Zero: 0 ticks
-
-env = SMDPfier(
-    base_env,
-    options_provider=options,
-    duration_fn=ConstantOptionDuration(12),
-    partial_duration_policy="proportional"  # Default
-)
-```
 
 ## Error Handling
 

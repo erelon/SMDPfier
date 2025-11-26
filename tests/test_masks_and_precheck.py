@@ -10,11 +10,9 @@ class TestSmokeTest:
         """Test that the package imports correctly and has basic attributes."""
         # Test that main components are importable
         from smdpfier import SMDPfier, Option
-        from smdpfier.defaults import ConstantOptionDuration
 
         # Verify basic functionality exists
         option = Option([0, 1], "test")
-        duration_fn = ConstantOptionDuration(5)
 
         assert option.name == "test"
         assert len(option.actions) == 2

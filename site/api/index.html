@@ -1,0 +1,2050 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="SMDP-level behavior for Gymnasium environments">
+      
+      
+      
+        <link rel="canonical" href="https://smdpfier.readthedocs.io/api/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../usage_index_vs_direct/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>API Reference - SMDPfier</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="SMDPfier" class="md-header__button md-logo" aria-label="SMDPfier" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SMDPfier
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/smdpfier/smdpfier" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    smdpfier/smdpfier
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="SMDPfier" class="md-nav__button md-logo" aria-label="SMDPfier" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SMDPfier
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/smdpfier/smdpfier" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    smdpfier/smdpfier
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Start Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick Start Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-smdpfier-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic SMDPfier Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-options-with-built-in-generators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic Options with Built-in Generators
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Classes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#smdpfier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SMDPfier
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SMDPfier">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smdp-info-payload-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SMDP Info Payload Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SMDP Info Payload Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#info-fields-detail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Info Fields Detail
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#action-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action Interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Action Interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#index-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#action-interfaces_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action Interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Action Interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#index-interface_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direct-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Direct Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#built-in-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Built-in Defaults
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Built-in Defaults">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-generators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option Generators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reward-aggregation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reward Aggregation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-options-with-index-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Options with Index Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-options-with-masking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic Options with Masking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continuous-actions-with-direct-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous Actions with Direct Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-options-provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Options Provider
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-duration-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Duration Function
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-availability-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Availability Function
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Tips
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Tips">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#efficient-option-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Efficient Option Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-efficient-duration-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memory-Efficient Duration Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#action-masking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action Masking
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage_index_vs_direct/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index vs Direct Interfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../durations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Durations and SMDP Discounting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../masking_and_precheck/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Action Masking and Precheck
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Start Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick Start Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-smdpfier-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic SMDPfier Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-options-with-built-in-generators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic Options with Built-in Generators
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Classes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#smdpfier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SMDPfier
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SMDPfier">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Option">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smdp-info-payload-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SMDP Info Payload Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SMDP Info Payload Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#info-fields-detail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Info Fields Detail
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#action-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action Interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Action Interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#index-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#action-interfaces_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action Interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Action Interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#index-interface_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direct-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Direct Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#built-in-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Built-in Defaults
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Built-in Defaults">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-generators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option Generators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reward-aggregation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reward Aggregation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-options-with-index-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Options with Index Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-options-with-masking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic Options with Masking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continuous-actions-with-direct-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous Actions with Direct Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-options-provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Options Provider
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-duration-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Duration Function
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-availability-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Availability Function
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Tips
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Tips">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#efficient-option-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Efficient Option Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-efficient-duration-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memory-Efficient Duration Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#action-masking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action Masking
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="api-reference">API Reference</h1>
+<p>Complete reference for SMDPfier classes, functions, and configurations.</p>
+<h2 id="quick-start-examples">Quick Start Examples</h2>
+<h3 id="basic-smdpfier-setup">Basic SMDPfier Setup</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMDPfier</span><span class="p">,</span> <span class="n">Option</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults</span><span class="w"> </span><span class="kn">import</span> <span class="n">sum_rewards</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gymnasium</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gym</span>
+
+<span class="c1"># Basic setup with static options</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;CartPole-v1&quot;</span><span class="p">)</span>
+<span class="n">options</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;left-right&quot;</span><span class="p">),</span>     <span class="c1"># 2 actions = 2 ticks</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;right-left&quot;</span><span class="p">)</span>      <span class="c1"># 2 actions = 2 ticks</span>
+<span class="p">]</span>
+
+<span class="n">smdp_env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
+    <span class="n">env</span><span class="p">,</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
+    <span class="n">max_options</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="dynamic-options-with-built-in-generators">Dynamic Options with Built-in Generators</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults.options</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomStaticLen</span>
+
+<span class="n">smdp_env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
+    <span class="n">env</span><span class="p">,</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="n">RandomStaticLen</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">num_options</span><span class="o">=</span><span class="mi">8</span><span class="p">),</span>
+    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
+    <span class="n">max_options</span><span class="o">=</span><span class="mi">8</span>
+<span class="p">)</span>
+</code></pre></div>
+<h2 id="core-classes">Core Classes</h2>
+<h3 id="smdpfier">SMDPfier</h3>
+<p><strong>Primary wrapper class that transforms any Gymnasium environment into an SMDP.</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SMDPfier</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">env</span><span class="p">:</span> <span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">options_provider</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">Option</span><span class="p">]]</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Option</span><span class="p">],</span>
+        <span class="n">reward_agg</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_rewards</span><span class="p">,</span>
+        <span class="n">action_interface</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="s2">&quot;direct&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;index&quot;</span><span class="p">,</span>
+        <span class="n">max_options</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">availability_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">precheck</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">rng_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>env</code></td>
+<td><code>gym.Env</code></td>
+<td>✅</td>
+<td>-</td>
+<td>Base Gymnasium environment</td>
+</tr>
+<tr>
+<td><code>options_provider</code></td>
+<td><code>Callable</code> or <code>Sequence[Option]</code></td>
+<td>✅</td>
+<td>-</td>
+<td>Static options or dynamic generator</td>
+</tr>
+<tr>
+<td><code>reward_agg</code></td>
+<td><code>Callable</code></td>
+<td>❌</td>
+<td><code>sum_rewards</code></td>
+<td>How to aggregate per-step rewards</td>
+</tr>
+<tr>
+<td><code>action_interface</code></td>
+<td><code>"index"</code> or <code>"direct"</code></td>
+<td>❌</td>
+<td><code>"index"</code></td>
+<td>Action selection interface</td>
+</tr>
+<tr>
+<td><code>max_options</code></td>
+<td><code>int</code> or <code>None</code></td>
+<td>❌</td>
+<td><code>None</code></td>
+<td>Max options (required for index interface)</td>
+</tr>
+<tr>
+<td><code>availability_fn</code></td>
+<td><code>Callable</code> or <code>None</code></td>
+<td>❌</td>
+<td><code>None</code></td>
+<td>Action masking function</td>
+</tr>
+<tr>
+<td><code>precheck</code></td>
+<td><code>bool</code></td>
+<td>❌</td>
+<td><code>False</code></td>
+<td>Validate options before execution</td>
+</tr>
+<tr>
+<td><code>rng_seed</code></td>
+<td><code>int</code> or <code>None</code></td>
+<td>❌</td>
+<td><code>None</code></td>
+<td>Random seed for reproducibility</td>
+</tr>
+</tbody>
+</table>
+<h4 id="methods">Methods</h4>
+<p><strong><code>step(action: int | Option) -&gt; tuple[obs, reward, terminated, truncated, info]</code></strong></p>
+<p>Execute an option in the environment.</p>
+<ul>
+<li><strong>Index interface</strong>: <code>action</code> is integer index</li>
+<li><strong>Direct interface</strong>: <code>action</code> is Option object</li>
+</ul>
+<p><strong><code>reset(**kwargs) -&gt; tuple[obs, info]</code></strong></p>
+<p>Reset the environment and return initial observation and info.</p>
+<p><strong><code>close()</code></strong></p>
+<p>Close the environment.</p>
+<h3 id="option">Option</h3>
+<p><strong>Represents a sequence of primitive actions with metadata.</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Option</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">actions</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">meta</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_1">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actions</code></td>
+<td><code>Sequence[Any]</code></td>
+<td>✅</td>
+<td>Sequence of primitive actions</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>str</code></td>
+<td>✅</td>
+<td>Human-readable option name</td>
+</tr>
+<tr>
+<td><code>meta</code></td>
+<td><code>dict</code> or <code>None</code></td>
+<td>❌</td>
+<td>Additional metadata</td>
+</tr>
+</tbody>
+</table>
+<h4 id="properties">Properties</h4>
+<ul>
+<li><strong><code>actions</code></strong>: The action sequence</li>
+<li><strong><code>name</code></strong>: Human-readable name</li>
+<li><strong><code>meta</code></strong>: User-defined metadata dictionary</li>
+<li><strong><code>id</code></strong>: Stable hash-based identifier (computed from actions + name)</li>
+</ul>
+<h4 id="examples">Examples</h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Discrete actions</span>
+<span class="n">option1</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;left-right-left&quot;</span><span class="p">)</span>
+
+<span class="c1"># Continuous actions</span>
+<span class="n">option2</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">]],</span> <span class="s2">&quot;continuous-sequence&quot;</span><span class="p">)</span>
+
+<span class="c1"># With metadata</span>
+<span class="n">option3</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span>
+    <span class="n">actions</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> 
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;double-pairs&quot;</span><span class="p">,</span>
+    <span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;symmetric&quot;</span><span class="p">,</span> <span class="s2">&quot;difficulty&quot;</span><span class="p">:</span> <span class="s2">&quot;easy&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">option1</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># Stable hash: &quot;a1b2c3...&quot;</span>
+</code></pre></div>
+<h2 id="smdp-info-payload-structure">SMDP Info Payload Structure</h2>
+<p>Every <code>step()</code> call returns comprehensive metadata in <code>info["smdp"]</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="s2">&quot;option&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;abc123...&quot;</span><span class="p">,</span>              <span class="c1"># Stable hash-based ID</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;left-right-left&quot;</span><span class="p">,</span>      <span class="c1"># Human-readable name</span>
+        <span class="s2">&quot;len&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>                       <span class="c1"># Number of primitive actions</span>
+        <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">}</span>    <span class="c1"># User metadata (if any)</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;k_exec&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>                        <span class="c1"># Primitive steps actually executed</span>
+    <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>                      <span class="c1"># Duration in ticks (= k_exec)</span>
+    <span class="s2">&quot;rewards&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>        <span class="c1"># Per-step rewards</span>
+    <span class="s2">&quot;terminated_early&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>          <span class="c1"># Whether episode ended during option</span>
+    <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>       <span class="c1"># Available option indices (index interface only)</span>
+    <span class="s2">&quot;num_dropped&quot;</span><span class="p">:</span> <span class="mi">0</span>                    <span class="c1"># Options dropped due to overflow (index interface only)</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="info-fields-detail">Info Fields Detail</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>option.id</code></td>
+<td><code>str</code></td>
+<td>Stable identifier (hash of actions + name)</td>
+</tr>
+<tr>
+<td><code>option.name</code></td>
+<td><code>str</code></td>
+<td>Human-readable option name</td>
+</tr>
+<tr>
+<td><code>option.len</code></td>
+<td><code>int</code></td>
+<td>Total number of primitive actions in option</td>
+</tr>
+<tr>
+<td><code>option.meta</code></td>
+<td><code>dict</code></td>
+<td>User-defined metadata</td>
+</tr>
+<tr>
+<td><code>k_exec</code></td>
+<td><code>int</code></td>
+<td>Number of primitive steps actually executed</td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td><code>int</code></td>
+<td>Duration in ticks (always equals k_exec)</td>
+</tr>
+<tr>
+<td><code>rewards</code></td>
+<td><code>list[float]</code></td>
+<td>Per-primitive-step rewards</td>
+</tr>
+<tr>
+<td><code>terminated_early</code></td>
+<td><code>bool</code></td>
+<td>True if episode ended before option completed</td>
+</tr>
+<tr>
+<td><code>action_mask</code></td>
+<td><code>list[int]</code></td>
+<td>Binary mask of available options (index interface)</td>
+</tr>
+<tr>
+<td><code>num_dropped</code></td>
+<td><code>int</code></td>
+<td>Number of options dropped due to overflow (index interface)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="action-interfaces">Action Interfaces</h2>
+<h3 id="index-interface">Index Interface</h3>
+<h2 id="action-interfaces_1">Action Interfaces</h2>
+<h3 id="index-interface_1">Index Interface</h3>
+<p>Transforms the action space to <code>Discrete(max_options)</code> where actions are integer indices.</p>
+<p><strong>Configuration:</strong>
+<div class="highlight"><pre><span></span><code><span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
+    <span class="n">base_env</span><span class="p">,</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
+    <span class="n">max_options</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>  <span class="c1"># Required</span>
+<span class="p">)</span>
+
+<span class="c1"># Usage</span>
+<span class="n">action</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Select second option</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+</code></pre></div></p>
+<p><strong>Features:</strong>
+- Built-in action masking via <code>info["smdp"]["action_mask"]</code>
+- Overflow handling for dynamic options
+- Seamless RL algorithm integration</p>
+<h3 id="direct-interface">Direct Interface</h3>
+<p>Allows passing <code>Option</code> objects directly to <code>step()</code>.</p>
+<p><strong>Configuration:</strong>
+<div class="highlight"><pre><span></span><code><span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
+    <span class="n">base_env</span><span class="p">,</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;direct&quot;</span>
+    <span class="c1"># No max_options needed</span>
+<span class="p">)</span>
+
+<span class="c1"># Usage</span>
+<span class="n">option</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Select option object</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">option</span><span class="p">)</span>
+</code></pre></div></p>
+<p><strong>Features:</strong>
+- Intuitive option selection
+- Full control over option choice
+- Works naturally with continuous actions</p>
+<h2 id="built-in-defaults">Built-in Defaults</h2>
+<h3 id="option-generators">Option Generators</h3>
+<p><strong><code>RandomStaticLen</code></strong> - Generate random options with fixed length:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults.options</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomStaticLen</span>
+
+<span class="n">generator</span> <span class="o">=</span> <span class="n">RandomStaticLen</span><span class="p">(</span>
+    <span class="n">length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>                    <span class="c1"># Fixed option length (= 3 ticks)</span>
+    <span class="n">action_space_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>         <span class="c1"># Discrete action space size (auto-detected if None)</span>
+    <span class="n">num_options</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>              <span class="c1"># Number of options to generate</span>
+    <span class="n">rng_seed</span><span class="o">=</span><span class="mi">42</span>                  <span class="c1"># Random seed</span>
+<span class="p">)</span>
+</code></pre></div>
+<p><strong><code>RandomVarLen</code></strong> - Generate random options with variable length:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults.options</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomVarLen</span>
+
+<span class="n">generator</span> <span class="o">=</span> <span class="n">RandomVarLen</span><span class="p">(</span>
+    <span class="n">min_length</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>                <span class="c1"># Minimum option length (= 2 ticks)</span>
+    <span class="n">max_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>                <span class="c1"># Maximum option length (= 5 ticks)</span>
+    <span class="n">action_space_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>         <span class="c1"># Discrete action space size</span>
+    <span class="n">num_options</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>               <span class="c1"># Number of options to generate</span>
+    <span class="n">rng_seed</span><span class="o">=</span><span class="mi">42</span>                  <span class="c1"># Random seed</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="reward-aggregation">Reward Aggregation</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults</span><span class="w"> </span><span class="kn">import</span> <span class="n">sum_rewards</span><span class="p">,</span> <span class="n">mean_rewards</span><span class="p">,</span> <span class="n">discounted_sum</span>
+
+<span class="c1"># Sum all per-step rewards (default)</span>
+<span class="n">reward_agg</span> <span class="o">=</span> <span class="n">sum_rewards</span>
+
+<span class="c1"># Average per-step rewards</span>
+<span class="n">reward_agg</span> <span class="o">=</span> <span class="n">mean_rewards</span>
+
+<span class="c1"># Discount per-step rewards with γ</span>
+<span class="n">reward_agg</span> <span class="o">=</span> <span class="n">discounted_sum</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="configuration-patterns">Configuration Patterns</h2>
+<h3 id="static-options-with-index-interface">Static Options with Index Interface</h3>
+<div class="highlight"><pre><span></span><code><span class="n">options</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;left-right&quot;</span><span class="p">),</span>                <span class="c1"># 2 ticks</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;right-left&quot;</span><span class="p">),</span>                <span class="c1"># 2 ticks</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;left-left-right&quot;</span><span class="p">),</span>        <span class="c1"># 3 ticks</span>
+<span class="p">]</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
+    <span class="n">base_env</span><span class="p">,</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
+    <span class="n">max_options</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="dynamic-options-with-masking">Dynamic Options with Masking</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">dynamic_generator</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+    <span class="c1"># Generate options based on current state</span>
+    <span class="k">if</span> <span class="n">obs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;left&quot;</span><span class="p">),</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;double-left&quot;</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;right&quot;</span><span class="p">),</span> <span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;double-right&quot;</span><span class="p">)]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">availability_mask</span><span class="p">(</span><span class="n">obs</span><span class="p">):</span>
+    <span class="c1"># Mask options based on state</span>
+    <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">obs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># All available</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
+    <span class="n">base_env</span><span class="p">,</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="n">dynamic_generator</span><span class="p">,</span>
+    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
+    <span class="n">max_options</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">availability_fn</span><span class="o">=</span><span class="n">availability_mask</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="continuous-actions-with-direct-interface">Continuous Actions with Direct Interface</h3>
+<div class="highlight"><pre><span></span><code><span class="n">continuous_options</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Option</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]],</span> <span class="s2">&quot;left-center&quot;</span><span class="p">),</span>            <span class="c1"># 2 ticks</span>
+    <span class="n">Option</span><span class="p">([[</span><span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]],</span> <span class="s2">&quot;gentle-hard-right&quot;</span><span class="p">),</span>       <span class="c1"># 2 ticks</span>
+    <span class="n">Option</span><span class="p">([[</span><span class="o">-</span><span class="mf">2.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]],</span> <span class="s2">&quot;extreme-swing&quot;</span><span class="p">),</span>   <span class="c1"># 3 ticks</span>
+<span class="p">]</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
+    <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;Pendulum-v1&quot;</span><span class="p">),</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="n">continuous_options</span><span class="p">,</span>
+    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;direct&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+<h2 id="error-handling">Error Handling</h2>
+<p>SMDPfier provides detailed error context through specialized exceptions:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMDPOptionValidationError</span><span class="p">,</span> <span class="n">SMDPOptionExecutionError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">SMDPOptionValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Precheck failed for option &#39;</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">option_name</span><span class="si">}</span><span class="s2">&#39; at step </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">failing_step_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Action: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">action_repr</span><span class="si">}</span><span class="s2">, State: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">short_obs_summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">SMDPOptionExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Runtime error for option &#39;</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">option_name</span><span class="si">}</span><span class="s2">&#39; at step </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">failing_step_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Underlying error: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">base_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>See <a href="../errors/">Error Handling</a> for complete details.</p>
+<h2 id="custom-functions">Custom Functions</h2>
+<h3 id="custom-options-provider">Custom Options Provider</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">custom_options_provider</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate options based on observation and info.&quot;&quot;&quot;</span>
+    <span class="c1"># Access current state</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">obs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Access action space if needed</span>
+    <span class="n">action_space</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;action_space&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Access action mask if available</span>
+    <span class="n">action_mask</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;action_mask&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Generate options</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">position</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;strong-left&quot;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">position</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;strong-right&quot;</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">options</span>
+</code></pre></div>
+<h3 id="custom-duration-function">Custom Duration Function</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">custom_duration_fn</span><span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute duration based on option and state.&quot;&quot;&quot;</span>
+    <span class="n">base_duration</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>
+
+    <span class="c1"># State-dependent adjustment</span>
+    <span class="k">if</span> <span class="n">obs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>  <span class="c1"># Far right position</span>
+        <span class="k">return</span> <span class="n">base_duration</span> <span class="o">+</span> <span class="mi">3</span>  <span class="c1"># Takes longer</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">base_duration</span>
+
+<span class="c1"># Can return scalar (int) or list (list[int])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">per_action_duration_fn</span><span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return duration for each action.&quot;&quot;&quot;</span>
+    <span class="n">durations</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">option</span><span class="o">.</span><span class="n">actions</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># Left action</span>
+            <span class="n">durations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># Right action</span>
+            <span class="n">durations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">durations</span>
+</code></pre></div>
+<h3 id="custom-availability-function">Custom Availability Function</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">custom_availability_fn</span><span class="p">(</span><span class="n">obs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return available option indices based on state.&quot;&quot;&quot;</span>
+    <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">obs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">obs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">available</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Always allow basic options</span>
+    <span class="n">available</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># Complex options only when stable</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">velocity</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">:</span>
+        <span class="n">available</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">available</span>
+</code></pre></div>
+<h2 id="performance-tips">Performance Tips</h2>
+<h3 id="efficient-option-generation">Efficient Option Generation</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Pre-compute static options when possible</span>
+<span class="n">static_options</span> <span class="o">=</span> <span class="p">[</span><span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;option_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+
+<span class="c1"># Cache dynamic options when state doesn&#39;t change much</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CachedOptionsProvider</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="n">state_key</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">obs</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>  <span class="c1"># Use subset of observation as key</span>
+        <span class="k">if</span> <span class="n">state_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">state_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">generate_options_for_state</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">state_key</span><span class="p">]</span>
+</code></pre></div>
+<h3 id="memory-efficient-duration-functions">Memory-Efficient Duration Functions</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Use generators for large option sets</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">memory_efficient_duration_fn</span><span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+    <span class="c1"># Compute duration on demand rather than storing</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span> <span class="o">*</span> <span class="n">compute_action_cost</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="action-masking">Action Masking</h2>
+<p>Action masking in SMDPfier is handled through the <code>availability_fn</code> parameter and works exclusively with the index interface. See the <a href="../masking_and_precheck/">Masking and Precheck</a> guide for comprehensive examples.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">availability_fn</span><span class="p">(</span><span class="n">obs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return list of available option indices.&quot;&quot;&quot;</span>
+    <span class="c1"># Return indices of valid options based on current state</span>
+    <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>  <span class="c1"># Options 1 is masked out</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
+    <span class="n">base_env</span><span class="p">,</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+    <span class="n">duration_fn</span><span class="o">=</span><span class="n">duration_fn</span><span class="p">,</span>
+    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
+    <span class="n">availability_fn</span><span class="o">=</span><span class="n">availability_fn</span>
+<span class="p">)</span>
+
+<span class="c1"># Action mask appears in info</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>  <span class="c1"># e.g., [1, 0, 1, 1]</span>
+</code></pre></div>
+<hr />
+<p><strong>See Also:</strong>
+- <a href="../durations/">Duration Guide</a> - Understanding ticks and SMDP discounting
+- <a href="../usage_index_vs_direct/">Interface Guide</a> - Choosing index vs direct
+- <a href="../errors/">Error Handling</a> - Debugging failed options
+- <a href="../examples/">Examples</a> - Complete working examples</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

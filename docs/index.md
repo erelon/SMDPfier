@@ -1,45 +1,46 @@
 # SMDPfier Documentation
 
-Welcome to SMDPfier, a Gymnasium wrapper that enables **Semi-Markov Decision Process (SMDP)** behavior in reinforcement learning environments through **Options** and **duration metadata**.
+Welcome to SMDPfier, a Gymnasium wrapper that enables **Semi-Markov Decision Process (SMDP)** behavior in reinforcement learning environments through **Options** with simple, natural time semantics.
 
 ## Overview
 
-SMDPfier transforms any Gymnasium environment into an SMDP by allowing agents to execute **Options** (sequences of primitive actions) while tracking **duration metadata** in abstract "ticks" for proper temporal discounting.
+SMDPfier transforms any Gymnasium environment into an SMDP by allowing agents to execute **Options** (sequences of primitive actions) where each primitive action = 1 tick of time, enabling natural SMDP discounting.
 
-**🎯 Key Insight**: SMDPfier separates **execution** (how many `env.step()` calls) from **time** (abstract ticks for discounting), enabling true SMDP learning with γ^{ticks}.
+**🎯 Key Insight**: Each primitive action = 1 tick. Option duration = number of actions executed. Simple and natural.
 
 ## Key Features
 
 - **🔗 Flexible Options**: Static sequences or dynamic discovery via callable
 - **⚡ Two Interfaces**: [Index-based](usage_index_vs_direct.md#index-interface) (Discrete actions) or [direct](usage_index_vs_direct.md#direct-interface) Option passing  
-- **⏱️ Duration Metadata**: Integer ticks for [true SMDP discounting](durations.md)
+- **⏱️ Simple Time Semantics**: Each primitive action = 1 tick, [duration = k_exec](durations.md)
 - **🎭 Action Masking**: Support for [discrete action availability](masking_and_precheck.md)
 - **📊 Rich Info**: Comprehensive execution metadata in `info["smdp"]`
 - **🛡️ Error Handling**: Detailed [validation and runtime errors](errors.md)
 - **🔄 Continuous Actions**: Full support for continuous action spaces
-- **🎲 Built-in Defaults**: Ready-to-use option generators and duration functions
+- **🎲 Built-in Defaults**: Ready-to-use option generators and reward aggregators
 
 ## Quick Start
+
+### Index Interface (Recommended for RL)
 
 ```python
 import gymnasium as gym
 from smdpfier import SMDPfier, Option
-from smdpfier.defaults import ConstantOptionDuration
 
 # Create environment and define options
 env = gym.make("CartPole-v1")
 options = [
-    Option(actions=[0, 0, 1], name="left-left-right"),   # 3 steps
-    Option(actions=[1, 1, 0], name="right-right-left"),  # 3 steps
-    Option(actions=[0, 1], name="left-right"),           # 2 steps
+    Option(actions=[0, 0, 1], name="left-left-right"),   # 3 actions = 3 ticks
+    Option(actions=[1, 1, 0], name="right-right-left"),  # 3 actions = 3 ticks
+    Option(actions=[0, 1], name="left-right"),           # 2 actions = 2 ticks
 ]
 
 # Wrap with SMDPfier
 smdp_env = SMDPfier(
     env,
-    options_provider=options,               # Static options list
-    duration_fn=ConstantOptionDuration(10), # 10 ticks per option
-    action_interface="index"                # Discrete(3) action space
+    options_provider=options,       # Static options list
+    action_interface="index",       # Discrete(3) action space
+    max_options=len(options)
 )
 
 # Use like any Gym environment
@@ -48,13 +49,23 @@ obs, reward, term, trunc, info = smdp_env.step(0)  # Execute first option
 
 # Access SMDP metadata
 smdp = info["smdp"]
-print(f"Option '{smdp['option']['name']}' executed {smdp['k_exec']}/3 steps")
-print(f"Duration: {smdp['duration_exec']} ticks (for SMDP discounting)")
+print(f"Option '{smdp['option']['name']}' executed {smdp['k_exec']} steps")
+print(f"Duration: {smdp['duration']} ticks (= k_exec)")
 print(f"Per-step rewards: {smdp['rewards']}")
 
 # Apply SMDP discounting
 gamma = 0.99
-discounted_reward = reward * (gamma ** smdp['duration_exec'])
+discounted_reward = reward * (gamma ** smdp['duration'])
+```
+
+### Direct Interface (Intuitive)
+
+```python
+# Pass Option objects directly
+smdp_env = SMDPfier(env, options_provider=options, action_interface="direct")
+
+# Execute with Option object
+obs, reward, term, trunc, info = smdp_env.step(options[0])
 ```
 
 ## Core Concepts
@@ -71,39 +82,36 @@ option = Option(
 )
 ```
 
-### Steps vs Duration (Critical Distinction!)
+### Time Semantics (v0.2.0+)
 
-**This is the most important concept in SMDPfier:**
-
-| Concept | Definition | Controls | Purpose |
-|---------|------------|----------|---------|
-| **Steps** | Number of `env.step()` calls | Option length | Environment execution |
-| **Duration (Ticks)** | Abstract time units | Duration function | SMDP discounting only |
+**Simple and natural:**
+- Each primitive action = **1 tick** of time
+- Option duration = **k_exec** (number of primitive actions executed)
+- If option completes: `duration = len(option.actions)`
+- If terminated early: `duration < len(option.actions)`
 
 **Example:**
 ```python
-option = Option([0, 1, 0], "three-action-option")  # Always 3 steps
-duration_fn = ConstantOptionDuration(10)            # Always 10 ticks
+option = Option([0, 1, 0], "three-action-option")  # 3 actions
 
-# Result: 3 environment steps executed, 10 ticks of "time" for discounting
+# If it completes normally: duration = 3 ticks
+# If episode terminates after 2 actions: duration = 2 ticks
 ```
-
-**Duration does NOT control execution** - it's purely metadata for temporal reasoning.
 
 ### SMDP Discounting
 
-**Standard MDP**: `γ^{steps}`  
-**SMDP**: `γ^{ticks}`
+**Standard MDP**: `γ^{1}` per primitive step  
+**SMDP**: `γ^{k}` where k = option duration
 
 ```python
-# MDP: Each step advances time by 1
+# MDP: Each primitive step discounts by γ
 mdp_return = r₁ + γ¹·r₂ + γ²·r₃ + γ³·r₄
 
-# SMDP: Each option advances time by its duration
-# Options with durations [5, 3, 7] ticks:  
-smdp_return = r₁ + γ⁵·r₂ + γ⁸·r₃ + γ¹⁵·r₄
+# SMDP: Each option discounts by γ^{duration}
+# Options with lengths [3, 2, 4]:  
+smdp_return = r₁ + γ³·r₂ + γ⁵·r₃ + γ⁹·r₄
 #                   ↑      ↑       ↑
-#                   5    5+3    5+3+7
+#                   3    3+2    3+2+4
 ```
 
 ### Action Interfaces
@@ -136,11 +144,11 @@ Every step returns comprehensive metadata in `info["smdp"]`:
         "meta": {}                   # User metadata
     },
     "k_exec": 3,                     # Steps actually executed
+    "duration": 3,                   # Duration in ticks (= k_exec)
     "rewards": [1.0, 1.0, 1.0],     # Per-step rewards
-    "duration_planned": 10,          # Expected ticks
-    "duration_exec": 10,             # Actual ticks (may differ due to early termination)
     "terminated_early": False,       # Episode ended during option?
-    "time_units": "ticks",           # Always "ticks"
+    "action_mask": [1, 1, 0],       # Available options (index interface only)
+    "num_dropped": 0                 # Dropped options (index interface only)
 }
 ```
 
@@ -151,11 +159,12 @@ See the [API Reference](api.md#smdp-info-payload-structure) for complete details
 | Section | Focus | When to Read |
 |---------|-------|--------------|
 | **[API Reference](api.md)** | Complete SMDPfier API | Setting up your wrapper |
-| **[Durations Guide](durations.md)** | Ticks, SMDP discounting, policies | Understanding temporal mechanics |
+| **[Durations Guide](durations.md)** | Duration = k_exec, SMDP discounting | Understanding time semantics |
 | **[Index vs Direct](usage_index_vs_direct.md)** | Interface comparison | Choosing action interface |
 | **[Masking & Precheck](masking_and_precheck.md)** | Action constraints | Handling invalid actions |
 | **[Error Handling](errors.md)** | Debugging failed options | Troubleshooting |
 | **[FAQ](faq.md)** | Common questions | Quick answers |
+| **[Migration from 0.1.x](migration_0_2.md)** | Upgrading to v0.2.0 | Updating existing code |
 
 ## Quick Navigation
 
@@ -167,24 +176,9 @@ See the [API Reference](api.md#smdp-info-payload-structure) for complete details
 
 **❓ Something not working?** Try [Error Handling](errors.md) and [FAQ](faq.md).
 
+**⬆️ Upgrading from 0.1.x?** See [Migration Guide](migration_0_2.md).
+
 ---
-
-**Next:** [API Reference](api.md) | **Examples:** [../examples/](../examples/)
-
-### Options
-Options represent temporal abstractions - sequences of primitive actions executed atomically. Each option has:
-- `actions`: Sequence of primitive actions
-- `name`: Human-readable identifier  
-- `meta`: Optional metadata dictionary
-
-### Durations
-Durations are metadata (in ticks) that don't control execution but enable true SMDP discounting:
-- **Planned**: Expected duration before execution
-- **Executed**: Actual duration after execution (may differ due to early termination)
-
-### Interfaces
-- **Index Interface**: Choose options by index from `Discrete(max_options)` action space
-- **Direct Interface**: Pass `Option` objects directly to `step()`
 
 ## Installation
 
@@ -199,145 +193,11 @@ cd smdpfier
 pip install -e .[dev]
 ```
 
-## Examples
-
-### CartPole with Static Options (Index Interface)
-
-```python
-import gymnasium as gym
-from smdpfier import Option, SMDPfier
-from smdpfier.defaults import ConstantOptionDuration, sum_rewards
-
-# Create base environment
-env = gym.make("CartPole-v1")
-
-# Define static options
-static_options = [
-    Option([0, 0, 1], "left-left-right", meta={"category": "mixed"}),
-    Option([1, 1, 0], "right-right-left", meta={"category": "mixed"}), 
-    Option([0, 0, 0], "left-triple", meta={"category": "directional"}),
-    Option([1, 1, 1], "right-triple", meta={"category": "directional"}),
-]
-
-# Create SMDPfier with index interface
-smdp_env = SMDPfier(
-    env,
-    options_provider=static_options,
-    duration_fn=ConstantOptionDuration(10),  # 10 ticks per option
-    reward_agg=sum_rewards,
-    action_interface="index",
-    max_options=len(static_options),
-)
-
-# Execute
-obs, info = smdp_env.reset(seed=42)
-obs, reward, terminated, truncated, info = smdp_env.step(0)
-
-# Check results
-smdp_info = info["smdp"]
-print(f"Executed option: {smdp_info['option']['name']}")
-print(f"Steps: {smdp_info['k_exec']}/{smdp_info['option']['len']}")
-print(f"Duration: {smdp_info['duration_exec']} ticks")
-```
-
-### Taxi with Dynamic Options & Masking (Index Interface)
-
-```python
-import gymnasium as gym  
-from smdpfier import Option, SMDPfier
-from smdpfier.defaults import RandomActionDuration, mean_rewards
-
-def create_taxi_options(obs, info):
-    """Dynamic option provider based on current state."""
-    return [
-        Option([0], "south", meta={"type": "primitive"}),
-        Option([1], "north", meta={"type": "primitive"}),
-        Option([2], "east", meta={"type": "primitive"}),
-        Option([3], "west", meta={"type": "primitive"}),
-        Option([4], "pickup", meta={"type": "primitive"}),
-        Option([5], "dropoff", meta={"type": "primitive"}),
-        # Navigation sequences
-        Option([0, 2], "south-east", meta={"type": "navigation"}),
-        Option([1, 3], "north-west", meta={"type": "navigation"}),
-    ]
-
-def taxi_availability_function(obs):
-    """Restrict certain actions based on state."""
-    # Movement always available
-    available = [0, 1, 2, 3]
-    # Conditionally add pickup/dropoff
-    if (obs + 42) % 10 < 7:  # Pseudo-random condition
-        available.append(4)  # pickup
-    if (obs + 17) % 10 < 6:
-        available.append(5)  # dropoff
-    return available
-
-# Create SMDPfier with masking
-env = gym.make("Taxi-v3")
-smdp_env = SMDPfier(
-    env,
-    options_provider=create_taxi_options,
-    duration_fn=RandomActionDuration(3, 8),
-    reward_agg=mean_rewards,
-    action_interface="index",
-    max_options=12,
-    availability_fn=taxi_availability_function,
-    precheck=True,
-)
-
-obs, info = smdp_env.reset(seed=42)
-
-# Check masking
-mask = info["action_mask"]
-available_options = [i for i, avail in enumerate(mask) if avail]
-print(f"Available options: {available_options}")
-
-obs, reward, terminated, truncated, info = smdp_env.step(available_options[0])
-print(f"Mean reward: {reward:.3f}")
-```
-
-### Pendulum with Continuous Actions (Direct Interface)
-
-```python
-import gymnasium as gym
-from smdpfier import Option, SMDPfier  
-from smdpfier.defaults import ConstantActionDuration, discounted_sum
-
-# Create continuous action options
-continuous_options = [
-    Option([[1.0], [-1.0], [1.0], [-1.0]], "oscillate-high", 
-           meta={"category": "oscillation"}),
-    Option([[0.5], [-0.5], [0.5]], "oscillate-medium",
-           meta={"category": "oscillation"}), 
-    Option([[0.0], [0.0], [0.0]], "hold-steady",
-           meta={"category": "stabilization"}),
-]
-
-# Create SMDPfier with direct interface  
-env = gym.make("Pendulum-v1")
-smdp_env = SMDPfier(
-    env,
-    options_provider=continuous_options,
-    duration_fn=ConstantActionDuration(4),  # 4 ticks per action
-    reward_agg=discounted_sum,
-    action_interface="direct",
-)
-
-obs, info = smdp_env.reset(seed=42)
-
-# Execute by passing Option objects directly
-option_to_execute = continuous_options[0]  # oscillate-high
-obs, reward, terminated, truncated, info = smdp_env.step(option_to_execute)
-
-smdp_info = info["smdp"]
-print(f"Executed {smdp_info['k_exec']} actions")
-print(f"Total duration: {smdp_info['duration_exec']} ticks")
-print(f"Discounted reward: {reward:.3f}")
-```
-
 ## Next Steps
 
 - [API Reference](api.md) - Complete API documentation
-- [Usage Guide](usage_index_vs_direct.md) - Interface comparison and examples
-- [Durations](durations.md) - Understanding duration metadata and SMDP discounting
+- [Usage Guide](usage_index_vs_direct.md) - Interface comparison
+- [Durations](durations.md) - Understanding duration = k_exec
 - [FAQ](faq.md) - Common questions and troubleshooting
+- [Migration Guide](migration_0_2.md) - Upgrading from 0.1.x
+- [Examples](../examples/) - Working code examples

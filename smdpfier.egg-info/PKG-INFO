@@ -1,0 +1,36 @@
+Metadata-Version: 2.4
+Name: smdpfier
+Version: 0.1.0
+Summary: SMDP-level behavior for Gymnasium environments with options and durations
+Author-email: SMDPfier Contributors <contributors@smdpfier.org>
+License: MIT
+Project-URL: Homepage, https://github.com/smdpfier/smdpfier
+Project-URL: Documentation, https://smdpfier.readthedocs.io
+Project-URL: Repository, https://github.com/smdpfier/smdpfier.git
+Project-URL: Bug Tracker, https://github.com/smdpfier/smdpfier/issues
+Keywords: reinforcement-learning,smdp,gymnasium,options,hierarchical-rl
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: gymnasium>=0.28.0
+Requires-Dist: numpy>=1.21.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Requires-Dist: pre-commit>=3.0.0; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: mkdocs>=1.5.0; extra == "docs"
+Requires-Dist: mkdocs-material>=9.0.0; extra == "docs"
+Requires-Dist: mkdocstrings[python]>=0.20.0; extra == "docs"
+Dynamic: license-file

@@ -5,7 +5,6 @@ import argparse
 import gymnasium as gym
 
 from smdpfier import Option, SMDPfier
-from smdpfier.defaults import ConstantOptionDuration, sum_rewards
 
 
 def main(max_steps: int = 10) -> None:
@@ -25,16 +24,13 @@ def main(max_steps: int = 10) -> None:
         Option(actions=[1, 0], name="right-left", meta={"category": "short"}),
     ]
 
-    # Create SMDPfier with static options
+    # Create SMDPfier with static options (default reward aggregation = sum)
     smdp_env = SMDPfier(
         env,
         options_provider=static_options,  # Static sequence
-        duration_fn=ConstantOptionDuration(10),  # 10 ticks per option
-        reward_agg=sum_rewards,
         action_interface="index",  # Use discrete action indices
         max_options=len(static_options),  # All options fit
         precheck=False,  # No precheck for simplicity
-        partial_duration_policy="proportional",
         rng_seed=42,
     )
 
@@ -52,7 +48,7 @@ def main(max_steps: int = 10) -> None:
 
     for episode_step in range(max_steps):  # Limit steps for demo
         # Choose option (in real RL, this would come from policy)
-        available_mask = info.get("action_mask")
+        available_mask = info.get("smdp", {}).get("action_mask")
         if available_mask is not None:
             available_indices = [i for i, avail in enumerate(available_mask) if avail]
             option_idx = available_indices[episode_step % len(available_indices)]
@@ -70,9 +66,7 @@ def main(max_steps: int = 10) -> None:
         print(f"  Executed {smdp_info['k_exec']}/{smdp_info['option']['len']} actions")
         print(f"  Rewards: {smdp_info['rewards']}")
         print(f"  Aggregated reward: {reward}")
-        print(
-            f"  Duration: {smdp_info['duration_exec']}/{smdp_info['duration_planned']} ticks"
-        )
+        print(f"  Duration: {smdp_info['duration']} ticks (= k_exec)")
         print(f"  Early termination: {smdp_info['terminated_early']}")
 
         total_reward += reward

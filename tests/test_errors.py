@@ -119,7 +119,6 @@ class TestErrorIntegration:
         """Test that execution errors are raised when options fail at runtime."""
         import gymnasium as gym
         from smdpfier import SMDPfier, Option
-        from smdpfier.defaults.durations import ConstantOptionDuration
 
         # Create CartPole environment (discrete action space 0,1)
         env = gym.make("CartPole-v1")
@@ -130,7 +129,6 @@ class TestErrorIntegration:
         smdp_env = SMDPfier(
             env,
             options_provider=[invalid_option],
-            duration_fn=ConstantOptionDuration(5),
             action_interface="direct"
         )
 
@@ -151,45 +149,10 @@ class TestErrorIntegration:
         import gymnasium as gym
 
         from smdpfier import SMDPfier
-        from smdpfier.defaults.durations import ConstantOptionDuration
         from smdpfier.errors import SMDPOptionValidationError
         from smdpfier.option import Option
 
         # Use Taxi-v3 which has action constraints
-        env = gym.make("Taxi-v3")
-
-        # Create an option that tries forbidden action at initial state
-        def availability_fn(obs):
-            # Forbid action 0 (south) at initial state
-            if obs == env.unwrapped.encode(0, 0, 0, 0):  # Initial encoded state
-                return [1, 2, 3, 4, 5]  # All except action 0
-            return [0, 1, 2, 3, 4, 5]  # All actions normally
-
-        forbidden_option = Option([0], "forbidden-south")  # Action 0 will be forbidden at start
-
-        smdp_env = SMDPfier(
-            env,
-            options_provider=[forbidden_option],
-            duration_fn=ConstantOptionDuration(5),
-            availability_fn=availability_fn,
-            precheck=True,
-            action_interface="direct"
-        )
-
-        obs, info = smdp_env.reset(seed=42)
-
-        # This should raise SMDPOptionValidationError during precheck
-        try:
-            obs, reward, term, trunc, info = smdp_env.step(forbidden_option)
-            # If we get here, either precheck didn't catch it or the setup was wrong
-            # Let's just verify basic functionality exists
-            assert True  # Basic smoke test
-        except SMDPOptionValidationError as e:
-            assert e.option_name == "forbidden-south"
-            assert e.failing_step_index == 0  # First action fails
-            assert "0" in e.action_repr
-            assert e.short_obs_summary is not None
-
         env = gym.make("Taxi-v3")
 
         def restrictive_availability(obs):
@@ -201,7 +164,6 @@ class TestErrorIntegration:
         smdp_env = SMDPfier(
             env,
             options_provider=[invalid_option],
-            duration_fn=ConstantOptionDuration(2),
             action_interface="index",
             availability_fn=restrictive_availability,
             precheck=True
@@ -227,7 +189,6 @@ class TestErrorIntegration:
         import gymnasium as gym
 
         from smdpfier import SMDPfier
-        from smdpfier.defaults.durations import ConstantOptionDuration
         from smdpfier.errors import SMDPOptionValidationError
         from smdpfier.option import Option
 
@@ -242,7 +203,6 @@ class TestErrorIntegration:
         smdp_env = SMDPfier(
             env,
             options_provider=[invalid_option],
-            duration_fn=ConstantOptionDuration(4),
             action_interface="index",
             availability_fn=availability_fn,
             precheck=True

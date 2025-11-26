@@ -1,0 +1,1801 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="SMDP-level behavior for Gymnasium environments">
+      
+      
+      
+        <link rel="canonical" href="https://smdpfier.readthedocs.io/durations/">
+      
+      
+        <link rel="prev" href="../usage_index_vs_direct/">
+      
+      
+        <link rel="next" href="../masking_and_precheck/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Durations and SMDP Discounting - SMDPfier</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#durations-and-smdp-discounting" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="SMDPfier" class="md-header__button md-logo" aria-label="SMDPfier" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SMDPfier
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Durations and SMDP Discounting
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/smdpfier/smdpfier" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    smdpfier/smdpfier
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="SMDPfier" class="md-nav__button md-logo" aria-label="SMDPfier" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SMDPfier
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/smdpfier/smdpfier" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    smdpfier/smdpfier
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage_index_vs_direct/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index vs Direct Interfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Durations and SMDP Discounting
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Durations and SMDP Discounting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#time-semantics-v020" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Time Semantics (v0.2.0+)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Time Semantics (v0.2.0+)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Simple Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visual-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visual Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smdp-discounting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 SMDP Discounting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 SMDP Discounting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-discounting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Discounting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-step-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Step Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparison-mdp-vs-smdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparison: MDP vs SMDP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reward-aggregation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Reward Aggregation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Reward Aggregation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-aggregators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Aggregators
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#early-termination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ Early Termination
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⚠️ Early Termination">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-this-matters-for-discounting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why This Matters for Discounting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧪 Full Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Key Takeaways
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migrating-from-01x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Migrating from 0.1.x
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Migrating from 0.1.x">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#duration-type-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Duration Type Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smdp-discounting_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SMDP Discounting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SMDP Discounting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standard-mdp-vs-smdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Standard MDP vs SMDP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practical-smdp-discounting-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical SMDP Discounting Implementation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partial-duration-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partial Duration Policies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Partial Duration Policies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#policy-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Policy Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-partial-duration-calculation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: Partial Duration Calculation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-selection-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Policy Selection Guide
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-duration-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Duration Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Duration Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-duration-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Duration Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-dependent-durations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State-Dependent Durations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../masking_and_precheck/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Action Masking and Precheck
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#time-semantics-v020" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Time Semantics (v0.2.0+)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Time Semantics (v0.2.0+)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Simple Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visual-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visual Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smdp-discounting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 SMDP Discounting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 SMDP Discounting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-discounting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Discounting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-step-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Step Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparison-mdp-vs-smdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparison: MDP vs SMDP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reward-aggregation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Reward Aggregation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Reward Aggregation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-aggregators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Aggregators
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#early-termination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ Early Termination
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⚠️ Early Termination">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-this-matters-for-discounting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why This Matters for Discounting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧪 Full Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Key Takeaways
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migrating-from-01x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Migrating from 0.1.x
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Migrating from 0.1.x">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#duration-type-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Duration Type Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smdp-discounting_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SMDP Discounting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SMDP Discounting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standard-mdp-vs-smdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Standard MDP vs SMDP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practical-smdp-discounting-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical SMDP Discounting Implementation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partial-duration-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partial Duration Policies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Partial Duration Policies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#policy-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Policy Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-partial-duration-calculation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: Partial Duration Calculation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-selection-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Policy Selection Guide
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-duration-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Duration Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Duration Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-duration-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Duration Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-dependent-durations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State-Dependent Durations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="durations-and-smdp-discounting">Durations and SMDP Discounting</h1>
+<p><strong>Duration</strong> in SMDPfier v0.2.0+ is simple: each primitive action = 1 tick, and option duration equals the number of primitive actions executed (k_exec).</p>
+<h2 id="time-semantics-v020">🎯 Time Semantics (v0.2.0+)</h2>
+<p><strong>The key principle:</strong> Each primitive action = 1 tick of time.</p>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tick</strong></td>
+<td>One primitive action execution</td>
+</tr>
+<tr>
+<td><strong>Option Duration</strong></td>
+<td>Number of primitive actions executed (k_exec)</td>
+</tr>
+<tr>
+<td><strong>Complete Execution</strong></td>
+<td>duration = <code>len(option.actions)</code></td>
+</tr>
+<tr>
+<td><strong>Partial Execution</strong></td>
+<td>duration = number of actions before termination</td>
+</tr>
+</tbody>
+</table>
+<h3 id="simple-example">Simple Example</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMDPfier</span><span class="p">,</span> <span class="n">Option</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gymnasium</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gym</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;CartPole-v1&quot;</span><span class="p">)</span>
+<span class="n">options</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;three-step&quot;</span><span class="p">),</span>      <span class="c1"># 3 actions = 3 ticks</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;four-step&quot;</span><span class="p">),</span>    <span class="c1"># 4 actions = 4 ticks</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;two-step&quot;</span><span class="p">),</span>           <span class="c1"># 2 actions = 2 ticks</span>
+<span class="p">]</span>
+
+<span class="n">smdp_env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">max_options</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Execute first option (3 actions)</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">smdp_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Check duration</span>
+<span class="k">assert</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>  <span class="c1"># 3 actions executed = 3 ticks</span>
+<span class="k">assert</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;k_exec&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>    <span class="c1"># Same value</span>
+</code></pre></div>
+<h3 id="visual-example">Visual Example</h3>
+<div class="highlight"><pre><span></span><code>Option: [0, 1, 0, 1, 1]  (5 actions)
+
+Normal Execution:
+┌─────┬─────┬─────┬─────┬─────┐
+│ a=0 │ a=1 │ a=0 │ a=1 │ a=1 │
+└─────┴─────┴─────┴─────┴─────┘
+tick:   1     2     3     4     5    → duration = 5
+
+Early Termination (after 3 actions):
+┌─────┬─────┬─────┐  X
+│ a=0 │ a=1 │ a=0 │ episode ends
+└─────┴─────┴─────┘
+tick:   1     2     3                → duration = 3
+</code></pre></div>
+<h2 id="smdp-discounting">🔄 SMDP Discounting</h2>
+<p>With simple duration = k_exec, SMDP discounting becomes straightforward:</p>
+<h3 id="basic-discounting">Basic Discounting</h3>
+<div class="highlight"><pre><span></span><code><span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.99</span>
+
+<span class="c1"># Execute option</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+<span class="n">duration</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span>
+
+<span class="c1"># Apply SMDP discount</span>
+<span class="n">discounted_reward</span> <span class="o">=</span> <span class="n">reward</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">**</span> <span class="n">duration</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="multi-step-example">Multi-Step Example</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Execute sequence of options</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.99</span>
+<span class="n">total_time</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">cumulative_return</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]:</span>
+    <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Apply time-cumulative discount</span>
+    <span class="n">discount_factor</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">**</span> <span class="n">total_time</span>
+    <span class="n">cumulative_return</span> <span class="o">+=</span> <span class="n">reward</span> <span class="o">*</span> <span class="n">discount_factor</span>
+
+    <span class="n">total_time</span> <span class="o">+=</span> <span class="n">duration</span>
+    <span class="k">if</span> <span class="n">term</span> <span class="ow">or</span> <span class="n">trunc</span><span class="p">:</span>
+        <span class="k">break</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total time: </span><span class="si">{</span><span class="n">total_time</span><span class="si">}</span><span class="s2"> ticks&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cumulative return: </span><span class="si">{</span><span class="n">cumulative_return</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="comparison-mdp-vs-smdp">Comparison: MDP vs SMDP</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># MDP: Each primitive action discounts by γ</span>
+<span class="n">mdp_return</span> <span class="o">=</span> <span class="n">r</span><span class="err">₀</span> <span class="o">+</span> <span class="n">γ</span><span class="err">¹·</span><span class="n">r</span><span class="err">₁</span> <span class="o">+</span> <span class="n">γ</span><span class="err">²·</span><span class="n">r</span><span class="err">₂</span> <span class="o">+</span> <span class="n">γ</span><span class="err">³·</span><span class="n">r</span><span class="err">₃</span> <span class="o">+</span> <span class="n">γ</span><span class="err">⁴·</span><span class="n">r</span><span class="err">₄</span>
+
+<span class="c1"># SMDP: Each option discounts by γ^{duration}</span>
+<span class="c1"># Options with lengths [3, 2, 4]:</span>
+<span class="n">smdp_return</span> <span class="o">=</span> <span class="n">R</span><span class="err">₀</span> <span class="o">+</span> <span class="n">γ</span><span class="err">³·</span><span class="n">R</span><span class="err">₁</span> <span class="o">+</span> <span class="n">γ</span><span class="err">⁵·</span><span class="n">R</span><span class="err">₂</span>
+<span class="c1">#                   ↑      ↑</span>
+<span class="c1">#                   3    3+2</span>
+</code></pre></div>
+<h2 id="reward-aggregation">📊 Reward Aggregation</h2>
+<p>By default, SMDPfier sums the per-step rewards to produce the macro reward:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Default behavior (v0.2.0+)</span>
+<span class="n">macro_reward</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">primitive_rewards</span><span class="p">)</span>
+
+<span class="c1"># Example:</span>
+<span class="c1"># Option executes 3 steps with rewards [1.0, 1.0, 1.0]</span>
+<span class="c1"># macro_reward = 1.0 + 1.0 + 1.0 = 3.0</span>
+</code></pre></div>
+<h3 id="custom-aggregators">Custom Aggregators</h3>
+<p>You can customize reward aggregation:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMDPfier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_rewards</span><span class="p">,</span> <span class="n">discounted_sum</span>
+
+<span class="c1"># Average per-step rewards</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">reward_agg</span><span class="o">=</span><span class="n">mean_rewards</span><span class="p">)</span>
+<span class="c1"># 3 steps with rewards [1.0, 1.0, 1.0] → macro_reward = 1.0</span>
+
+<span class="c1"># Discount per-step rewards</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">reward_agg</span><span class="o">=</span><span class="n">discounted_sum</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="mf">0.99</span><span class="p">))</span>
+<span class="c1"># 3 steps with rewards [1.0, 1.0, 1.0] → macro_reward = 1.0 + 0.99 + 0.98 = 2.97</span>
+
+<span class="c1"># Custom aggregator</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">custom_agg</span><span class="p">(</span><span class="n">rewards</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rewards</span><span class="p">))</span>  <span class="c1"># Weighted sum</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">reward_agg</span><span class="o">=</span><span class="n">custom_agg</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="early-termination">⚠️ Early Termination</h2>
+<p>When the episode terminates before an option completes, duration reflects actual execution:</p>
+<div class="highlight"><pre><span></span><code><span class="n">option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;five-step&quot;</span><span class="p">)</span>
+
+<span class="c1"># Episode terminates after 3rd action</span>
+<span class="c1"># - k_exec = 3</span>
+<span class="c1"># - duration = 3 (not 5!)</span>
+<span class="c1"># - rewards = [r₁, r₂, r₃] (only 3 rewards)</span>
+<span class="c1"># - terminated_early = True</span>
+
+<span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">option</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;terminated_early&quot;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Option interrupted after </span><span class="si">{</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;smdp&#39;</span><span class="p">][</span><span class="s1">&#39;k_exec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;smdp&#39;</span><span class="p">][</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;len&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> actions&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duration: </span><span class="si">{</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;smdp&#39;</span><span class="p">][</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> ticks (not </span><span class="si">{</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;smdp&#39;</span><span class="p">][</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;len&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="why-this-matters-for-discounting">Why This Matters for Discounting</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Option length: 5 actions</span>
+<span class="c1"># Terminated after 3 actions</span>
+
+<span class="c1"># ✅ Correct: Use actual duration</span>
+<span class="n">duration</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span>  <span class="c1"># = 3</span>
+<span class="n">next_discount</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">**</span> <span class="n">duration</span>    <span class="c1"># = γ³</span>
+
+<span class="c1"># ❌ Wrong: Use planned duration</span>
+<span class="n">planned</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;option&quot;</span><span class="p">][</span><span class="s2">&quot;len&quot;</span><span class="p">]</span>  <span class="c1"># = 5</span>
+<span class="n">wrong_discount</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">**</span> <span class="n">planned</span>         <span class="c1"># = γ⁵ (incorrect!)</span>
+</code></pre></div>
+<h2 id="full-example">🧪 Full Example</h2>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">gymnasium</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gym</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMDPfier</span><span class="p">,</span> <span class="n">Option</span>
+
+<span class="c1"># Setup</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;CartPole-v1&quot;</span><span class="p">)</span>
+<span class="n">options</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;left-left-right&quot;</span><span class="p">),</span>    <span class="c1"># 3 ticks</span>
+    <span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;right-right-left-left&quot;</span><span class="p">),</span>  <span class="c1"># 4 ticks</span>
+<span class="p">]</span>
+
+<span class="n">smdp_env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
+    <span class="n">env</span><span class="p">,</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+    <span class="n">action_interface</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
+    <span class="n">max_options</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+
+<span class="c1"># Episode</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">smdp_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.99</span>
+<span class="n">total_time</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">returns</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">smdp_env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">smdp_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+
+    <span class="n">smdp</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">]</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="n">smdp</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Step </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Option: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;option&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Duration: </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> ticks&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Rewards: </span><span class="si">{</span><span class="n">smdp</span><span class="p">[</span><span class="s1">&#39;rewards&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Macro reward: </span><span class="si">{</span><span class="n">reward</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Discounted: </span><span class="si">{</span><span class="n">reward</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">gamma</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="n">total_time</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">total_time</span> <span class="o">+=</span> <span class="n">duration</span>
+    <span class="n">returns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">**</span> <span class="n">total_time</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">term</span> <span class="ow">or</span> <span class="n">trunc</span><span class="p">:</span>
+        <span class="k">break</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Total time: </span><span class="si">{</span><span class="n">total_time</span><span class="si">}</span><span class="s2"> ticks&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total return: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="key-takeaways">📝 Key Takeaways</h2>
+<ol>
+<li><strong>Each primitive action = 1 tick</strong>: Time is simple and natural</li>
+<li><strong>Duration = k_exec</strong>: No separate duration function needed</li>
+<li><strong>Early termination</strong>: Duration reflects actual execution, not planned</li>
+<li><strong>SMDP discounting</strong>: Use <code>γ^{duration}</code> for each option</li>
+<li><strong>Macro reward</strong>: Sum of per-step rewards by default (customizable)</li>
+</ol>
+<h2 id="migrating-from-01x">🔄 Migrating from 0.1.x</h2>
+<p>In v0.1.x, you had to specify a <code>duration_fn</code>. In v0.2.0+, this is automatic:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 0.1.x - Old way</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConstantActionDuration</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
+    <span class="n">env</span><span class="p">,</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+    <span class="n">duration_fn</span><span class="o">=</span><span class="n">ConstantActionDuration</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>  <span class="c1"># Each action = 1 tick</span>
+    <span class="c1"># ...</span>
+<span class="p">)</span>
+
+<span class="c1"># 0.2.0+ - New way (automatic!)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
+    <span class="n">env</span><span class="p">,</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+    <span class="c1"># duration_fn removed - each action automatically = 1 tick</span>
+    <span class="c1"># ...</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>See <a href="../migration_0_2/">Migration Guide</a> for complete upgrade instructions.</p>
+<hr />
+<p><strong>Next:</strong> <a href="../faq/">FAQ</a> | <strong>Previous:</strong> <a href="../api/">API Reference</a>
+- When different actions have different inherent durations</p>
+<h3 id="duration-type-comparison">Duration Type Comparison</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Scalar Duration</th>
+<th>List Duration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Option</strong>: <code>[0,1,0]</code></td>
+<td><code>10</code> → 10 ticks total</td>
+<td><code>[3,4,3]</code> → 10 ticks total</td>
+</tr>
+<tr>
+<td><strong>Early Termination</strong></td>
+<td>Apply partial duration policy</td>
+<td>Sum executed portion</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>Simple</td>
+<td>More detailed</td>
+</tr>
+<tr>
+<td><strong>Use Case</strong></td>
+<td>Macro-actions</td>
+<td>Action-specific costs</td>
+</tr>
+</tbody>
+</table>
+<h2 id="smdp-discounting_1">SMDP Discounting</h2>
+<p>The power of SMDPs lies in proper temporal discounting using elapsed time rather than step counts.</p>
+<h3 id="standard-mdp-vs-smdp">Standard MDP vs SMDP</h3>
+<p><strong>Standard MDP Discounting:</strong>
+<div class="highlight"><pre><span></span><code><span class="c1"># Each step advances time by exactly 1 unit</span>
+<span class="k">return</span> <span class="o">=</span> <span class="n">r</span><span class="err">₁</span> <span class="o">+</span> <span class="n">γ</span><span class="err">¹·</span><span class="n">r</span><span class="err">₂</span> <span class="o">+</span> <span class="n">γ</span><span class="err">²·</span><span class="n">r</span><span class="err">₃</span> <span class="o">+</span> <span class="n">γ</span><span class="err">³·</span><span class="n">r</span><span class="err">₄</span> <span class="o">+</span> <span class="o">...</span>
+<span class="c1">#           ↑    ↑    ↑    ↑</span>
+<span class="c1">#          t=1  t=2  t=3  t=4</span>
+</code></pre></div></p>
+<p><strong>SMDP Discounting:</strong>
+<div class="highlight"><pre><span></span><code><span class="c1"># Each option advances time by its duration</span>
+<span class="c1"># Options with durations [5, 3, 7, 2] ticks:</span>
+<span class="k">return</span> <span class="o">=</span> <span class="n">r</span><span class="err">₁</span> <span class="o">+</span> <span class="n">γ</span><span class="err">⁵·</span><span class="n">r</span><span class="err">₂</span> <span class="o">+</span> <span class="n">γ</span><span class="err">⁸·</span><span class="n">r</span><span class="err">₃</span> <span class="o">+</span> <span class="n">γ</span><span class="err">¹⁵·</span><span class="n">r</span><span class="err">₄</span> <span class="o">+</span> <span class="n">γ</span><span class="err">¹⁷·</span><span class="n">r</span><span class="err">₅</span>
+<span class="c1">#           ↑     ↑     ↑      ↑      ↑</span>
+<span class="c1">#          t=0   t=5   t=8   t=15   t=17</span>
+</code></pre></div></p>
+<h3 id="practical-smdp-discounting-implementation">Practical SMDP Discounting Implementation</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">gymnasium</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gym</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMDPfier</span><span class="p">,</span> <span class="n">Option</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConstantOptionDuration</span>
+
+<span class="c1"># Setup</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span>
+    <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;CartPole-v1&quot;</span><span class="p">),</span>
+    <span class="n">options_provider</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;left-left&quot;</span><span class="p">),</span>     <span class="c1"># 2 steps, 10 ticks</span>
+        <span class="n">Option</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;right-x3&quot;</span><span class="p">),</span>   <span class="c1"># 3 steps, 10 ticks  </span>
+        <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;left-right&quot;</span><span class="p">),</span>    <span class="c1"># 2 steps, 10 ticks</span>
+    <span class="p">],</span>
+    <span class="n">duration_fn</span><span class="o">=</span><span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Episode with SMDP discounting</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.99</span>
+<span class="n">discounted_return</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">elapsed_time</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">obs</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">step</span> <span class="o">%</span> <span class="mi">3</span>  <span class="c1"># Cycle through options</span>
+    <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+
+    <span class="c1"># Get duration from SMDP info</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;smdp&quot;</span><span class="p">][</span><span class="s2">&quot;duration_exec&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Apply SMDP discounting</span>
+    <span class="n">discount_factor</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">**</span> <span class="n">elapsed_time</span>
+    <span class="n">discounted_return</span> <span class="o">+=</span> <span class="n">discount_factor</span> <span class="o">*</span> <span class="n">reward</span>
+
+    <span class="c1"># Update elapsed time for next option</span>
+    <span class="n">elapsed_time</span> <span class="o">+=</span> <span class="n">duration</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Option </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">: reward=</span><span class="si">{</span><span class="n">reward</span><span class="si">}</span><span class="s2">, duration=</span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">, &quot;</span>
+          <span class="sa">f</span><span class="s2">&quot;discount=γ^</span><span class="si">{</span><span class="n">elapsed_time</span><span class="o">-</span><span class="n">duration</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">discount_factor</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">term</span> <span class="ow">or</span> <span class="n">trunc</span><span class="p">:</span>
+        <span class="k">break</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total SMDP discounted return: </span><span class="si">{</span><span class="n">discounted_return</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Sample Output:</strong>
+<div class="highlight"><pre><span></span><code>Option 0: reward=2.0, duration=10, discount=γ^0=1.0000
+Option 1: reward=3.0, duration=10, discount=γ^10=0.9044  
+Option 2: reward=1.0, duration=10, discount=γ^20=0.8179
+Total SMDP discounted return: 4.6223
+</code></pre></div></p>
+<h2 id="partial-duration-policies">Partial Duration Policies</h2>
+<p>When an episode terminates early (before an option completes), SMDPfier applies a <strong>partial duration policy</strong> to determine the executed duration.</p>
+<h3 id="policy-comparison">Policy Comparison</h3>
+<p>Consider an option with 3 actions and scalar duration 10, terminating after 2 actions:</p>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Formula</th>
+<th>Result</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"proportional"</code></td>
+<td><code>(k_exec / option_len) * planned_duration</code></td>
+<td><code>(2/3) * 10 = 6</code></td>
+<td><strong>Default</strong> - proportional time</td>
+</tr>
+<tr>
+<td><code>"full"</code></td>
+<td><code>planned_duration</code></td>
+<td><code>10</code></td>
+<td>Option "completes" conceptually</td>
+</tr>
+<tr>
+<td><code>"zero"</code></td>
+<td><code>0</code></td>
+<td><code>0</code></td>
+<td>No time passes on failure</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-partial-duration-calculation">Example: Partial Duration Calculation</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConstantOptionDuration</span>
+
+<span class="c1"># Option with 4 actions, 12 ticks planned</span>
+<span class="n">option</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;four-action-option&quot;</span><span class="p">)</span>
+<span class="n">duration_fn</span> <span class="o">=</span> <span class="n">ConstantOptionDuration</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="c1"># Episode terminates after 3 actions (k_exec = 3)</span>
+
+<span class="c1"># Proportional policy (default):</span>
+<span class="n">duration_exec</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">=</span> <span class="mi">9</span> <span class="n">ticks</span>
+
+<span class="c1"># Full policy:  </span>
+<span class="n">duration_exec</span> <span class="o">=</span> <span class="mi">12</span> <span class="n">ticks</span>
+
+<span class="c1"># Zero policy:</span>
+<span class="n">duration_exec</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">ticks</span>
+</code></pre></div>
+<h3 id="policy-selection-guide">Policy Selection Guide</h3>
+<table>
+<thead>
+<tr>
+<th>Choose</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"proportional"</code></td>
+<td>Time should scale with execution (most realistic)</td>
+</tr>
+<tr>
+<td><code>"full"</code></td>
+<td>Options have setup costs regardless of completion</td>
+</tr>
+<tr>
+<td><code>"zero"</code></td>
+<td>Failed options should not consume time</td>
+</tr>
+</tbody>
+</table>
+<h2 id="advanced-duration-functions">Advanced Duration Functions</h2>
+<h3 id="custom-duration-functions">Custom Duration Functions</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">custom_duration_fn</span><span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Duration based on option length and environment state.&quot;&quot;&quot;</span>
+    <span class="n">base_duration</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>
+
+    <span class="c1"># Adjust based on environment state  </span>
+    <span class="k">if</span> <span class="n">obs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># Cart position in CartPole</span>
+        <span class="k">return</span> <span class="n">base_duration</span> <span class="o">+</span> <span class="mi">5</span>  <span class="c1"># Takes longer when cart is right</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">base_duration</span>
+
+<span class="c1"># Usage</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">SMDPfier</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">options_provider</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">duration_fn</span><span class="o">=</span><span class="n">custom_duration_fn</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="state-dependent-durations">State-Dependent Durations</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">smdpfier.defaults</span><span class="w"> </span><span class="kn">import</span> <span class="n">MapActionDuration</span>
+
+<span class="c1"># Different actions have different costs</span>
+<span class="n">action_duration_map</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">0</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>  <span class="c1"># Left action: 2 ticks</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>  <span class="c1"># Right action: 5 ticks (more expensive)</span>
+<span class="p">}</span>
+
+<span class="n">duration_fn</span> <span class="o">=</span> <span class="n">MapActionDuration</span><span class="p">(</span><span class="n">action_duration_map</span><span class="p">,</span> <span class="n">default_duration</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Option [0, 1, 0] → durations [2, 5, 2] → total 9 ticks</span>
+</code></pre></div>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Key Point</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Steps vs Ticks</strong></td>
+<td>Steps = execution, Ticks = time metadata</td>
+</tr>
+<tr>
+<td><strong>Duration Types</strong></td>
+<td>Scalar (per-option) vs List (per-action)</td>
+</tr>
+<tr>
+<td><strong>SMDP Discounting</strong></td>
+<td>Use γ^{duration_exec}, not γ^{steps}</td>
+</tr>
+<tr>
+<td><strong>Partial Policies</strong></td>
+<td>Handle early termination gracefully</td>
+</tr>
+<tr>
+<td><strong>Custom Functions</strong></td>
+<td>Tailor durations to your domain</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Remember</strong>: Duration is metadata for discounting - it never affects how many environment steps are executed!</p>
+<hr />
+<p><strong>Next</strong>: <a href="../usage_index_vs_direct/">Index vs Direct Interfaces</a> | <strong>See Also</strong>: <a href="../api/#duration-functions">API Reference</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
