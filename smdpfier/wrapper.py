@@ -10,7 +10,7 @@ import gymnasium as gym
 import numpy as np
 
 from .errors import SMDPOptionExecutionError, SMDPOptionValidationError
-from .option import Option
+from .option import OptionBase
 from .utils import (
     coerce_options_fn,
     create_action_mask,
@@ -48,7 +48,7 @@ class SMDPfier(gym.Wrapper[ObsType, ActType, ObsType, ActType]):
         self,
         env: gym.Env[ObsType, ActType],
         *,
-        options_provider: Callable[[Any, dict], list[Option]] | Sequence[Option],
+        options_provider: Callable[[Any, dict], list[OptionBase]] | Sequence[OptionBase],
         reward_agg: Callable[[list[float]], float] | None = None,
         action_interface: Literal["index", "direct"] = "index",
         max_options: int | None = None,
@@ -61,15 +61,15 @@ class SMDPfier(gym.Wrapper[ObsType, ActType, ObsType, ActType]):
         Args:
             env: The Gymnasium environment to wrap
             options_provider: **REQUIRED** Either:
-                - Callable taking (obs, info) -> list[Option] for dynamic discovery
-                - Static sequence of Option objects for fixed catalog
+                - Callable taking (obs, info) -> list[OptionBase] for dynamic discovery
+                - Static sequence of OptionBase objects for fixed catalog
                 Internally coerced to a callable for uniform handling.
             reward_agg: Function to aggregate per-primitive rewards into option reward.
                 Default: None (uses sum_rewards - sums all per-step rewards).
                 Signature: (rewards: list[float]) -> float
             action_interface: Interface for action selection:
                 - "index": Expose Discrete(max_options) with action masking
-                - "direct": Accept Option objects directly in step()
+                - "direct": Accept OptionBase objects directly in step()
             max_options: Maximum number of options for index interface. Required
                 when action_interface="index" and using dynamic options_provider.
                 Overflow handled by truncation policy with num_dropped reporting.
@@ -316,7 +316,7 @@ class SMDPfier(gym.Wrapper[ObsType, ActType, ObsType, ActType]):
             option = available_options[action]
         else:
             # Direct interface - action is already an Option
-            if not isinstance(action, Option):
+            if not isinstance(action, OptionBase):
                 raise ValueError(f"For direct interface, action must be Option, got {type(action)}")
             option = action
 
@@ -331,27 +331,47 @@ class SMDPfier(gym.Wrapper[ObsType, ActType, ObsType, ActType]):
                 )
 
 
-        # Execute the option
+        # Execute the option using stateful execution loop
         primitive_rewards = []
         k_exec = 0
         terminated = False
         truncated = False
-        final_obs = None
-        final_info = None
+        final_obs = obs_for_duration  # Start with initial observation
+        final_info = info_for_duration
         current_primitive_action = None
 
         try:
-            for _step_idx, primitive_action in enumerate(option.actions):
+            # Import normalize_act_output
+            from .option import normalize_act_output
+
+            # Initialize option state
+            option.begin(obs_for_duration, info_for_duration)
+
+            # Stateful execution loop
+            while True:
+                # Get next action from option
+                act_output = option.act(final_obs, final_info)
+                primitive_action, option_done = normalize_act_output(act_output)
                 current_primitive_action = primitive_action
+
+                # Check if option wants to terminate without choosing an action
+                if primitive_action is None:
+                    # Option terminated without executing an action
+                    break
+
                 # Execute primitive action
                 obs, reward, terminated, truncated, info = self.env.step(primitive_action)
                 primitive_rewards.append(float(reward))
                 k_exec += 1
+
+                # Let option process the step result
+                option.on_step(obs, reward, terminated, truncated, info)
+
                 final_obs = obs
                 final_info = info
 
-                # Stop if episode ended
-                if terminated or truncated:
+                # Stop if episode ended or option signaled done
+                if terminated or truncated or option_done:
                     break
 
         except Exception as e:
@@ -366,8 +386,12 @@ class SMDPfier(gym.Wrapper[ObsType, ActType, ObsType, ActType]):
                 base_error=e
             )
 
-        # Calculate actual duration executed
-        terminated_early = k_exec < len(option.actions)
+        # Calculate actual duration executed - for ListOption, compare against len()
+        if hasattr(option, '__len__'):
+            terminated_early = k_exec < len(option)
+        else:
+            # For custom options without __len__, we can't determine this
+            terminated_early = False
 
         # Duration is simply k_exec
         duration = int(k_exec)
@@ -386,7 +410,7 @@ class SMDPfier(gym.Wrapper[ObsType, ActType, ObsType, ActType]):
             "option": {
                 "id": option.option_id,
                 "name": option.name,
-                "len": len(option.actions),
+                "len": len(option) if hasattr(option, '__len__') else None,
                 "meta": option.meta,
             },
             "k_exec": k_exec,
@@ -436,7 +460,7 @@ class SMDPfier(gym.Wrapper[ObsType, ActType, ObsType, ActType]):
 
         return final_obs, aggregated_reward, terminated, truncated, final_info
 
-    def get_available_options(self, obs: ObsType, info: dict[str, Any]) -> list[Option]:
+    def get_available_options(self, obs: ObsType, info: dict[str, Any]) -> list[OptionBase]:
         """Get list of currently available options for given state.
 
         Args:
@@ -444,7 +468,7 @@ class SMDPfier(gym.Wrapper[ObsType, ActType, ObsType, ActType]):
             info: Current environment info dict
 
         Returns:
-            List of available Option objects (may be truncated if > max_options)
+            List of available OptionBase objects (may be truncated if > max_options)
         """
         # Get options from provider - add action space info
         enhanced_info = dict(info)
@@ -467,7 +491,7 @@ class SMDPfier(gym.Wrapper[ObsType, ActType, ObsType, ActType]):
         return options
 
     def validate_option(
-        self, option: Option, obs: ObsType, info: dict[str, Any]
+        self, option: OptionBase, obs: ObsType, info: dict[str, Any]
     ) -> bool:
         """Validate whether an option can be executed in the current state.
 
@@ -497,17 +521,36 @@ class SMDPfier(gym.Wrapper[ObsType, ActType, ObsType, ActType]):
 
                 available_actions = set(self._availability_fn(obs))
 
-                # Check if all actions in the option are available
-                for i, action in enumerate(option.actions):
-                    if isinstance(action, (int, np.integer)) and action not in available_actions:
-                        raise SMDPOptionValidationError(
-                            option_name=option.name,
-                            option_id=option.option_id,
-                            validation_type="mask",
-                            failing_step_index=i,
-                            action_repr=str(action),
-                            short_obs_summary=summarize_observation(obs)
-                        )
+                # For ListOption, we can check all actions in advance
+                # Import here to avoid circular dependency
+                from .option import ListOption
+
+                if isinstance(option, ListOption):
+                    # Check all actions in the list
+                    for i, action in enumerate(option.actions):
+                        if isinstance(action, (int, np.integer)) and action not in available_actions:
+                            raise SMDPOptionValidationError(
+                                option_name=option.name,
+                                option_id=option.option_id,
+                                validation_type="mask",
+                                failing_step_index=i,
+                                action_repr=str(action),
+                                short_obs_summary=summarize_observation(obs)
+                            )
+                else:
+                    # For custom options, use preview() to check first action
+                    first_action = option.preview(obs, info)
+
+                    if first_action is not None and isinstance(first_action, (int, np.integer)):
+                        if first_action not in available_actions:
+                            raise SMDPOptionValidationError(
+                                option_name=option.name,
+                                option_id=option.option_id,
+                                validation_type="mask",
+                                failing_step_index=0,
+                                action_repr=str(first_action),
+                                short_obs_summary=summarize_observation(obs)
+                            )
 
             # If no availability function or not discrete, assume valid
             return True
@@ -527,7 +570,7 @@ class SMDPfier(gym.Wrapper[ObsType, ActType, ObsType, ActType]):
 
 
     # Helper methods for state tracking
-    def _get_current_available_options(self) -> list[Option]:
+    def _get_current_available_options(self) -> list[OptionBase]:
         """Get available options for current state."""
         obs = getattr(self, '_last_obs', None)
         info = getattr(self, '_last_info', {})
