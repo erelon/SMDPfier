@@ -91,36 +91,129 @@ Reset the environment and return initial observation and info.
 
 Close the environment.
 
-### Option
+### Option (Abstract Base Class)
 
-**Represents a sequence of primitive actions with metadata.**
+**Abstract base class defining the stateful execution interface for temporal abstractions.**
 
-```python
-class Option:
-    def __init__(
-        self,
-        actions: Sequence[Any],
-        name: str,
-        meta: dict | None = None
-    )
+Options represent sequences of actions that can span multiple time steps. The stateful interface allows options to observe the environment and adapt their behavior dynamically.
+
+#### Stateful Execution Lifecycle
+
+```
+1. option.begin(obs, info)           # Initialize state
+2. Loop:
+   a. action, done = option.act(obs, info)  # Choose next action
+   b. If action is None: break       # Option terminates without action
+   c. obs, r, term, trunc, info = env.step(action)
+   d. option.on_step(obs, r, term, trunc, info)  # Process result
+   e. If done or term or trunc: break
+3. Return aggregated reward and duration=k_exec
 ```
 
-#### Parameters
+#### Abstract Methods
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `actions` | `Sequence[Any]` | ✅ | Sequence of primitive actions |
-| `name` | `str` | ✅ | Human-readable option name |
-| `meta` | `dict` or `None` | ❌ | Additional metadata |
+All custom options must implement these methods:
+
+```python
+from abc import ABC, abstractmethod
+from smdpfier.option import OptionBase
+
+class MyOption(OptionBase):
+    @abstractmethod
+    def begin(self, obs: Any, info: dict[str, Any]) -> None:
+        """Initialize option state before execution.
+        
+        Called once at the start with initial observation.
+        Use this to reset counters, initialize policies, etc.
+        """
+        pass
+    
+    @abstractmethod
+    def act(self, obs: Any, info: dict[str, Any]) -> Any | tuple[Any, bool]:
+        """Select next action based on current observation.
+        
+        Returns:
+            - action: Next action to execute
+            - (action, done): Action and termination flag
+            - None or (None, True): Terminate without executing action
+        
+        The option can observe current state and adapt dynamically.
+        Return done=True to signal early termination.
+        """
+        pass
+    
+    @abstractmethod
+    def on_step(self, obs: Any, reward: float, terminated: bool, 
+                truncated: bool, info: dict[str, Any]) -> None:
+        """Process the result of executing an action.
+        
+        Called after each env.step() with the transition data.
+        Use this to update internal state, collect statistics, etc.
+        """
+        pass
+    
+    @abstractmethod
+    def preview(self, obs: Any, info: dict[str, Any]) -> Any | None:
+        """Preview the first action without executing.
+        
+        Used for action masking in discrete environments.
+        
+        Returns:
+            - First action that would be executed
+            - None if option cannot determine or is unavailable
+        """
+        pass
+    
+    @abstractmethod
+    def identity(self) -> tuple[str, ...]:
+        """Return stable identity tuple for hashing.
+        
+        Used to generate stable option IDs across equivalent instances.
+        
+        Returns:
+            Tuple of strings uniquely identifying this option's behavior.
+        """
+        pass
+```
 
 #### Properties
 
-- **`actions`**: The action sequence
-- **`name`**: Human-readable name
-- **`meta`**: User-defined metadata dictionary
-- **`id`**: Stable hash-based identifier (computed from actions + name)
+All options have these properties:
 
-#### Examples
+- **`option_id`**: Stable hash-based identifier (from `identity()`)
+- **`name`**: Human-readable name (overridable property)
+- **`meta`**: Optional metadata dictionary (overridable property)
+
+### ListOption (Concrete Implementation)
+
+**Concrete option that executes a fixed list of actions.**
+
+This is the most common option type and provides backward compatibility with the original Option dataclass.
+
+```python
+from smdpfier import ListOption
+
+option = ListOption(
+    actions=[0, 1, 0],
+    _name="left-right-left",
+    _meta={"category": "basic"}
+)
+```
+
+For convenience, use the `Option()` factory function:
+
+```python
+from smdpfier import Option
+
+# Simple usage (recommended)
+option = Option([0, 1, 0], "left-right-left")
+
+# With metadata
+option = Option([0, 0, 1, 1], "double-pairs", 
+                meta={"category": "symmetric"})
+```
+
+#### ListOption Examples
 
 ```python
 # Discrete actions
@@ -136,8 +229,76 @@ option3 = Option(
     meta={"category": "symmetric", "difficulty": "easy"}
 )
 
-print(option1.id)  # Stable hash: "a1b2c3..."
+print(option1.option_id)  # Stable hash: "a1b2c3..."
+print(len(option1))       # 3 (number of actions)
 ```
+
+### Custom Stateful Options
+
+Create options that adapt to observations:
+
+```python
+from smdpfier.option import OptionBase
+
+class ThresholdOption(OptionBase):
+    """Execute action 0 until observation exceeds threshold."""
+    
+    def __init__(self, threshold: float = 0.0, max_steps: int = 5):
+        self.threshold = threshold
+        self.max_steps = max_steps
+        self.step_count = 0
+    
+    def begin(self, obs, info):
+        """Reset step counter."""
+        self.step_count = 0
+    
+    def act(self, obs, info):
+        """Choose action based on observation."""
+        if obs[0] > self.threshold:
+            return None  # Terminate without action
+        
+        self.step_count += 1
+        done = (self.step_count >= self.max_steps)
+        return 0, done
+    
+    def on_step(self, obs, reward, terminated, truncated, info):
+        """Track execution (already counted in act)."""
+        pass
+    
+    def preview(self, obs, info):
+        """Preview first action."""
+        return None if obs[0] > self.threshold else 0
+    
+    def identity(self):
+        """Stable identity for hashing."""
+        return ("ThresholdOption", str(self.threshold), str(self.max_steps))
+    
+    @property
+    def name(self):
+        return f"threshold_{self.threshold}"
+
+# Usage
+option = ThresholdOption(threshold=0.5, max_steps=3)
+env = SMDPfier(base_env, options_provider=[option])
+```
+
+#### Termination Without Action
+
+Options can terminate immediately without executing any action by returning `None`:
+
+```python
+class ConditionalOption(OptionBase):
+    def act(self, obs, info):
+        if not self.precondition_met(obs):
+            return None  # Terminate without acting
+        return self.choose_action(obs)
+```
+
+When `None` is returned:
+- No action is executed in the environment
+- `k_exec = 0` and `duration = 0`
+- `rewards = []` (empty)
+- Option completes immediately
 
 ## SMDP Info Payload Structure
 

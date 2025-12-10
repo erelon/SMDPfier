@@ -154,6 +154,96 @@ Every step returns comprehensive metadata in `info["smdp"]`:
 
 See the [API Reference](api.md#smdp-info-payload-structure) for complete details.
 
+## Option Types
+
+SMDPfier supports two types of options:
+
+### ListOption (Fixed Sequences)
+
+Execute a predetermined sequence of actions:
+
+```python
+from smdpfier import Option  # Factory function creates ListOption
+
+# Basic usage
+option = Option([0, 1, 0], "left-right-left")
+
+# With metadata
+option = Option(
+    [0, 0, 1, 1],
+    "double-pairs",
+    meta={"category": "symmetric"}
+)
+
+# Continuous actions
+option = Option(
+    [[-1.0], [0.5], [2.0]],
+    "continuous-sequence"
+)
+```
+
+### Stateful Options (Adaptive Behavior)
+
+Create options that observe the environment and adapt their behavior:
+
+```python
+from smdpfier.option import OptionBase
+
+class ThresholdOption(OptionBase):
+    """Execute action until observation exceeds threshold."""
+    
+    def __init__(self, threshold=0.5, max_steps=5):
+        self.threshold = threshold
+        self.max_steps = max_steps
+        self.step_count = 0
+    
+    def begin(self, obs, info):
+        """Initialize state."""
+        self.step_count = 0
+    
+    def act(self, obs, info):
+        """Choose action based on current observation."""
+        # Terminate if threshold exceeded
+        if obs[0] > self.threshold:
+            return None  # Terminate without action
+        
+        # Continue with action 0
+        self.step_count += 1
+        done = (self.step_count >= self.max_steps)
+        return 0, done
+    
+    def on_step(self, obs, reward, terminated, truncated, info):
+        """Process step result."""
+        pass  # Could track statistics here
+    
+    def preview(self, obs, info):
+        """Preview first action for masking."""
+        return None if obs[0] > self.threshold else 0
+    
+    def identity(self):
+        """Stable identity for hashing."""
+        return ("ThresholdOption", str(self.threshold), str(self.max_steps))
+    
+    @property
+    def name(self):
+        return f"threshold_{self.threshold}"
+
+# Usage
+env = SMDPfier(
+    gym.make("CartPole-v1"),
+    options_provider=[ThresholdOption(threshold=0.3)],
+    action_interface="index"
+)
+```
+
+**Key Benefits of Stateful Options:**
+- **Observe environment**: Access current observation in `act()`
+- **Adaptive duration**: Terminate early via `done=True` or return `None`
+- **Immediate termination**: Return `None` to skip action execution (`duration=0`)
+- **State tracking**: Use `on_step()` to collect data or update internal state
+
+See [API Reference](api.md#custom-stateful-options) for complete stateful option documentation.
+
 ## Documentation Guide
 
 | Section | Focus | When to Read |

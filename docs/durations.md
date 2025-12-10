@@ -10,8 +10,9 @@
 |---------|-------|
 | **Tick** | One primitive action execution |
 | **Option Duration** | Number of primitive actions executed (k_exec) |
-| **Complete Execution** | duration = `len(option.actions)` |
+| **Complete Execution** | duration = `len(option)` for fixed-length options |
 | **Partial Execution** | duration = number of actions before termination |
+| **Stateful Termination** | Option can stop early via `done=True` from `act()` |
 
 ### Simple Example
 
@@ -39,7 +40,7 @@ assert info["smdp"]["k_exec"] == 3    # Same value
 ### Visual Example
 
 ```
-Option: [0, 1, 0, 1, 1]  (5 actions)
+Fixed Option: [0, 1, 0, 1, 1]  (5 actions)
 
 Normal Execution:
 ┌─────┬─────┬─────┬─────┬─────┐
@@ -47,12 +48,77 @@ Normal Execution:
 └─────┴─────┴─────┴─────┴─────┘
 tick:   1     2     3     4     5    → duration = 5
 
-Early Termination (after 3 actions):
+Episode Termination (after 3 actions):
 ┌─────┬─────┬─────┐  X
 │ a=0 │ a=1 │ a=0 │ episode ends
 └─────┴─────┴─────┘
 tick:   1     2     3                → duration = 3
+
+Stateful Option Early Stop (done=True):
+┌─────┬─────┐  option signals done=True
+│ a=0 │ a=1 │
+└─────┴─────┘
+tick:   1     2                      → duration = 2
 ```
+
+## 🎮 Stateful Option Duration Control
+
+Stateful options can control their own duration by returning `done=True`:
+
+```python
+from smdpfier.option import OptionBase
+
+class AdaptiveOption(OptionBase):
+    """Option that stops when observation exceeds threshold."""
+    
+    def __init__(self, threshold=0.5, max_steps=5):
+        self.threshold = threshold
+        self.max_steps = max_steps
+        self.step_count = 0
+    
+    def begin(self, obs, info):
+        self.step_count = 0
+    
+    def act(self, obs, info):
+        if obs[0] > self.threshold:
+            return None  # Terminate immediately (duration=0)
+        
+        self.step_count += 1
+        done = (self.step_count >= self.max_steps)
+        return 0, done  # Signal done when max_steps reached
+    
+    def on_step(self, obs, reward, terminated, truncated, info):
+        pass
+    
+    # ... other methods ...
+
+# Usage
+env = SMDPfier(base_env, options_provider=[AdaptiveOption()])
+obs, reward, term, trunc, info = env.step(0)
+
+# Duration varies based on when option decided to stop
+print(f"Duration: {info['smdp']['duration']}")  # Could be 0, 1, 2, ..., or max_steps
+```
+
+### Duration Scenarios for Stateful Options
+
+1. **Immediate Termination** (action is `None`):
+   ```python
+   def act(self, obs, info):
+       return None  # duration = 0, k_exec = 0
+   ```
+
+2. **Early Stop** (done=True):
+   ```python
+   def act(self, obs, info):
+       if self.should_stop(obs):
+           return action, True  # duration = k_exec when stopped
+       return action, False
+   ```
+
+3. **Episode Ends**:
+   - Option stops when environment returns `terminated=True` or `truncated=True`
+   - Duration = k_exec at termination point
 
 ## 🔄 SMDP Discounting
 

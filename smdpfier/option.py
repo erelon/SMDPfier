@@ -92,7 +92,7 @@ class Option(ABC):
             >>> def act(self, obs, info):
             ...     return (5, True)  # Action 5, then terminate
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def on_step(
@@ -351,3 +351,35 @@ def make_option_id(actions: Sequence[Any], name: str) -> str:
 
 # Preserve reference to ABC before shadowing with factory function
 OptionBase = Option
+
+# Backward compatibility: Allow Option to be called as a factory function
+# This mimics the old dataclass constructor behavior
+def Option(actions: Sequence[Any], name: str, meta: dict[str, Any] | None = None) -> ListOption:
+    """Factory function for creating ListOption instances (backward compatibility).
+
+    This function provides backward compatibility with the old Option dataclass.
+    New code should use ListOption directly.
+
+    Args:
+        actions: Sequence of primitive actions to execute
+        name: Human-readable name for this option
+        meta: Optional metadata dictionary
+
+    Returns:
+        ListOption instance
+
+    Raises:
+        ValueError: If name is empty
+        TypeError: If name is not a string
+
+    Examples:
+        >>> option = Option([0, 1, 0], "left-right-left")
+        >>> option = Option([0, 1], "test", meta={"category": "basic"})
+    """
+    # Backward compatibility validation (old Option dataclass enforced these)
+    if not name:
+        raise ValueError("Option name cannot be empty")
+    if not isinstance(name, str):
+        raise TypeError(f"Option name must be string, got {type(name)}")
+
+    return ListOption(actions=actions, _name=name, _meta=meta)

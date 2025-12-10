@@ -149,6 +149,78 @@ obs, reward, term, trunc, info = smdp_env.step(option)
 | [**Index vs Direct**](docs/usage_index_vs_direct.md) | Choosing the right interface for your use case |
 | [**Masking & Precheck**](docs/masking_and_precheck.md) | Action constraints and validation |
 | [**Error Handling**](docs/errors.md) | Comprehensive error context and debugging |
+
+## 🎮 Stateful Options
+
+SMDPfier v0.2.0+ supports **stateful options** that can observe the environment and adapt their behavior dynamically:
+
+```python
+from smdpfier.option import OptionBase
+
+class ThresholdOption(OptionBase):
+    """Execute actions until observation exceeds threshold."""
+    
+    def __init__(self, threshold=0.5, max_steps=5):
+        self.threshold = threshold
+        self.max_steps = max_steps
+        self.step_count = 0
+    
+    def begin(self, obs, info):
+        """Initialize state before execution."""
+        self.step_count = 0
+    
+    def act(self, obs, info):
+        """Choose next action based on current observation."""
+        if obs[0] > self.threshold:
+            return None  # Terminate immediately (duration=0)
+        
+        self.step_count += 1
+        done = (self.step_count >= self.max_steps)
+        return 0, done  # (action, done_flag)
+    
+    def on_step(self, obs, reward, terminated, truncated, info):
+        """Process step result - track statistics, update state, etc."""
+        pass
+    
+    def preview(self, obs, info):
+        """Preview first action for masking."""
+        return None if obs[0] > self.threshold else 0
+    
+    def identity(self):
+        """Return stable identity for option ID."""
+        return ("ThresholdOption", str(self.threshold), str(self.max_steps))
+    
+    @property
+    def name(self):
+        return f"threshold_{self.threshold}"
+
+# Use with SMDPfier
+env = SMDPfier(
+    gym.make("CartPole-v1"),
+    options_provider=[ThresholdOption(threshold=0.3)],
+    action_interface="index"
+)
+```
+
+**Key Benefits:**
+- ✅ **Observe environment**: Access current observation in `act()`
+- ✅ **Adaptive duration**: Control when option terminates via `done` flag
+- ✅ **Immediate termination**: Return `None` to skip execution entirely
+- ✅ **State tracking**: Use `on_step()` to collect data or update internal state
+
+**Execution Lifecycle:**
+```
+1. option.begin(obs, info)                    # Initialize
+2. Loop:
+   a. action, done = option.act(obs, info)    # Choose action
+   b. If action is None: break                # Immediate termination
+   c. obs, r, ... = env.step(action)          # Execute
+   d. option.on_step(obs, r, ...)             # Process result
+   e. If done or terminated: break
+3. Return duration = k_exec
+```
+
+See [API Reference - Stateful Options](docs/api.md#custom-stateful-options) for complete documentation.
 | [**FAQ**](docs/faq.md) | Common questions and gotchas |
 | [**Migration from 0.1.x**](docs/migration_0_2.md) | Upgrading to v0.2.0 simplified semantics |
 
